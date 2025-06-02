@@ -35,7 +35,7 @@ $config['base_url'] = 'http://localhost/work_activity/';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = '';
+$config['index_page'] = ''; // hilangkan index.php dari url (gunakan .htaccess)
 
 /*
 |--------------------------------------------------------------------------
