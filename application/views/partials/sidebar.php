@@ -78,7 +78,7 @@
 			</div>
 
 			<div class="menu-item">
-				<a class="menu-link" href="<?= base_url('HSEObjective') ?>">
+				<a class="menu-link <?= $page_title == "HSE Objective" ? "active" : "" ?>" href="<?= base_url() . 'HseObjective' ?>">
 					<span class="menu-icon">
 						<i class="ki-duotone ki-shield-tick fs-2">
 							<span class="path1"></span><span class="path2"></span>
@@ -89,7 +89,7 @@
 			</div>
 
 			<div class="menu-item">
-				<a class="menu-link" href="<?= base_url('DevelopmentCommitment') ?>">
+				<a class="menu-link <?= $page_title == "Development Commitment" ? "active" : "" ?>" href="<?= base_url() . 'DevelopmentCommitment' ?>">
 					<span class="menu-icon">
 						<i class="ki-duotone ki-briefcase fs-2">
 							<span class="path1"></span><span class="path2"></span>
@@ -100,7 +100,7 @@
 			</div>
 
 			<div class="menu-item">
-				<a class="menu-link" href="<?= base_url('CommunityEnvelopment') ?>">
+				<a class="menu-link <?= $page_title == "Community Envelopment" ? "active" : "" ?>" href="<?= base_url() . 'CommunityEnvelopment' ?>">
 					<span class="menu-icon">
 						<i class="ki-duotone ki-people fs-2">
 							<span class="path1"></span><span class="path2"></span>
