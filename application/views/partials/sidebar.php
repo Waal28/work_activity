@@ -4,7 +4,7 @@
 
 			<!-- Dashboard -->
 			<div class="menu-item">
-				<a class="menu-link <?= $content_dir == "dashboard" ? "active" : "" ?>" href="<?= base_url() . 'Dashboard' ?>">
+				<a class="menu-link <?= $page_title == "Dashboard" ? "active" : "" ?>" href="<?= base_url() . 'Dashboard' ?>">
 					<span class="menu-icon">
 						<i class="ki-duotone ki-element-11 fs-2">
 							<span class="path1"></span>
@@ -37,15 +37,15 @@
 					<span class="menu-title">Pekerjaan</span>
 					<span class="menu-arrow"></span>
 				</span>
-				<div class="menu-sub menu-sub-accordion <?= $content_dir == "pekerjaan" ? "show" : "" ?>">
+				<div class="menu-sub menu-sub-accordion <?= $page_title == "Pekerjaan Saya" || $page_title == "Pemberian Pekerjaan" ? "show" : "" ?>">
 					<div class="menu-item">
-						<a class="menu-link <?= $content_dir == "pekerjaan" && $content_name == "index" ? "active" : "" ?>" href="<?= base_url() . 'Pekerjaan' ?>">
+						<a class="menu-link <?= $page_title == "Pekerjaan Saya" ? "active" : "" ?>" href="<?= base_url() . 'PekerjaanSaya' ?>">
 							<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
 							<span class="menu-title">Pekerjaan Saya</span>
 						</a>
 					</div>
 					<div class="menu-item">
-						<a class="menu-link <?= $content_dir == "pekerjaan" && $content_name == "pemberian" ? "active" : "" ?>" href="<?= base_url() . 'Pekerjaan/pemberian' ?>">
+						<a class="menu-link <?= $page_title == "Pemberian Pekerjaan" ? "active" : "" ?>" href="<?= base_url() . 'PemberianPekerjaan' ?>">
 							<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
 							<span class="menu-title">Pemberian Pekerjaan</span>
 						</a>
@@ -55,7 +55,7 @@
 
 			<!-- Monitoring -->
 			<div class="menu-item">
-				<a class="menu-link <?= $content_dir == "monitoring" ? "active" : "" ?>" href="<?= base_url() . 'Monitoring' ?>">
+				<a class="menu-link <?= $page_title == "Monitoring Pekerjaan" ? "active" : "" ?>" href="<?= base_url() . 'Monitoring' ?>">
 					<span class="menu-icon">
 						<i class="ki-duotone ki-calendar-8 fs-2">
 							<span class="path1"></span>

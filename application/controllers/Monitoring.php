@@ -5,9 +5,8 @@ class Monitoring extends CI_Controller
 {
 	public function index()
 	{
-		$data['title'] = 'Monitoring Pekerjaan';
-		$data['content_dir'] = 'direktur_utama/monitoring';
-		$data['content_name'] = 'index';
+		$data['page_title'] = 'Monitoring Pekerjaan';
+		$data['content_view'] = 'monitoring/index';
 		$this->load->view('main', $data);
 	}
 }
