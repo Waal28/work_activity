@@ -6,8 +6,10 @@
     <div class="aside-user-info flex-row-fluid flex-wrap ms-5">
       <div class="d-flex">
         <div class="flex-grow-1 me-2">
-          <a href="#" class="text-white text-hover-primary fs-6 fw-bold">Nama Lengkap</a>
-          <span class="text-gray-600 fw-semibold d-block fs-8 mb-1">Direktur Utama</span>
+          <a href="#" class="text-white text-hover-primary fs-6 fw-bold">
+            <?= $this->session->userdata('current_user')['nama'] ?>
+          </a>
+          <span class="text-gray-600 fw-semibold d-block fs-8 mb-1"><?= $this->session->userdata('current_user')['role_desc'] ?></span>
           <div class="d-flex align-items-center text-success fs-9">
             <span class="bullet bullet-dot bg-success me-1"></span>work
           </div>
@@ -26,15 +28,18 @@
                   <img alt="Logo" src="<?= base_url('assets/') ?>media/avatars/300-1.jpg" />
                 </div>
                 <div class="d-flex flex-column">
-                  <div class="fw-bold d-flex align-items-center fs-5">Nama Lengkap
+                  <div class="fw-bold d-flex align-items-center fs-5">
+                    <?= $this->session->userdata('current_user')['nama'] ?>
                   </div>
-                  <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">nama@kt.com</a>
+                  <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
+                    <?= $this->session->userdata('current_user')['email'] ?>
+                  </a>
                 </div>
               </div>
             </div>
             <div class="separator my-2"></div>
             <div class="menu-item px-5">
-              <a href="<?= base_url() . 'Auth' ?>" class="menu-link px-5">Logout</a>
+              <a href="<?= site_url('auth/logout') ?>" class="menu-link px-5">Logout</a>
             </div>
           </div>
         </div>

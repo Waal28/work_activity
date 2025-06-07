@@ -7,7 +7,7 @@
 	</div>
 	<div class="card-body py-3">
 		<div class="table-responsive">
-			<?php $this->load->view('partials/pekerjaan_saya_tabel.php', ['rows' => $rows]); ?>
+			<?php $this->load->view('partials/tabel_pekerjaan_saya.php', ['rows' => $rows]); ?>
 		</div>
 	</div>
 </div>

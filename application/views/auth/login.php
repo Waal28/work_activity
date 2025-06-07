@@ -42,6 +42,21 @@
 		}
 	</script>
 	<div class="d-flex flex-column flex-root">
+		<!-- Toast -->
+		<?php if ($this->session->flashdata('toast')): ?>
+			<?php $toast = $this->session->flashdata('toast'); ?>
+			<div class="position-fixed top-0 end-0 p-3" style="z-index: 1080">
+				<div id="ciToast" class="toast align-items-center text-white bg-<?= $toast['type'] ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
+					<div class="d-flex">
+						<div class="toast-body">
+							<?= $toast['message'] ?>
+						</div>
+						<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
+		<!-- end Toast -->
 		<div class="d-flex flex-column flex-lg-row flex-column-fluid">
 			<div class="d-flex flex-column flex-column-fluid flex-center w-lg-50 p-10">
 				<div class="d-flex justify-content-between flex-column-fluid flex-column w-100 mw-450px">
@@ -49,25 +64,30 @@
 						<div class="me-2"></div>
 					</div>
 					<div class="py-20">
-						<form class="form w-100" novalidate="novalidate" action="<?= base_url() . 'Dashboard' ?>" method="POST">
+						<form class="form w-100" novalidate="novalidate" method="POST" action="<?= site_url('auth/login') ?>">
 							<div class="card-body">
 								<div class="text-start mb-10">
 									<h1 class="text-gray-900 mb-3 fs-3x" data-kt-translate="sign-in-title">Work Activity</h1>
 									<div class="text-gray-500 fw-semibold fs-6" data-kt-translate="general-desc">Masukkan Username dan Password</div>
 								</div>
 								<div class="fv-row mb-8">
-									<input type="text" placeholder="Username" name="username" autocomplete="off" " class=" form-control form-control-solid" />
+									<input type="text" placeholder="Username" name="username" required class=" form-control form-control-solid" />
 								</div>
 								<div class="fv-row mb-7">
-									<input type="text" placeholder="Password" name="password" autocomplete="off" class="form-control form-control-solid" />
+									<input type="password" placeholder="Password" name="password" required class="form-control form-control-solid" />
 								</div>
 								<div class="d-flex flex-stack">
 									<button id="kt_sign_in_submit" class="btn btn-primary me-2 flex-shrink-0">
-										<span class="indicator-label" data-kt-translate="sign-in-submit">Login</span>
+										<span class="indicator-label" data-kt-translate="sign-in-submit" type="submit">Login</span>
 									</button>
 								</div>
 							</div>
 						</form>
+						<?php if ($this->session->flashdata('error')): ?>
+							<span class="badge badge-danger fs-7 fw-bold mt-10">
+								<?= $this->session->flashdata('error') ?>
+							</span>
+						<?php endif; ?>
 					</div>
 					<div class="m-0">
 					</div>
@@ -78,6 +98,7 @@
 	</div>
 	<script>
 		var hostUrl = "<?= base_url('assets/') ?>";
+		const BASE_URL = "<?= base_url() ?>";
 	</script>
 	<script src="<?= base_url('assets/') ?>plugins/global/plugins.bundle.js"></script>
 	<script src="<?= base_url('assets/') ?>js/scripts.bundle.js"></script>
@@ -86,6 +107,8 @@
 	<script src="<?= base_url('assets/') ?>js/custom/widgets.js"></script>
 	<script src="<?= base_url('assets/') ?>js/custom/apps/chat/chat.js"></script>
 	<script src="<?= base_url('assets/') ?>js/custom/utilities/modals/users-search.js"></script>
+	<script src="<?= base_url('assets/js/main.js?v=1.0.2') ?>"></script>
+	<script src="<?= base_url('assets/js/toast.js?v=1.0.2') ?>"></script>
 </body>
 
 </html>

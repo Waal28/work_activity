@@ -42,6 +42,21 @@
 		}
 	</script>
 	<div class="d-flex flex-column flex-root">
+		<!-- Toast -->
+		<?php if ($this->session->flashdata('toast')): ?>
+			<?php $toast = $this->session->flashdata('toast'); ?>
+			<div class="position-fixed top-0 end-0 p-3" style="z-index: 1080">
+				<div id="ciToast" class="toast align-items-center text-white bg-<?= $toast['type'] ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
+					<div class="d-flex">
+						<div class="toast-body">
+							<?= $toast['message'] ?>
+						</div>
+						<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
+		<!-- end Toast -->
 		<div class="page d-flex flex-row flex-column-fluid">
 			<!-- Sidebar -->
 			<div id="kt_aside" class="aside" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
@@ -103,8 +118,12 @@
 			</div>
 		</div>
 	</div>
+	<!-- modal konfirmasi hapus -->
+	<?php $this->load->view('partials/modal_konfirmasi_hapus.php'); ?>
+	<!-- end konfirmasi hapus -->
 	<script>
 		var hostUrl = "<?= base_url('assets/') ?>";
+		const BASE_URL = "<?= base_url() ?>";
 	</script>
 	<script src="<?= base_url('assets/') ?>plugins/global/plugins.bundle.js"></script>
 	<script src="<?= base_url('assets/') ?>js/scripts.bundle.js"></script>
@@ -113,6 +132,8 @@
 	<script src="<?= base_url('assets/') ?>js/custom/widgets.js"></script>
 	<script src="<?= base_url('assets/') ?>js/custom/apps/chat/chat.js"></script>
 	<script src="<?= base_url('assets/') ?>js/custom/utilities/modals/users-search.js"></script>
+	<script src="<?= base_url('assets/js/main.js?v=1.0.2') ?>"></script>
+	<script src="<?= base_url('assets/js/toast.js?v=1.0.2') ?>"></script>
 </body>
 
 </html>
