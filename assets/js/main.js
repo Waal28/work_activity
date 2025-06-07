@@ -37,11 +37,10 @@ function formHandler({ form, formErrorAlert } = {}) {
 	};
 }
 
-const modalKonfirmasi = document.getElementById("modalKonfirmasiHapus");
-modalKonfirmasi.addEventListener("show.bs.modal", function (event) {
-	const button = event.relatedTarget;
-	const actionUrl = button.getAttribute("data-href");
-
-	const form = modalKonfirmasi.querySelector("#formHapus");
-	form.action = actionUrl;
+document.addEventListener("DOMContentLoaded", function () {
+	const ciToast = document.getElementById("ciToast");
+	if (ciToast) {
+		const toast = new bootstrap.Toast(ciToast);
+		toast.show();
+	}
 });

@@ -133,7 +133,16 @@
 	<script src="<?= base_url('assets/') ?>js/custom/apps/chat/chat.js"></script>
 	<script src="<?= base_url('assets/') ?>js/custom/utilities/modals/users-search.js"></script>
 	<script src="<?= base_url('assets/js/main.js?v=1.0.2') ?>"></script>
-	<script src="<?= base_url('assets/js/toast.js?v=1.0.2') ?>"></script>
+	<script>
+		const modalKonfirmasi = document.getElementById("modalKonfirmasiHapus");
+		modalKonfirmasi.addEventListener("show.bs.modal", function (event) {
+			const button = event.relatedTarget;
+			const actionUrl = button.getAttribute("data-href");
+
+			const form = modalKonfirmasi.querySelector("#formHapus");
+			form.action = actionUrl;
+		});
+	</script>
 </body>
 
 </html>

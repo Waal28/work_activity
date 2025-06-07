@@ -112,15 +112,6 @@
 			actionUrl: `pemberianpekerjaan/edit/${data.pekerjaan_id}`,
 		});
 	}
-
-	const modalKonfirmasi = document.getElementById('modalKonfirmasiHapus');
-  modalKonfirmasi.addEventListener('show.bs.modal', function (event) {
-    const button = event.relatedTarget;
-    const actionUrl = button.getAttribute('data-href');
-
-    const form = modalKonfirmasi.querySelector('#formHapus');
-    form.action = actionUrl;
-  });
 </script>
 <?php if ($this->session->flashdata('validation_errors')): ?>
 	<script>
