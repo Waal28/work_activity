@@ -77,6 +77,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- tambah komentar -->
 </div>
 <script src="<?= base_url('assets/js/main.js?v=1.0.2') ?>"></script>
 <script>
