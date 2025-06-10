@@ -56,6 +56,15 @@ class PemberianPekerjaan extends CI_Controller
 				]
 			],
 			[
+				'field'  => 'jenis_pekerjaan',
+				'label'  => 'Jenis Pekerjaan',
+				'rules'  => 'required|in_list[KPI,Non KPI]',
+				'errors' => [
+					'required' => 'Silakan pilih nilai {field}.',
+					'in_list'  => '{field} hanya boleh berisi: KPI atau Non KPI.'
+				]
+			],
+			[
 				'field'  => 'id_pegawai',
 				'label'  => 'Penerima',
 				'rules'  => 'required',
@@ -74,13 +83,15 @@ class PemberianPekerjaan extends CI_Controller
 		}
 
 		$data = [
-			'judul'       => $input['judul'],
-			'deadline'    => $input['deadline'],
-			'prioritas'   => $input['prioritas'],
-			'id_pegawai'  => $input['id_pegawai'],
-			'deskripsi'   => $input['deskripsi'],
-			'status'      => 'To Do',
-			'created_id'  => $current_user['user_id'],
+			'judul'       		=> $input['judul'],
+			'deadline'   			=> $input['deadline'],
+			'jenis_pekerjaan' => $input['jenis_pekerjaan'],
+			'prioritas'   		=> $input['prioritas'],
+			'id_pegawai'  		=> $input['id_pegawai'],
+			'deskripsi'   		=> $input['deskripsi'],
+			'status'      		=> 'To Do',
+			'pemberi'  				=> $current_user['nama'],
+			'created_id'  		=> $current_user['user_id'],
 		];
 
 		$this->Pekerjaan_model->insert($data);
@@ -133,6 +144,15 @@ class PemberianPekerjaan extends CI_Controller
 				]
 			],
 			[
+				'field'  => 'jenis_pekerjaan',
+				'label'  => 'Jenis Pekerjaan',
+				'rules'  => 'required|in_list[KPI,Non KPI]',
+				'errors' => [
+					'required' => 'Silakan pilih nilai {field}.',
+					'in_list'  => '{field} hanya boleh berisi: KPI atau Non KPI.'
+				]
+			],
+			[
 				'field'  => 'id_pegawai',
 				'label'  => 'Penerima',
 				'rules'  => 'required',
@@ -152,13 +172,14 @@ class PemberianPekerjaan extends CI_Controller
 		}
 
 		$data = [
-			'judul'       => $input['judul'],
-			'deadline'    => $input['deadline'],
-			'prioritas'   => $input['prioritas'],
-			'id_pegawai'  => $input['id_pegawai'],
-			'deskripsi'   => $input['deskripsi'],
+			'judul'       		=> $input['judul'],
+			'deadline'    		=> $input['deadline'],
+			'jenis_pekerjaan' => $input['jenis_pekerjaan'],
+			'prioritas'   		=> $input['prioritas'],
+			'id_pegawai'  		=> $input['id_pegawai'],
+			'deskripsi'   		=> $input['deskripsi'],
 			// 'status'      => $input['status'],
-			'updated_id'  => $current_user['user_id'],
+			'updated_id'  		=> $current_user['user_id'],
 		];
 
 		$this->Pekerjaan_model->update($id, $data);

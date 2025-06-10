@@ -7,34 +7,57 @@ class PekerjaanSaya extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('AuthMiddleware');
+		
+		$this->load->model('Pekerjaan_model');
+
+		$this->load->helper('format');
 		$menu_access = $this->session->userdata('menu_access');
 		$this->authmiddleware->check($menu_access['pekerjaan_saya']);
+
 	}
 	public function index()
 	{
 		$data['page_title'] = 'Pekerjaan Saya';
 		$data['content_view'] = 'pekerjaan/pekerjaan_saya';
-		$rows = [
-			[
-					'nama_pekerjaan' => 'Audit Keuangan',
-					'penerima' => 'Andika',
-					'deadline' => '10 Februari 2025',
-					'status' => 'In Progress'
-			],
-			[
-					'nama_pekerjaan' => 'Evaluasi IT',
-					'penerima' => 'Putri',
-					'deadline' => '15 Februari 2025',
-					'status' => 'Done'
-			],
-			[
-					'nama_pekerjaan' => 'Audit Keuangan',
-					'penerima' => 'Samsul',
-					'deadline' => '20 Februari 2025',
-					'status' => 'Pending'
-			]
-		];
-		$data['rows'] = $rows;
+		$data['tab_active'] = 'semua';
+		$current_user = $this->session->userdata('current_user');
+		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai']);
 		$this->load->view('main', $data);
+	}
+	public function kpi()
+	{
+		$data['page_title'] = 'Pekerjaan Saya';
+		$data['content_view'] = 'pekerjaan/pekerjaan_saya';
+		$data['tab_active'] = 'kpi';
+		$current_user = $this->session->userdata('current_user');
+		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai'], 'KPI');
+		$this->load->view('main', $data);
+	}
+	public function nonkpi()
+	{
+		$data['page_title'] = 'Pekerjaan Saya';
+		$data['content_view'] = 'pekerjaan/pekerjaan_saya';
+		$data['tab_active'] = 'nonkpi';
+		$current_user = $this->session->userdata('current_user');
+		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai'], 'Non KPI');
+		$this->load->view('main', $data);
+	}
+	public function updateStatus() {
+		$input = $this->input->post(NULL, TRUE);
+		$pekerjaan_id = $input['pekerjaan_id'];
+		$status = $input['status'];
+		if (!$pekerjaan_id || !$status) {
+			$this->session->set_flashdata('toast', [
+				'message' => 'Data gagal diubah, ID tidak ditemukan!',
+				'type'    => 'error' // success, danger, warning, info
+			]);
+			redirect('pekerjaansaya');
+		}
+		$this->Pekerjaan_model->update($pekerjaan_id, ['status' => $status]);
+		$this->session->set_flashdata('toast', [
+			'message' => 'Data berhasil diubah!',
+			'type'    => 'success' // success, danger, warning, info
+		]);
+		redirect('pekerjaansaya');
 	}
 }

@@ -13,9 +13,9 @@
       <?php foreach ($rows as $index => $row): ?>
         <tr>
           <td class="ps-4 rounded-start"><?= $index + 1 ?></td>
-          <td><?= htmlspecialchars($row['nama_pekerjaan']) ?></td>
-          <td><?= htmlspecialchars($row['penerima']) ?></td>
-          <td><?= htmlspecialchars($row['deadline']) ?></td>
+          <td><?= htmlspecialchars($row['judul']) ?></td>
+          <td><?= htmlspecialchars($row['nama']) ?></td>
+          <td><?= !empty($row['deadline']) ? formatTanggalIndo($row['deadline']) : '-' ?></td>
           <td>
             <?php
               $status = strtolower($row['status']);
@@ -34,7 +34,7 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-          <td colspan="6" class="text-center text-muted">Tidak ada data.</td>
+          <td colspan="5" class="text-center text-muted">Tidak ada data.</td>
       </tr>
     <?php endif; ?>
   </tbody>

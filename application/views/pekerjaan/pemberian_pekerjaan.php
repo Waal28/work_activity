@@ -15,6 +15,7 @@
 		</div>
 	</div>
 </div>
+<!-- Modal -->
 <div class="modal fade" id="modalPemberianPekerjaan" role="dialog" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered mw-650px">
 		<div class="modal-content rounded">
@@ -51,6 +52,13 @@
 						<textarea class="form-control form-control-solid" rows="3" name="deskripsi" placeholder="Keterangan"></textarea>
 					</div>
 					<div class="d-flex flex-column mb-8 fv-row">
+						<label class="required fs-6 fw-semibold mb-2">Jenis Pekerjaan</label>
+						<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis Pekerjaan" name="jenis_pekerjaan">
+							<option value="KPI">KPI</option>
+							<option value="Non KPI">Non KPI</option>
+						</select>
+					</div>
+					<div class="d-flex flex-column mb-8 fv-row">
 						<label class="required fs-6 fw-semibold mb-2">Prioritas</label>
 						<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Prioritas" name="prioritas">
 							<option value="Low">Low</option>
@@ -65,9 +73,12 @@
 						<input type="date" class="form-control form-control-solid" name="deadline" />
 					</div>
 					<div class="text-center">
-						<button type="reset" id="kt_modal_new_target_cancel" class="btn btn-light me-3" data-bs-dismiss="modal" onclick="clearErrorForm()">Cancel</button>
+						<button type="reset" id="kt_modal_new_target_cancel" class="btn btn-light me-3" onclick="clearErrorForm()">Cancel</button>
 						<button type="submit" id="kt_modal_new_target_submit" class="btn btn-primary">
 							<span class="indicator-label">Submit</span>
+							<div class="spinner-border indicator-spinner d-none" style="width: 1rem; height: 1rem;" role="status">
+								<span class="sr-only">Loading...</span>
+							</div>
 						</button>
 					</div>
 
@@ -79,6 +90,7 @@
 	</div>
 	<!-- tambah komentar -->
 </div>
+<!-- end modal -->
 <script src="<?= base_url('assets/js/main.js?v=1.0.2') ?>"></script>
 <script>
 	const formErrorAlert = document.getElementById("form-error-alert");
@@ -89,6 +101,7 @@
 		fields: {
 			judul: root.querySelector('[name="judul"]'),
 			deskripsi: root.querySelector('[name="deskripsi"]'),
+			jenis_pekerjaan: root.querySelector('[name="jenis_pekerjaan"]'),
 			deadline: root.querySelector('[name="deadline"]'),
 			id_pegawai: root.querySelector('[name="id_pegawai"]'),
 			prioritas: root.querySelector('[name="prioritas"]'),
@@ -113,6 +126,18 @@
 			actionUrl: `pemberianpekerjaan/edit/${data.pekerjaan_id}`,
 		});
 	}
+
+	const formModal = document.getElementById("kt_modal_new_target_form");
+  const submitButton = document.getElementById("kt_modal_new_target_submit");
+
+  formModal.addEventListener("submit", function () {
+    // Disable tombol submit
+    submitButton.disabled = true;
+
+    // Sembunyikan teks "Submit", tampilkan spinner
+    submitButton.querySelector(".indicator-label").classList.add("d-none");
+    submitButton.querySelector(".indicator-spinner").classList.remove("d-none");
+  });
 </script>
 <?php if ($this->session->flashdata('validation_errors')): ?>
 	<script>

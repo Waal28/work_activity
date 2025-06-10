@@ -3,32 +3,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // variabel global
 
-$config['roles'] = ['Direktur', 'Chief Unit', 'Senior Officer', 'Junior Officer', 'Staf'];
+$config['roles'] = ['Direktur', 'Vice President', 'Manajer Unit', 'Staf'];
 
 $config['page_roles'] = [
   'dashboard' => [
     'Direktur',
-    'Chief Unit',
-    'Senior Officer',
-    'Junior Officer',
+    'Vice President',
+    'Manajer Unit',
     'Staf'
   ],
   'pekerjaan_saya' => [
-    'Chief Unit',
-    'Senior Officer',
-    'Junior Officer',
+    'Vice President',
+    'Manajer Unit',
     'Staf'
   ],
   'pemberian_pekerjaan' => [
     'Direktur',
-    'Chief Unit',
-    'Senior Officer',
+    'Vice President',
+    'Manajer Unit',
     'Junior Officer'
   ],
   'monitoring' => [
     'Direktur',
-    'Chief Unit',
-    'Senior Officer',
+    'Vice President',
+    'Manajer Unit',
     'Junior Officer'
   ],
   'hse_objective' => [
