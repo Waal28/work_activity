@@ -116,7 +116,7 @@
 									<span class="path1"></span><span class="path2"></span>
 								</i>
 							</span>
-							<span class="menu-title">HSE Objective</span>
+							<span class="menu-title">HSSE Objective</span>
 						</a>
 					</div>
 				<?php endif; ?>
@@ -149,7 +149,7 @@
 			<?php endif; ?>
 
 			<!-- ASSESSMENT -->
-			<!-- <div class="menu-item pt-5">
+			<div class="menu-item pt-5">
 				<div class="menu-content">
 					<span class="menu-heading fw-bold text-uppercase fs-7">Assessment</span>
 				</div>
@@ -163,10 +163,10 @@
 					</span>
 					<span class="menu-title">ABS</span>
 				</a>
-			</div> -->
+			</div>
 
 			<!-- ANALYTICS -->
-			<!-- <div class="menu-item pt-5">
+			<div class="menu-item pt-5">
 				<div class="menu-content">
 					<span class="menu-heading fw-bold text-uppercase fs-7">Analytics</span>
 				</div>
@@ -182,7 +182,7 @@
 					</span>
 					<span class="menu-title">Reports</span>
 				</a>
-			</div> -->
+			</div>
 		</div>
 	</div>
 </div>
