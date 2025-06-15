@@ -1,4 +1,31 @@
+<?php
+  $current_user = $this->session->userdata('current_user');
+?>
 <div class="card mb-5 mb-xl-12">
+  <div class="ps-8 pe-8">
+    <table class="table table-bordered border-dark">
+      <tbody>
+        <tr>
+          <td class="fw-bold">Nama</td>
+          <td>: <?= $current_user['nama'] ?></td>
+          <td class="fw-bold">No. Pegawai</td>
+          <td>: <?= !empty($current_user['nik']) ? $current_user['nik'] : '-' ?></td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Unit</td>
+          <td>: <?= !empty($current_user['unit']) ? $current_user['unit'] : '-' ?></td>
+          <td class="fw-bold">Fungsi</td>
+          <td>: <?= !empty($current_user['fungsi']) ? $current_user['fungsi'] : '-' ?></td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Jabatan</td>
+          <td>: <?= !empty($current_user['jabatan']) ? $current_user['jabatan'] : '-' ?></td>
+          <td class="fw-bold">Priode</td>
+          <td>: <?= !empty($current_user['priode']) ? $current_user['priode'] : '-' ?></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 	<div class="card-header border-0 pt-5">
 		<h3 class="card-title align-items-start flex-column">
 			<span class="card-label fw-bold fs-3 mb-1">Hsse Participation</span>
