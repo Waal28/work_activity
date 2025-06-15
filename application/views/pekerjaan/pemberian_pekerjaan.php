@@ -16,107 +16,63 @@
 	</div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="modalPemberianPekerjaan" role="dialog" tabindex="-1" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered mw-650px">
-		<div class="modal-content rounded">
-			<div class="modal-header pb-0 border-0 justify-content-end">
-				<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal" onclick="clearErrorForm()">
-					<i class="ki-duotone ki-cross fs-1">
-						<span class="path1"></span>
-						<span class="path2"></span>
-					</i>
-				</div>
-			</div>
-			<div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-				<!-- form pekerjaan -->
-				<form id="kt_modal_new_target_form" class="form form_pekerjaan" action="" method="POST">
-					<div class="mb-13 text-center">
-						<h1 class="mb-3 form_pekerjaan_title" >Pemberian Pekerjaan</h1>
-					</div>
-					<div class="d-flex flex-column mb-8 fv-row">
-						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-							<span class="required">Nama Pekerjaan</span>
-						</label>
-						<input type="text" class="form-control form-control-solid" placeholder="Nama Pekerjaan" name="judul" />
-					</div>
-					<div class="d-flex flex-column mb-8 fv-row">
-						<label class="required fs-6 fw-semibold mb-2">Tujuan Pemberian</label>
-						<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Pegawai" name="id_pegawai">
-							<?php foreach ($pegawai_list as $pegawai): ?>
-								<option value="<?= $pegawai['id_pegawai']; ?>"><?= $pegawai['nama']; ?></option>
-							<?php endforeach; ?>
-						</select>
-					</div>
-					<div class="d-flex flex-column mb-8">
-						<label class="fs-6 fw-semibold mb-2">Keterangan Pekerjaan</label>
-						<textarea class="form-control form-control-solid" rows="3" name="deskripsi" placeholder="Keterangan"></textarea>
-					</div>
-					<div class="d-flex flex-column mb-8 fv-row">
-						<label class="required fs-6 fw-semibold mb-2">Jenis Pekerjaan</label>
-						<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis Pekerjaan" name="jenis_pekerjaan">
-							<option value="KPI">KPI</option>
-							<option value="Non KPI">Non KPI</option>
-						</select>
-					</div>
-					<div class="d-flex flex-column mb-8 fv-row">
-						<label class="required fs-6 fw-semibold mb-2">Prioritas</label>
-						<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Prioritas" name="prioritas">
-							<option value="Low">Low</option>
-							<option value="Medium">Medium</option>
-							<option value="High">High</option>
-						</select>
-					</div>
-					<div class="d-flex flex-column mb-8 fv-row">
-						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-							<span class="required">Deadline</span>
-						</label>
-						<input type="date" class="form-control form-control-solid" name="deadline" />
-					</div>
-					<div class="text-center">
-						<button type="reset" id="kt_modal_new_target_cancel" class="btn btn-light me-3" onclick="clearErrorForm()">Cancel</button>
-						<button type="submit" id="kt_modal_new_target_submit" class="btn btn-primary">
-							<span class="indicator-label">Submit</span>
-							<div class="spinner-border indicator-spinner d-none" style="width: 1rem; height: 1rem;" role="status">
-								<span class="sr-only">Loading...</span>
-							</div>
-						</button>
-					</div>
-
-					<div id="form-error-alert"></div>
-				</form>
-				<!-- end form -->
-			</div>
-		</div>
-	</div>
-	<!-- tambah komentar -->
-</div>
+<?php $this->load->view('partials/form_pemberian_pekerjaan.php', ['pegawai_list' => $pegawai_list]); ?>
 <!-- end modal -->
-<script src="<?= base_url('assets/js/main.js?v=1.0.2') ?>"></script>
 <script>
-	const formErrorAlert = document.getElementById("form-error-alert");
-	const root = document.querySelector(".form_pekerjaan");
-	const form = {
-		title: document.querySelector(".form_pekerjaan_title"),
-		element: root,
-		fields: {
-			judul: root.querySelector('[name="judul"]'),
-			deskripsi: root.querySelector('[name="deskripsi"]'),
-			jenis_pekerjaan: root.querySelector('[name="jenis_pekerjaan"]'),
-			deadline: root.querySelector('[name="deadline"]'),
-			id_pegawai: root.querySelector('[name="id_pegawai"]'),
-			prioritas: root.querySelector('[name="prioritas"]'),
-		},
+const root = document.querySelector(".form_pekerjaan");
+const formErrorAlert = document.getElementById("form-error-alert");
+const form = {
+	title: document.querySelector(".form_pekerjaan_title"),
+	element: root,
+	fields: {
+		judul: root.querySelector('[form-field="judul"]'),
+		deskripsi: root.querySelector('[form-field="deskripsi"]'),
+		jenis_pekerjaan: root.querySelector('[form-field="jenis_pekerjaan"]'),
+		deadline: root.querySelector('[form-field="deadline"]'),
+		id_pegawai: root.querySelector('[form-field="id_pegawai"]'),
+		prioritas: root.querySelector('[form-field="prioritas"]'),
+	},
+};
+
+function setValue(el, value = "") {
+		if (!el) return;
+		el.value = value;
+		if ($(el).hasClass("select2-hidden-accessible")) {
+			$(el).trigger("change");
+		}
+	}
+
+	const openForm = ({ data = {}, formTitle, actionUrl } = {}) => {
+		form.title.innerText = formTitle;
+		form.element.action = BASE_URL + actionUrl;
+
+		for (const [key, el] of Object.entries(form.fields)) {
+			setValue(el, data?.[key] ?? "");
+		}
 	};
-	const { openForm, clearErrorForm } = formHandler({ form, formErrorAlert });
+
+	const clearErrorForm = ({ isClickEdit = false } = {}) => {
+		if (formErrorAlert) formErrorAlert.innerHTML = "";
+
+		if (!isClickEdit) {
+			for (const el of Object.values(form.fields)) {
+				setValue(el, "");
+			}
+		}
+	};
+	// Expose ke global scope
+	function handleClearForm() {
+		clearErrorForm();
+	};
 
 	function handleClickTambahPekerjaan() {
-		clearErrorForm({ isClickEdit: false });
+		clearErrorForm();
 		openForm({
 			data: {},
 			formTitle: "Pemberian Pekerjaan",
 			actionUrl: "pemberianpekerjaan/create",
 		});
-	}
+	};
 
 	function handleClickEditPekerjaan(data) {
 		clearErrorForm({ isClickEdit: true });
@@ -125,43 +81,80 @@
 			formTitle: "Edit Pemberian Pekerjaan",
 			actionUrl: `pemberianpekerjaan/edit/${data.pekerjaan_id}`,
 		});
+		updateSelect(data.tipe_pelaksanaan, data.id_pegawai);
+	};
+
+	// Handle disable tombol submit
+	const formModal = document.getElementById("kt_modal_new_target_form");
+	const submitButton = document.getElementById("kt_modal_new_target_submit");
+
+	formModal.addEventListener("submit", () => {
+		submitButton.disabled = true;
+		submitButton.querySelector(".indicator-label")?.classList.add("d-none");
+		submitButton.querySelector(".indicator-spinner")?.classList.remove("d-none");
+	});
+
+	// Fungsi untuk update radio & select2
+	function updateSelect(paramsTipe = null, paramsIdPegawai = []) {
+		const radios = [...root.querySelectorAll('input[name="tipe_pelaksanaan"]')];
+		const tipe = paramsTipe || radios.find(radio => radio.checked)?.value;
+		const select = root.querySelector('[form-field="id_pegawai"]');
+
+		// Sinkronkan radio yang dipilih
+		radios.forEach(radio => {
+			radio.checked = radio.value === tipe;
+		});
+
+		// Atur multiple
+		const isTeam = tipe === 'Team';
+		select.multiple = isTeam;
+
+		// Reset dan pilih berdasarkan parameter
+		Array.from(select.options).forEach(option => {
+			option.selected = paramsIdPegawai.includes(option.value);
+		});
+
+		// Reinit Select2
+		if ($(select).hasClass("select2-hidden-accessible")) {
+			$(select).select2('destroy');
+		}
+
+		$(select).select2({
+			placeholder: 'Pilih Pegawai',
+			multiple: isTeam,
+			minimumResultsForSearch: Infinity,
+		});
+	}
+</script>
+
+<!-- Flashdata Handling -->
+<?php if ($this->session->flashdata('validation_errors')): ?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+	const modal = new bootstrap.Modal(document.getElementById('modalPemberianPekerjaan'));
+	const oldInput = <?= json_encode($this->session->flashdata('old_input') ?? []) ?>;
+	const validationErrors = `<?= $this->session->flashdata('validation_errors') ?>`;
+	const isEdit = !!oldInput.pekerjaan_id;
+
+	// Tampilkan error
+	if (formErrorAlert) {
+		formErrorAlert.innerHTML = `
+			<div class="alert alert-danger fs-7 fw-bold mt-10">
+				${validationErrors}
+			</div>
+		`;
 	}
 
-	const formModal = document.getElementById("kt_modal_new_target_form");
-  const submitButton = document.getElementById("kt_modal_new_target_submit");
+	// Open form kembali dengan data sebelumnya
+	openForm({
+		data: oldInput,
+		formTitle: isEdit ? "Edit Pemberian Pekerjaan" : "Pemberian Pekerjaan",
+		actionUrl: isEdit ? `pemberianpekerjaan/edit/${oldInput.pekerjaan_id}` : "pemberianpekerjaan/create",
+	});
+	updateSelect(oldInput.tipe_pelaksanaan, oldInput.id_pegawai);
 
-  formModal.addEventListener("submit", function () {
-    // Disable tombol submit
-    submitButton.disabled = true;
-
-    // Sembunyikan teks "Submit", tampilkan spinner
-    submitButton.querySelector(".indicator-label").classList.add("d-none");
-    submitButton.querySelector(".indicator-spinner").classList.remove("d-none");
-  });
+	modal.show();
+});
 </script>
-<?php if ($this->session->flashdata('validation_errors')): ?>
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-			const modal = new bootstrap.Modal(document.getElementById('modalPemberianPekerjaan'));
-			const formErrorAlert = document.getElementById('form-error-alert');
-			
-			const oldInput = <?= json_encode($this->session->flashdata('old_input') ?? []) ?>;
-			const validationErrors = `<?= $this->session->flashdata('validation_errors') ?>`;
-			const isEdit = !!oldInput.pekerjaan_id;
-
-			if (formErrorAlert) {
-				formErrorAlert.innerHTML = `
-					<div class="alert alert-danger fs-7 fw-bold mt-10">
-						${validationErrors}
-					</div>
-				`;
-			}
-			openForm({
-				data: oldInput,
-				formTitle: isEdit ? "Edit Pemberian Pekerjaan" : "Pemberian Pekerjaan",
-				actionUrl: isEdit ? "pemberianpekerjaan/edit/" + oldInput.pekerjaan_id : "pemberianpekerjaan/create",
-			});
-			modal.show();
-		});
-	</script>
 <?php endif; ?>
+

@@ -7,10 +7,11 @@
   <thead>
     <tr class="fw-bold text-muted bg-light">
       <th class="ps-4 rounded-start">No</th>
-      <th>Nama Pekerjaan</th>
-      <th>Diberikan Kepada</th>
-      <th>Dedline</th>
-      <th>Status</th>
+      <th>Aktivitas</th>
+      <th>Poin</th>
+      <th>Tanggal Pelaksanaan</th>
+      <th>Lokasi</th>
+      <th>Keterangan</th>
       <th>Aksi</th>
     </tr>
   </thead>
@@ -19,28 +20,16 @@
       <?php foreach ($rows as $index => $row): ?>
         <tr>
           <td class="ps-4 rounded-start"><?= $index + 1 ?></td>
-          <td><?= htmlspecialchars($row['judul']) ?></td>
-          <td><?= htmlspecialchars(implode(', ', $row['nama_pegawai'])) ?></td>
-          <td><?= !empty($row['deadline']) ? formatTanggalIndo($row['deadline']) : '-' ?></td>
-          <td>
-            <?php
-              $status = strtolower($row['status']);
-              $badgeClass = match ($status) {
-                'in progress' => 'badge-light-primary',
-                'done' => 'badge-light-success',
-                'pending' => 'badge-light-warning',
-                default => 'badge-light-secondary',
-              };
-            ?>
-            <span class="badge <?= $badgeClass ?> fs-7 fw-bold">
-              <?= htmlspecialchars($row['status']) ?>
-            </span>
-          </td>
+          <td><?= htmlspecialchars($row['aktivitas']) ?></td>
+          <td><?= !empty($row['poin']) ? $row['poin'] : '-' ?></td>
+          <td><?= !empty($row['tanggal_pelaksanaan']) ? formatTanggalIndo($row['tanggal_pelaksanaan']) : '-' ?></td>
+          <td><?= !empty($row['lokasi']) ? htmlspecialchars($row['lokasi']) : '-' ?></td>
+          <td><?= !empty($row['keterangan']) ? htmlspecialchars($row['keterangan']) : '-' ?></td>
           <td>
             <button
               type="button"
               data-bs-toggle="modal"
-              data-bs-target="#modalPemberianPekerjaan"
+              data-bs-target="#modalHseObjective"
               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
               onclick='handleClickEditPekerjaan(<?= json_encode($row) ?>)'
             >
@@ -54,7 +43,7 @@
               data-bs-toggle="modal"
               data-bs-target="#modalKonfirmasiHapus"
               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
-              data-href="<?= base_url('pemberianpekerjaan/delete/' . $row['pekerjaan_id']) ?>"
+              data-href="<?= base_url('hseobjective/delete/' . $row['id']) ?>"
             >
               <i class="ki-duotone ki-trash fs-2 text-danger">
                 <span class="path1"></span>

@@ -1,9 +1,9 @@
 <div class="row g-5 g-xl-8">
-    <?=
+    <!-- <?=
         '<pre>';
         print_r($this->session->userdata());
         '</pre>';
-    ?>
+    ?> -->
     <div class="col-xl-4">
         <a href="#" class="card bg-primary hoverable card-xl-stretch mb-xl-8">
             <div class="card-body">

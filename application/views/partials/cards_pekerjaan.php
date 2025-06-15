@@ -85,6 +85,20 @@
                   <?= htmlspecialchars($row['status']) ?>
                 </span>
               </div>
+              <?php
+                $halaman_tim = ["Pekerjaan Tim", "Pekerjaan Selesai"];
+              ?>
+              <?php if (in_array($page_title, $halaman_tim)): ?>
+                <div class="mb-2">
+                  <strong class="me-3">
+                    <img src="https://api.iconify.design/uil:calender.svg?color=%23000" alt="..." >
+                    Tim:
+                  </strong>
+                  <span class="">
+                    <?= !empty($row['deadline']) ? implode(', ', $row['nama_pegawai']) : '-' ?>
+                  </span>
+                </div>
+              <?php endif; ?>
             </div>
 
             <div class="card-footer bg-white d-flex justify-content-between align-items-center border-top">
@@ -107,12 +121,9 @@
         </div>
       <?php endforeach; ?>
     <?php else: ?>
-      <div class="col-lg-4">
-        <div class="card rounded-3" style="border: 1px solid #dcdcdc; border-top: 4px solid red;">
-          <div class="card-body">
-            <h5 class="card-title mb-3">Belum ada pekerjaan</h5>
-          </div>
-        </div>
+      <div class="d-flex flex-column align-items-center">
+        <img src="https://api.iconify.design/line-md:coffee-half-empty-filled-loop.svg?color=%23000" alt="..." style="width: 100px; height: 100px">
+        <h3 class="mt-3">Belum ada pekerjaan</h3>
       </div>
     <?php endif; ?>
   </div>
@@ -121,7 +132,14 @@
 <!-- Modal -->
 <div class="modal fade" id="modalDetailPekerjaan" tabindex="-1" aria-labelledby="modalDetailPekerjaanLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <form class="modal-content" id="formDetailPekerjaan" method="post" action=<?= base_url('pekerjaansaya/updateStatus') ?>>
+    <?php
+      $path = [
+        'Pekerjaan Saya'    => 'pekerjaansaya',
+        'Pekerjaan Tim'     => 'pekerjaantim',
+        'Pekerjaan Selesai' => 'pekerjaanselesai',
+      ]
+    ?>
+    <form class="modal-content" id="formDetailPekerjaan" method="post" action=<?= base_url($path[$page_title] . '/updateStatus') ?>>
       <div class="modal-header">
         <h4 class="modal-title pb-4" style="border-bottom: 3px solid #007BFF" id="modalDetailPekerjaanLabel">Detail Pekerjaan</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

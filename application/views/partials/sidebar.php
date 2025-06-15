@@ -39,15 +39,34 @@
 							<span class="path3"></span>
 						</i>
 					</span>
-					<span class="menu-title">Pekerjaan</span>
+					<span class="menu-title">Cascading KPI</span>
 					<span class="menu-arrow"></span>
 				</span>
-				<div class="menu-sub menu-sub-accordion <?= $page_title == "Pekerjaan Saya" || $page_title == "Pemberian Pekerjaan" ? "show" : "" ?>">
+				<?php
+					$menu_pekerjaan = ["Pekerjaan Saya", "Pekerjaan Tim", "Pekerjaan Selesai", "Pemberian Pekerjaan"]
+				?>
+				<div class="menu-sub menu-sub-accordion <?= in_array($page_title, $menu_pekerjaan) ? "show" : "" ?>">
 					<?php if ($menu_access['pekerjaan_saya']): ?>
 						<div class="menu-item">
 							<a class="menu-link <?= $page_title == "Pekerjaan Saya" ? "active" : "" ?>" href="<?= base_url() . 'pekerjaansaya' ?>">
 								<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
 								<span class="menu-title">Pekerjaan Saya</span>
+							</a>
+						</div>
+					<?php endif; ?>
+					<?php if ($menu_access['pekerjaan_tim']): ?>
+						<div class="menu-item">
+							<a class="menu-link <?= $page_title == "Pekerjaan Tim" ? "active" : "" ?>" href="<?= base_url() . 'pekerjaantim' ?>">
+								<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+								<span class="menu-title">Pekerjaan Tim</span>
+							</a>
+						</div>
+					<?php endif; ?>
+					<?php if ($menu_access['pekerjaan_selesai']): ?>
+						<div class="menu-item">
+							<a class="menu-link <?= $page_title == "Pekerjaan Selesai" ? "active" : "" ?>" href="<?= base_url() . 'pekerjaanselesai' ?>">
+								<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+								<span class="menu-title">Pekerjaan Selesai</span>
 							</a>
 						</div>
 					<?php endif; ?>

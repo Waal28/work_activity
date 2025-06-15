@@ -7,6 +7,7 @@ class PekerjaanSaya extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('AuthMiddleware');
+		$this->load->library('form_validation');
 		
 		$this->load->model('Pekerjaan_model');
 
@@ -21,7 +22,9 @@ class PekerjaanSaya extends CI_Controller
 		$data['content_view'] = 'pekerjaan/pekerjaan_saya';
 		$data['tab_active'] = 'semua';
 		$current_user = $this->session->userdata('current_user');
-		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai']);
+
+		$payload = ['tipe_pelaksanaan' => 'Individu'];
+		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai'], $payload);
 		$this->load->view('main', $data);
 	}
 	public function kpi()
@@ -30,7 +33,12 @@ class PekerjaanSaya extends CI_Controller
 		$data['content_view'] = 'pekerjaan/pekerjaan_saya';
 		$data['tab_active'] = 'kpi';
 		$current_user = $this->session->userdata('current_user');
-		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai'], 'KPI');
+
+		$payload = [
+			'tipe_pelaksanaan' => 'Individu',
+			'jenis_pekerjaan' => 'KPI'
+		];
+		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai'], $payload);
 		$this->load->view('main', $data);
 	}
 	public function nonkpi()
@@ -39,7 +47,51 @@ class PekerjaanSaya extends CI_Controller
 		$data['content_view'] = 'pekerjaan/pekerjaan_saya';
 		$data['tab_active'] = 'nonkpi';
 		$current_user = $this->session->userdata('current_user');
-		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai'], 'Non KPI');
+
+		$payload = [
+			'tipe_pelaksanaan' => 'Individu',
+			'jenis_pekerjaan' => 'Non KPI'
+		];
+		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai'], $payload);
+		$this->load->view('main', $data);
+	}
+	public function pekerjaanTim()
+	{
+		$data['page_title'] = 'Pekerjaan Tim';
+		$data['content_view'] = 'pekerjaan/pekerjaan_saya';
+		$data['tab_active'] = 'semua';
+		$current_user = $this->session->userdata('current_user');
+
+		$payload = ['tipe_pelaksanaan' => 'Team'];
+		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai'], $payload);
+		$this->load->view('main', $data);
+	}
+	public function pekerjaanTimKpi()
+	{
+		$data['page_title'] = 'Pekerjaan Tim';
+		$data['content_view'] = 'pekerjaan/pekerjaan_saya';
+		$data['tab_active'] = 'kpi';
+		$current_user = $this->session->userdata('current_user');
+
+		$payload = [
+			'tipe_pelaksanaan' => 'Team',
+			'jenis_pekerjaan' => 'KPI'
+		];
+		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai'], $payload);
+		$this->load->view('main', $data);
+	}
+	public function pekerjaanTimNonkpi()
+	{
+		$data['page_title'] = 'Pekerjaan Tim';
+		$data['content_view'] = 'pekerjaan/pekerjaan_saya';
+		$data['tab_active'] = 'nonkpi';
+		$current_user = $this->session->userdata('current_user');
+
+		$payload = [
+			'tipe_pelaksanaan' => 'Team',
+			'jenis_pekerjaan' => 'Non KPI'
+		];
+		$data['rows'] = $this->Pekerjaan_model->get_by_id_pegawai($current_user['id_pegawai'], $payload);
 		$this->load->view('main', $data);
 	}
 	public function updateStatus() {

@@ -20,8 +20,29 @@ class PemberianPekerjaan extends CI_Controller
 	{
 		$data['page_title'] = 'Pemberian Pekerjaan';
     $data['content_view'] = 'pekerjaan/pemberian_pekerjaan';
-		$data['rows'] = $this->Pekerjaan_model->get_all();
 		$data['pegawai_list'] = $this->Pegawai_model->get_pegawai();
+		$original_data = $this->Pekerjaan_model->get_all();
+
+		$mapped = [];
+
+		foreach ($original_data as $row) {
+				$id = $row['pekerjaan_id'];
+
+				if (!isset($mapped[$id])) {
+						// Copy semua field dari pekerjaan, lalu kosongkan id_pegawai
+						$mapped[$id] = $row;
+						$mapped[$id]['id_pegawai'] = [];
+						$mapped[$id]['nama_pegawai'] = [];
+				}
+
+				$mapped[$id]['id_pegawai'][] = $row['id_pegawai'];
+				$mapped[$id]['nama_pegawai'][] = $row['nama'];
+		}
+
+		// Reset indeks agar rapi
+		$mapped = array_values($mapped);
+
+		$data['rows'] = $mapped;
 		$this->load->view('main', $data);
 	}
 
@@ -65,15 +86,22 @@ class PemberianPekerjaan extends CI_Controller
 				]
 			],
 			[
-				'field'  => 'id_pegawai',
+				'field'  => 'tipe_pelaksanaan',
+				'label'  => 'Tipe Pelaksanaan',
+				'rules'  => 'required|in_list[Individu,Team]',
+				'errors' => [
+					'required' => 'Silakan pilih nilai {field}.',
+					'in_list'  => '{field} hanya boleh berisi: Individu atau Team.'
+				]
+			],
+			[
+				'field'  => 'id_pegawai[]',
 				'label'  => 'Penerima',
 				'rules'  => 'required',
 				'errors' => [
 					'required' => 'Pilih salah satu {field} terlebih dahulu.'
 				]
 			],
-			// ['field' => 'deskripsi', 'label' => 'Deskripsi', 'rules' => 'required'],
-			// ['field' => 'status',    'label' => 'Status',    'rules' => 'required|in_list[To Do,Pending,In Progress,Done]'],
 		]);
 
 		if ($this->form_validation->run() === FALSE) {
@@ -83,38 +111,46 @@ class PemberianPekerjaan extends CI_Controller
 		}
 
 		$data = [
-			'judul'       		=> $input['judul'],
-			'deadline'   			=> $input['deadline'],
-			'jenis_pekerjaan' => $input['jenis_pekerjaan'],
-			'prioritas'   		=> $input['prioritas'],
-			'id_pegawai'  		=> $input['id_pegawai'],
-			'deskripsi'   		=> $input['deskripsi'],
-			'status'      		=> 'To Do',
-			'pemberi'  				=> $current_user['nama'],
-			'created_id'  		=> $current_user['user_id'],
+			'judul'       			=> $input['judul'],
+			'deadline'   				=> $input['deadline'],
+			'jenis_pekerjaan' 	=> $input['jenis_pekerjaan'],
+			'prioritas'   			=> $input['prioritas'],
+			'deskripsi'   			=> $input['deskripsi'],
+			'status'      			=> 'To Do',
+			'tipe_pelaksanaan'	=> $input['tipe_pelaksanaan'],
+			'pemberi'  					=> $current_user['nama'],
+			'created_id'  			=> $current_user['user_id'],
 		];
 
-		$this->Pekerjaan_model->insert($data);
+		$pekerjaan_id = $this->Pekerjaan_model->insert($data);
+
+		foreach ($input['id_pegawai'] as $pegawai) {
+			$this->Pekerjaan_model->insert_pekerjaan_pegawai([
+				'pekerjaan_id' => $pekerjaan_id,
+				'id_pegawai'   => $pegawai,
+			]);
+		}
+
 		$this->session->set_flashdata('toast', [
 			'message' => 'Data berhasil disimpan!',
-			'type'    => 'success' // success, danger, warning, info
+			'type'    => 'success' 
 		]);
 		redirect('pemberianpekerjaan');
 	}
 
-	public function edit($id = null) {
+	public function edit($pekerjaan_id = null) {
 		$current_user = $this->session->userdata('current_user');
 		$input = $this->input->post(NULL, TRUE);
 
-		if (!$id) {
+		if (!$pekerjaan_id) {
 			$this->session->set_flashdata('toast', [
 				'message' => 'Data gagal dihapus, ID tidak ditemukan!',
-				'type'    => 'danger' // success, danger, warning, info
+				'type'    => 'danger' 
 			]);
 			redirect('pemberianpekerjaan');
 		};
 
-		$data['pekerjaan'] = $this->Pekerjaan_model->get_by_id($id);
+		$data['pekerjaan'] = $this->Pekerjaan_model->get_by_id($pekerjaan_id);
 		if (!$data['pekerjaan']) show_404();
 
 		$this->form_validation->set_rules([
@@ -153,19 +189,26 @@ class PemberianPekerjaan extends CI_Controller
 				]
 			],
 			[
-				'field'  => 'id_pegawai',
+				'field'  => 'tipe_pelaksanaan',
+				'label'  => 'Tipe Pelaksanaan',
+				'rules'  => 'required|in_list[Individu,Team]',
+				'errors' => [
+					'required' => 'Silakan pilih nilai {field}.',
+					'in_list'  => '{field} hanya boleh berisi: Individu atau Team.'
+				]
+			],
+			[
+				'field'  => 'id_pegawai[]',
 				'label'  => 'Penerima',
 				'rules'  => 'required',
 				'errors' => [
 					'required' => 'Pilih salah satu {field} terlebih dahulu.'
 				]
 			],
-			// ['field' => 'deskripsi', 'label' => 'Deskripsi', 'rules' => 'required'],
-			// ['field' => 'status',    'label' => 'Status',    'rules' => 'required|in_list[To Do,Pending,In Progress,Done]'],
 		]);
 
 		if ($this->form_validation->run() === FALSE) {
-			$input['pekerjaan_id'] = $id;
+			$input['pekerjaan_id'] = $pekerjaan_id;
 			$this->session->set_flashdata('validation_errors', validation_errors());
 			$this->session->set_flashdata('old_input', $input); // agar value form tidak hilang
 			redirect('pemberianpekerjaan');
@@ -176,13 +219,20 @@ class PemberianPekerjaan extends CI_Controller
 			'deadline'    		=> $input['deadline'],
 			'jenis_pekerjaan' => $input['jenis_pekerjaan'],
 			'prioritas'   		=> $input['prioritas'],
-			'id_pegawai'  		=> $input['id_pegawai'],
 			'deskripsi'   		=> $input['deskripsi'],
-			// 'status'      => $input['status'],
+			'tipe_pelaksanaan'	=> $input['tipe_pelaksanaan'],
 			'updated_id'  		=> $current_user['user_id'],
 		];
 
-		$this->Pekerjaan_model->update($id, $data);
+		$this->Pekerjaan_model->update($pekerjaan_id, $data);
+		// Hapus dulu relasi lama
+    $this->Pekerjaan_model->delete_pegawai_relasi($pekerjaan_id);
+		foreach ($input['id_pegawai'] as $pegawai) {
+			$this->Pekerjaan_model->insert_pekerjaan_pegawai([
+				'pekerjaan_id' => $pekerjaan_id,
+				'id_pegawai'   => $pegawai,
+			]);
+		}
 		$this->session->set_flashdata('toast', [
 			'message' => 'Data berhasil diupdate!',
 			'type'    => 'success' // success, danger, warning, info

@@ -7,19 +7,19 @@
 						'id' => 'semua',
 						'title' => 'Semua Pekerjaan',
 						'icon' => 'https://api.iconify.design/material-symbols:format-list-bulleted.svg?color=%23',
-						'url' => site_url('pekerjaansaya')
+						'url' => site_url('pekerjaantim')
 					],
 					[
 						'id' => 'kpi',
 						'title' => 'KPI',
 						'icon' => 'https://api.iconify.design/gg:performance.svg?color=%23',
-						'url' => site_url('pekerjaansaya/kpi')
+						'url' => site_url('pekerjaantim/kpi')
 					],
 					[
 						'id' => 'nonkpi',
 						'title' => 'Non KPI',
 						'icon' => 'https://api.iconify.design/hugeicons:task-01.svg?color=%23',
-						'url' => site_url('pekerjaansaya/nonkpi')
+						'url' => site_url('pekerjaantim/nonkpi')
 					]
 				]
 			?>

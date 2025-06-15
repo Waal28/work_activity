@@ -17,6 +17,12 @@ $config['page_roles'] = [
     'Manajer Unit',
     'Staf'
   ],
+  'pekerjaan_tim' => [
+    'Staf'
+  ],
+  'pekerjaan_selesai' => [
+    'Staf'
+  ],
   'pemberian_pekerjaan' => [
     'Direktur',
     'Vice President',

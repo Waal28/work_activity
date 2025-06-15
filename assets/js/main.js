@@ -5,6 +5,7 @@ function formHandler({ form, formErrorAlert } = {}) {
 	}
 
 	function setValue(el, value = "") {
+		console.log(el);
 		if (!el) return;
 		el.value = value;
 		if ($(el).hasClass("select2-hidden-accessible")) {
@@ -13,6 +14,7 @@ function formHandler({ form, formErrorAlert } = {}) {
 	}
 
 	const openForm = ({ data = {}, formTitle, actionUrl } = {}) => {
+		console.log("openForm", data);
 		form.title.innerText = formTitle;
 		form.element.action = BASE_URL + actionUrl;
 
