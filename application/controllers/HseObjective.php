@@ -18,7 +18,7 @@ class HseObjective extends CI_Controller
 	}
 	public function index()
 	{
-		$data['page_title'] = 'HSE Objective';
+		$data['page_title'] = 'HSSE Objective';
 		$data['content_view'] = 'objective/hse_objective';
 		$current_user = $this->session->userdata('current_user');
 
