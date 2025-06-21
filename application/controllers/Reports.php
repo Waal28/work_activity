@@ -12,7 +12,7 @@ class Reports extends CI_Controller
 
     $this->load->helper('format');
 		$menu_access = $this->session->userdata('menu_access');
-		$this->authmiddleware->check($menu_access['abs']);
+		$this->authmiddleware->check($menu_access['reports']);
 	}
 	public function index()
 	{

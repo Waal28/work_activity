@@ -45,6 +45,15 @@ $config['page_roles'] = [
     'Staf'
   ],
   'abs' => [
+    'Direktur Utama',
+    'Vice President',
+    'Manager Unit',
+    'Staf'
+  ],
+  'reports' => [
+    'Direktur Utama',
+    'Vice President',
+    'Manager Unit',
     'Staf'
   ],
 ];
