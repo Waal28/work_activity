@@ -13,13 +13,13 @@
         </tr>
         <tr>
           <td class="fw-bold">Unit</td>
-          <td>: <?= !empty($current_user['unit']) ? $current_user['unit'] : '-' ?></td>
+          <td>: <?= !empty($current_user['nm_unit_kerja']) ? $current_user['nm_unit_kerja'] : '-' ?></td>
           <td class="fw-bold">Fungsi</td>
           <td>: <?= !empty($current_user['fungsi']) ? $current_user['fungsi'] : '-' ?></td>
         </tr>
         <tr>
           <td class="fw-bold">Jabatan</td>
-          <td>: <?= !empty($current_user['jabatan']) ? $current_user['jabatan'] : '-' ?></td>
+          <td>: <?= !empty($current_user['nm_unit_level']) ? $current_user['nm_unit_level'] : '-' ?></td>
           <td class="fw-bold">Priode</td>
           <td>: <?= !empty($current_user['priode']) ? $current_user['priode'] : '-' ?></td>
         </tr>
