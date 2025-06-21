@@ -76,6 +76,7 @@ class HseObjective extends CI_Controller
 			'lokasi' 							=> $input['lokasi'],
 			'keterangan'   				=> $input['keterangan'],
 			'id_pegawai'  				=> $current_user['id_pegawai'],
+			'priode_objective_id' => 1,
 		];
 
 		$this->Hse_objective_model->insert($data);

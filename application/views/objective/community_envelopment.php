@@ -28,7 +28,7 @@
   </div>
 	<div class="card-header border-0 pt-5">
 		<h3 class="card-title align-items-start flex-column">
-			<span class="card-label fw-bold fs-3 mb-1">Community E nvelopment</span>
+			<span class="card-label fw-bold fs-3 mb-1">Community Envelopment</span>
 		</h3>
 		<div class="card-toolbar">
 			<button type="button" class="btn btn-sm btn-primary" onclick="handleClickTambahPekerjaan()" data-bs-toggle="modal" data-bs-target="#modalCommunityEnvelopment">
@@ -39,6 +39,13 @@
 		<div class="table-responsive">
 			<?php $this->load->view('partials/tabel_community_envelopment.php', ['rows' => $rows]); ?>
 		</div>
+		<?php
+			$total_point = 0;
+			foreach ($rows as $row) {
+				$total_point += $row['point'];
+			}
+		?>
+		<span class="badge bg-primary text-white" style="font-size: 14px;">Total Point: <?= $total_point ?></span>
 	</div>
 </div>
 <!-- Modal -->
@@ -102,7 +109,7 @@ function setValue(el, value = "") {
 		clearErrorForm({ isClickEdit: true });
 		openForm({
 			data,
-			formTitle: "Edit Community E nvelopment",
+			formTitle: "Edit Community Envelopment",
 			actionUrl: `communityEnvelopment/edit/${data.id}`,
 		});
 	};

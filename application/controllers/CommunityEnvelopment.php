@@ -76,6 +76,7 @@ class CommunityEnvelopment extends CI_Controller
 			'lokasi' 							=> $input['lokasi'],
 			'keterangan'   				=> $input['keterangan'],
 			'id_pegawai'  				=> $current_user['id_pegawai'],
+			'priode_objective_id' => 3,
 		];
 
 		$this->Community_envelopment_model->insert($data);

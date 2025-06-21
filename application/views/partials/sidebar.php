@@ -110,7 +110,7 @@
 
 				<?php if ($menu_access['hse_objective']): ?>
 					<div class="menu-item">
-						<a class="menu-link <?= $page_title == "HSE Objective" ? "active" : "" ?>" href="<?= base_url() . 'hseobjective' ?>">
+						<a class="menu-link <?= $page_title == "HSSE Objective" ? "active" : "" ?>" href="<?= base_url() . 'hseobjective' ?>">
 							<span class="menu-icon">
 								<i class="ki-duotone ki-shield-tick fs-2">
 									<span class="path1"></span><span class="path2"></span>
@@ -155,7 +155,7 @@
 				</div>
 			</div>
 			<div class="menu-item">
-				<a class="menu-link" href="<?= base_url('ABS') ?>">
+				<a class="menu-link <?= $page_title == "PENILAIAN AKHLAK Behavior Survey" ? "active" : "" ?>" href="<?= base_url() . 'abs' ?>">
 					<span class="menu-icon">
 						<i class="ki-duotone ki-check-square fs-2">
 							<span class="path1"></span><span class="path2"></span>
@@ -172,7 +172,7 @@
 				</div>
 			</div>
 			<div class="menu-item">
-				<a class="menu-link" href="<?= base_url('Reports') ?>">
+				<a class="menu-link <?= $page_title == "Individual Goal Setting" ? "active" : "" ?>" href="<?= base_url() . 'reports' ?>">
 					<span class="menu-icon">
 						<i class="ki-duotone ki-chart-pie-4 fs-2">
 							<span class="path1"></span>

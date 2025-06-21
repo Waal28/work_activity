@@ -85,17 +85,14 @@
                   <?= htmlspecialchars($row['status']) ?>
                 </span>
               </div>
-              <?php
-                $halaman_tim = ["Pekerjaan Tim", "Pekerjaan Selesai"];
-              ?>
-              <?php if (in_array($page_title, $halaman_tim)): ?>
+              <?php if (isset($row['nama_pegawai']) && is_array($row['nama_pegawai']) && count($row['nama_pegawai']) > 1): ?>
                 <div class="mb-2">
                   <strong class="me-3">
                     <img src="https://api.iconify.design/uil:calender.svg?color=%23000" alt="..." >
                     Tim:
                   </strong>
                   <span class="">
-                    <?= !empty($row['deadline']) ? implode(', ', $row['nama_pegawai']) : '-' ?>
+                    <?= !empty($row['nama_pegawai']) ? implode(', ', $row['nama_pegawai']) : '-' ?>
                   </span>
                 </div>
               <?php endif; ?>

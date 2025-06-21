@@ -120,6 +120,13 @@ class PemberianPekerjaan extends CI_Controller
 			'tipe_pelaksanaan'	=> $input['tipe_pelaksanaan'],
 			'pemberi'  					=> $current_user['nama'],
 			'created_id'  			=> $current_user['user_id'],
+			'freq_mon'					=> 'Tahunan',
+			'bobot'							=> 15.00,
+			'satuan'						=> '%',
+			'annual_target'			=> 90.00,
+			'target_semester_1'	=> 40.00,
+			'target_semester_2'	=> 50.00,
+			'priode'						=> '2025',
 		];
 
 		$pekerjaan_id = $this->Pekerjaan_model->insert($data);

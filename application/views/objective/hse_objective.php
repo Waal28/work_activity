@@ -39,6 +39,13 @@
 		<div class="table-responsive">
 			<?php $this->load->view('partials/tabel_hse_objective.php', ['rows' => $rows]); ?>
 		</div>
+		<?php
+			$total_point = 0;
+			foreach ($rows as $row) {
+				$total_point += $row['point'];
+			}
+		?>
+		<span class="badge bg-primary text-white" style="font-size: 14px;">Total Point: <?= $total_point ?></span>
 	</div>
 </div>
 <!-- Modal -->

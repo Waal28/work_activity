@@ -21,7 +21,7 @@
         <tr>
           <td class="ps-4 rounded-start"><?= $index + 1 ?></td>
           <td><?= htmlspecialchars($row['aktivitas']) ?></td>
-          <td><?= !empty($row['poin']) ? $row['poin'] : '-' ?></td>
+          <td><?= !empty($row['point']) ? $row['point'] : '-' ?></td>
           <td><?= !empty($row['tanggal_pelaksanaan']) ? formatTanggalIndo($row['tanggal_pelaksanaan']) : '-' ?></td>
           <td><?= !empty($row['lokasi']) ? htmlspecialchars($row['lokasi']) : '-' ?></td>
           <td><?= !empty($row['keterangan']) ? htmlspecialchars($row['keterangan']) : '-' ?></td>
