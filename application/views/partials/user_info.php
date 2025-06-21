@@ -9,10 +9,7 @@
           <a href="#" class="text-white text-hover-primary fs-6 fw-bold">
             <?= $this->session->userdata('current_user')['nama'] ?>
           </a>
-          <span class="text-gray-600 fw-semibold d-block fs-8 mb-1"><?= $this->session->userdata('current_user')['role_desc'] ?></span>
-          <div class="d-flex align-items-center text-success fs-9">
-            <span class="bullet bullet-dot bg-success me-1"></span>work
-          </div>
+          <span class="text-gray-600 fw-semibold d-block fs-8 mb-1"><?= $this->session->userdata('role') ?></span>
         </div>
         <div class="me-n2">
           <a href="#" class="btn btn-icon btn-sm btn-active-color-primary mt-n2" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-overflow="true">

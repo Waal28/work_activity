@@ -24,20 +24,20 @@ class Auth extends CI_Controller {
     $password = $this->input->post('password');
 
     $user = $this->User_model->get_user($username, $password);
-		$menu_access = generate_menu_access($user->role_name);
+		$menu_access = generate_menu_access($user->nm_unit_level);
 
 		$user_array = (array) $user;
 		unset($user_array['password']); // opsional
     if ($user) {
         $this->session->set_userdata([
 					'logged_in' => true,
-					'role' => $user->role_name,
+					'role' => $user->nm_unit_level,
 					'menu_access' => $menu_access,
 					'current_user' => $user_array
         ]);
 
         // redirect jika role sesuai
-        if (in_array($user->role_name, $this->roles)) {
+        if (in_array($user->nm_unit_level, $this->roles)) {
 					redirect('dashboard');
         } else {
 					$this->session->set_flashdata('error', 'Role tidak sesuai');
