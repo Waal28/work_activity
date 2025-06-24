@@ -1,30 +1,54 @@
-
 <style>
   .badge-status {
     font-size: 0.75rem;
     padding: 0.4em 0.6em;
   }
-  .progress-bar-custom {
-    height: 5px;
-    background-color: #dcdcdc;
-  }
+
   .card-title {
     font-weight: 600;
     font-size: 1rem;
   }
+
+  .progress-slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: #dee2e6;
+    outline: none;
+    appearance: none;
+  }
+
+  .progress-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0d6efd;
+    cursor: pointer;
+  }
+
+  .progress-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0d6efd;
+    cursor: pointer;
+    border: none;
+  }
 </style>
+
 <div class="container">
   <div class="row mb-5">
     <?php if (!empty($rows)): ?>
       <?php foreach ($rows as $index => $row): ?>
         <div class="col-lg-4" style="padding: 10px;">
           <?php
-            $jenis = $row['jenis_pekerjaan'];
-            $colorJenis = match ($jenis) {
-              'KPI' => '#6f42c1',
-              'Non KPI' => '#fd7e14',
-              default => '#fd7e14',
-            };
+          $jenis = $row['jenis_pekerjaan'];
+          $colorJenis = match ($jenis) {
+            'KPI' => '#6f42c1',
+            'Non KPI' => '#fd7e14',
+            default => '#fd7e14',
+          };
           ?>
           <div class="card rounded-3" style="border: 2px solid #dcdcdc; border-top: 4px solid  <?= $colorJenis ?>;">
             <div class="card-body">
@@ -44,13 +68,13 @@
                   Prioritas:
                 </strong>
                 <?php
-                  $prioritas = strtolower($row['prioritas']);
-                  $colorPrioritas = match ($prioritas) {
-                    'low' => '#4CAF50',
-                    'medium' => '#FF9800',
-                    'high' => '#F44336',
-                    default => '#000',
-                  };
+                $prioritas = strtolower($row['prioritas']);
+                $colorPrioritas = match ($prioritas) {
+                  'low' => '#4CAF50',
+                  'medium' => '#FF9800',
+                  'high' => '#F44336',
+                  default => '#000',
+                };
                 ?>
                 <span class="badge bg-light" style="color: <?= $colorPrioritas ?>; border: 1px solid <?= $colorPrioritas ?>;">
                   <?= htmlspecialchars($row['prioritas']) ?>
@@ -59,7 +83,7 @@
 
               <div class="mb-2">
                 <strong class="me-3">
-                  <img src="https://api.iconify.design/uil:calender.svg?color=%23000" alt="..." >
+                  <img src="https://api.iconify.design/uil:calender.svg?color=%23000" alt="...">
                   Deadline:
                 </strong>
                 <span class="">
@@ -69,26 +93,39 @@
 
               <div class="mb-2">
                 <strong>
-                  <img src="https://api.iconify.design/mdi:progress-clock.svg?color=%23000" alt="..." >
-                  Progress:
-                </strong> 
+                  <img src="https://api.iconify.design/mdi:progress-clock.svg?color=%23000" alt="...">
+                  Status:
+                </strong>
                 <?php
-                  $status = strtolower($row['status']);
-                  $classStatus = match ($status) {
-                    'in progress' => 'badge-light-primary',
-                    'done' => 'badge-light-success',
-                    'pending' => 'badge-light-warning',
-                    default => 'badge-light-secondary',
-                  };
+                $status = strtolower($row['status']);
+                $classStatus = match ($status) {
+                  'in progress' => 'badge-light-primary',
+                  'done' => 'badge-light-success',
+                  'pending' => 'badge-light-warning',
+                  default => 'badge-light-secondary',
+                };
                 ?>
                 <span class="badge <?= $classStatus ?> fs-7 fw-bold">
                   <?= htmlspecialchars($row['status']) ?>
                 </span>
               </div>
+
+              <div class="mb-2">
+                <strong class="me-3">
+                  <img src="https://api.iconify.design/uil:calender.svg?color=%23000" alt="...">
+                  Progress:
+                </strong>
+                <?php if (!empty($row['progress'])) : ?>
+                  <span class="fw-bold text-primary"><?= $row['progress'] ?></span>%
+                <?php else : ?>
+                  <span>-</span>
+                <?php endif; ?>
+              </div>
+
               <?php if (isset($row['nama_pegawai']) && is_array($row['nama_pegawai']) && count($row['nama_pegawai']) > 1): ?>
                 <div class="mb-2">
                   <strong class="me-3">
-                    <img src="https://api.iconify.design/uil:calender.svg?color=%23000" alt="..." >
+                    <img src="https://api.iconify.design/uil:calender.svg?color=%23000" alt="...">
                     Tim:
                   </strong>
                   <span class="">
@@ -105,8 +142,7 @@
                 style="background-color: #dcdcdc"
                 data-bs-toggle="modal"
                 data-bs-target="#modalDetailPekerjaan"
-                onclick='handleClickDetailPekerjaan(<?= json_encode($row) ?>)'
-              >
+                onclick='showJobDetail(<?= json_encode($row) ?>)'>
                 Detail
               </button>
               <div class="d-flex align-items-center fw-bold" style="color: #6b7280">
@@ -130,91 +166,83 @@
 <div class="modal fade" id="modalDetailPekerjaan" tabindex="-1" aria-labelledby="modalDetailPekerjaanLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <?php
-      $path = [
-        'Pekerjaan Saya'    => 'pekerjaansaya',
-        'Pekerjaan Tim'     => 'pekerjaantim',
-        'Pekerjaan Selesai' => 'pekerjaanselesai',
-      ]
+    $path = [
+      'Pekerjaan Saya'    => 'pekerjaansaya',
+      'Pekerjaan Tim'     => 'pekerjaantim',
+      'Pekerjaan Selesai' => 'pekerjaanselesai',
+    ]
     ?>
-    <form class="modal-content" id="formDetailPekerjaan" method="post" action=<?= base_url($path[$page_title] . '/updateStatus') ?>>
+    <form class="modal-content" id="formDetailPekerjaan" method="post" action="<?= base_url($path[$page_title] . '/updateStatus') ?>">
       <div class="modal-header">
         <h4 class="modal-title pb-4" style="border-bottom: 3px solid #007BFF" id="modalDetailPekerjaanLabel">Detail Pekerjaan</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <input type="text" name="pekerjaan_id" style="display: none">
-        <div class="row mb-5">
-          <div class="col-4">
-            <span class="fs-6 fw-semibold">Nama Pekerjaan</span>
-          </div>
-           <div class="col-8">
-            : <span name="judul"></span>
-           </div>
+        <input type="hidden" name="pekerjaan_id" id="pekerjaan_id">
+
+        <!-- Job Details -->
+        <div class="row mb-3">
+          <div class="col-4"><span class="fs-6 fw-semibold">Nama Pekerjaan</span></div>
+          <div class="col-8">: <span id="detail_judul"></span></div>
         </div>
-        <div class="row mb-5">
-          <div class="col-4">
-            <span class="fs-6 fw-semibold">Deskripsi</span>
-          </div>
-           <div class="col-8">
-            : <span name="deskripsi"></span>
-           </div>
+
+        <div class="row mb-3">
+          <div class="col-4"><span class="fs-6 fw-semibold">Deskripsi</span></div>
+          <div class="col-8">: <span id="detail_deskripsi"></span></div>
         </div>
-        <div class="row mb-5">
-          <div class="col-4">
-            <span class="fs-6 fw-semibold">Prioritas</span>
-          </div>
-           <div class="col-8">
-            : <span name="prioritas" class="fw-bold"></span>
-           </div>
+
+        <div class="row mb-3">
+          <div class="col-4"><span class="fs-6 fw-semibold">Prioritas</span></div>
+          <div class="col-8">: <span id="detail_prioritas" class="fw-bold"></span></div>
         </div>
-        <div class="row mb-5">
-          <div class="col-4">
-            <span class="fs-6 fw-semibold">Jenis Pekerjaan</span>
-          </div>
-           <div class="col-8">
-            : <span name="jenis_pekerjaan"></span>
-           </div>
+
+        <div class="row mb-3">
+          <div class="col-4"><span class="fs-6 fw-semibold">Jenis Pekerjaan</span></div>
+          <div class="col-8">: <span id="detail_jenis_pekerjaan"></span></div>
         </div>
-        <div class="row mb-5">
-          <div class="col-4">
-            <span class="fs-6 fw-semibold">Deadline</span>
-          </div>
-           <div class="col-8">
-            : <span name="deadline"></span>
-           </div>
+
+        <div class="row mb-3">
+          <div class="col-4"><span class="fs-6 fw-semibold">Deadline</span></div>
+          <div class="col-8">: <span id="detail_deadline"></span></div>
         </div>
-        <div class="row mb-5">
-          <div class="col-4">
-            <span class="fs-6 fw-semibold">Pemberi Pekerjaan</span>
-          </div>
-           <div class="col-8">
-            : <span name="pemberi"></span>
-           </div>
+
+        <div class="row mb-3">
+          <div class="col-4"><span class="fs-6 fw-semibold">Pemberi Pekerjaan</span></div>
+          <div class="col-8">: <span id="detail_pemberi"></span></div>
         </div>
-        <div class="row mb-5">
-          <div class="col-4 d-flex align-items-center">
-            <span class="fs-6 fw-semibold">Status</span>
+
+        <!-- Status Select -->
+        <div class="row mb-3">
+          <div class="col-4"><span class="fs-6 fw-semibold">Status</span></div>
+          <div class="col-8">
+            : <select class="form-select form-select-sm" name="status" id="status_select" style="width: max-content; display: inline-block;">
+              <option value="To Do">To Do</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Pending">Pending</option>
+              <option value="Done">Done</option>
+            </select>
           </div>
-           <div class="col-8 d-flex align-items-center">
-            <div>:</div>
-            <div name="status-container" style="margin-left: 5px; border-radius: 5px; width: max-content">
-              <select
-                class="form-select form-select-solid form-select-sm"
-                data-control="select2"
-                data-hide-search="true"
-                data-placeholder="Pilih Status"
-                name="status"
-              >
-                <option value="To Do">To Do</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Pending">Pending</option>
-                <option value="Done">Done</option>
-              </select>
-            </div>
-           </div>
+        </div>
+
+        <!-- Progress Slider -->
+        <div class="text-center mt-4">
+          <div class="mb-3">
+            <span class="fs-6 fw-semibold">Progress: </span>
+            <span id="progress_label" class="fw-bold text-primary">0</span>%
+          </div>
+          <input
+            type="range"
+            class="progress-slider"
+            min="0"
+            max="100"
+            value="0"
+            id="progress_slider"
+            name="progress">
         </div>
       </div>
+
       <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
         <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
       </div>
     </form>
@@ -222,116 +250,128 @@
 </div>
 
 <script>
-  function formatTanggalIndo(tanggalString) {
-    if (!tanggalString) return "";
+  // Utility Functions
+  const formatTanggalIndo = (tanggalString) => {
+    if (!tanggalString) return "-";
 
     const bulanIndo = [
-      "Januari",
-      "Februari",
-      "Maret",
-      "April",
-      "Mei",
-      "Juni",
-      "Juli",
-      "Agustus",
-      "September",
-      "Oktober",
-      "November",
-      "Desember",
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
     ];
 
     const tanggal = new Date(tanggalString);
-    if (isNaN(tanggal)) return tanggalString; // fallback jika gagal parsing
+    if (isNaN(tanggal)) return tanggalString;
 
     const hari = tanggal.getDate();
     const bulan = bulanIndo[tanggal.getMonth()];
     const tahun = tanggal.getFullYear();
 
     return `${hari} ${bulan} ${tahun}`;
-  }
+  };
 
-  function handleClickDetailPekerjaan(data) {
-    // 1. Validasi input
+  const getPriorityColor = (priority) => {
+    const colors = {
+      'Low': '#4CAF50',
+      'Medium': '#FF9800',
+      'High': '#F44336'
+    };
+    return colors[priority] || '#000';
+  };
+
+  const getStatusColor = (status) => {
+    const colors = {
+      'To Do': '#6c757d',
+      'In Progress': '#007BFF',
+      'Pending': '#FFC107',
+      'Done': '#28A745'
+    };
+    return colors[status] || '#000';
+  };
+
+  const updateProgressSlider = (slider) => {
+    const percent = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+    slider.style.background = `linear-gradient(to right, #0d6efd ${percent}%, #dee2e6 ${percent}%)`;
+  };
+
+  // Main Function to Show Job Detail
+  const showJobDetail = (data) => {
     if (!data || typeof data !== 'object') {
-      console.error('Invalid data provided');
+      console.error('Invalid job data');
       return;
     }
 
-    // 2. Ambil elemen form
-    const form = document.getElementById("formDetailPekerjaan");
-    if (!form) {
-      console.error('Form not found');
-      return;
-    }
-
-    // 3. Daftar nama field yang akan diproses
-    const fieldNames = [
-      "judul", "deskripsi", "jenis_pekerjaan",
-      "deadline", "prioritas", "status", "pemberi", "pekerjaan_id"
-    ];
-
-    // 4. Fungsi bantu untuk update field
-    const updateField = (element, key, value) => {
-      const tag = element.tagName;
-
-      if (tag === 'INPUT' || tag === 'SELECT') {
-        element.value = value;
-
-        // Select2 handling
-        if (element.classList.contains('select2-hidden-accessible')) {
-          $(element).val(value).trigger('change');
-        }
-      } else {
-        element.textContent = value;
-      }
-
-      // 5. Styling khusus untuk field tertentu
-      switch (key) {
-        case 'status': {
-          const statusColorMap = {
-            'In Progress': '#007BFF',
-            'Pending': '#FFC107',
-            'Done': '#28A745'
-          };
-          const color = statusColorMap[value] || '#000';
-          const container = form.querySelector('[name="status-container"]');
-
-          if (container) {
-            container.style.border = `2px solid ${color}`;
-          }
-
-          element.style.color = color;
-          break;
-        }
-
-        case 'prioritas': {
-          const colorPrioritasMap = {
-            Low: '#4CAF50',
-            Medium: '#FF9800',
-            High: '#F44336',
-          };
-          const color = colorPrioritasMap[value] || '#000';
-          element.style.color = color;
-          break;
-        }
-
-        case 'deadline': {
-          element.textContent = formatTanggalIndo(value);
-          break;
-        }
-      }
+    // Populate form fields
+    const fields = {
+      'pekerjaan_id': data.pekerjaan_id || '',
+      'detail_judul': data.judul || '-',
+      'detail_deskripsi': data.deskripsi || '-',
+      'detail_jenis_pekerjaan': data.jenis_pekerjaan || '-',
+      'detail_deadline': formatTanggalIndo(data.deadline),
+      'detail_pemberi': data.pemberi || '-'
     };
 
-    // 6. Iterasi dan update setiap field
-    fieldNames.forEach((key) => {
-      const element = form.querySelector(`[name="${key}"]`);
-      if (!element) {
-        console.warn(`Element for field "${key}" not found`);
-        return;
+    // Set basic fields
+    Object.entries(fields).forEach(([id, value]) => {
+      const element = document.getElementById(id);
+      if (element) {
+        if (element.tagName === 'INPUT') {
+          element.value = value;
+        } else {
+          element.textContent = value;
+        }
       }
-
-      const value = data[key] ?? '';
-      updateField(element, key, value);
     });
-  }
+
+    // Set priority with color
+    const prioritasElement = document.getElementById('detail_prioritas');
+    if (prioritasElement && data.prioritas) {
+      prioritasElement.textContent = data.prioritas;
+      prioritasElement.style.color = getPriorityColor(data.prioritas);
+    }
+
+    // Set status
+    const statusSelect = document.getElementById('status_select');
+    if (statusSelect && data.status) {
+      statusSelect.value = data.status;
+      statusSelect.style.color = getStatusColor(data.status);
+    }
+
+    // Set progress - FIXED: Ensure progress value is properly handled
+    const progressSlider = document.getElementById('progress_slider');
+    const progressLabel = document.getElementById('progress_label');
+
+    if (progressSlider && progressLabel) {
+      // Convert progress to number and handle potential undefined/null values
+      const progressValue = data.progress ? parseInt(data.progress) : 0;
+
+      progressSlider.value = progressValue;
+      progressLabel.textContent = progressValue;
+      updateProgressSlider(progressSlider);
+    }
+  };
+
+  // Event Listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    const progressSlider = document.getElementById('progress_slider');
+    const progressLabel = document.getElementById('progress_label');
+    const statusSelect = document.getElementById('status_select');
+
+    // Progress slider event
+    if (progressSlider && progressLabel) {
+      progressSlider.addEventListener('input', function() {
+        progressLabel.textContent = this.value;
+        updateProgressSlider(this);
+      });
+
+      // Initial update
+      updateProgressSlider(progressSlider);
+    }
+
+    // Status select color change
+    if (statusSelect) {
+      statusSelect.addEventListener('change', function() {
+        this.style.color = getStatusColor(this.value);
+      });
+    }
+  });
 </script>

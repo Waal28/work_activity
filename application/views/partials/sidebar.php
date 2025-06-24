@@ -1,5 +1,5 @@
 <?php
-  $menu_access = $this->session->userdata('menu_access');
+$menu_access = $this->session->userdata('menu_access');
 ?>
 
 <div class="aside-menu flex-column-fluid">
@@ -43,7 +43,7 @@
 					<span class="menu-arrow"></span>
 				</span>
 				<?php
-					$menu_pekerjaan = ["Pekerjaan Saya", "Pekerjaan Tim", "Pekerjaan Selesai", "Pemberian Pekerjaan"]
+				$menu_pekerjaan = ["Pekerjaan Saya", "Pekerjaan Tim", "Pekerjaan Selesai", "Pemberian Pekerjaan"]
 				?>
 				<div class="menu-sub menu-sub-accordion <?= in_array($page_title, $menu_pekerjaan) ? "show" : "" ?>">
 					<?php if ($menu_access['pekerjaan_saya']): ?>

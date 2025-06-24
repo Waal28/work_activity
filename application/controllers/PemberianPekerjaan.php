@@ -3,7 +3,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class PemberianPekerjaan extends CI_Controller
 {
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('AuthMiddleware');
@@ -19,34 +20,52 @@ class PemberianPekerjaan extends CI_Controller
 	public function index()
 	{
 		$data['page_title'] = 'Pemberian Pekerjaan';
-    $data['content_view'] = 'pekerjaan/pemberian_pekerjaan';
-		$data['pegawai_list'] = $this->Pegawai_model->get_pegawai();
-		$original_data = $this->Pekerjaan_model->get_all();
+		$data['content_view'] = 'pekerjaan/pemberian_pekerjaan';
 
+		$current_user = $this->session->userdata('current_user');
+		$role = $this->session->userdata('role');
+
+		// Role-to-payload mapping
+		$payload_map = [
+			'Manager Unit' => [
+				'id_unit_level' => 'A16',
+				'id_unit_kerja' => $current_user['id_unit_kerja']
+			],
+			'Vice President' => [
+				'id_unit_level' => 'A11',
+			],
+			'Direktur Utama' => [
+				'id_unit_level' => 'A6',
+			]
+		];
+
+		$payload = $payload_map[$role] ?? null;
+
+		$data['pegawai_list'] = $this->Pegawai_model->get_pegawai($payload);
+
+		$original_data = $this->Pekerjaan_model->get_all();
 		$mapped = [];
 
 		foreach ($original_data as $row) {
-				$id = $row['pekerjaan_id'];
+			$id = $row['pekerjaan_id'];
 
-				if (!isset($mapped[$id])) {
-						// Copy semua field dari pekerjaan, lalu kosongkan id_pegawai
-						$mapped[$id] = $row;
-						$mapped[$id]['id_pegawai'] = [];
-						$mapped[$id]['nama_pegawai'] = [];
-				}
+			if (!isset($mapped[$id])) {
+				$mapped[$id] = $row;
+				$mapped[$id]['id_pegawai'] = [];
+				$mapped[$id]['nama_pegawai'] = [];
+			}
 
-				$mapped[$id]['id_pegawai'][] = $row['id_pegawai'];
-				$mapped[$id]['nama_pegawai'][] = $row['nama'];
+			$mapped[$id]['id_pegawai'][] = $row['id_pegawai'];
+			$mapped[$id]['nama_pegawai'][] = $row['nama'];
 		}
 
-		// Reset indeks agar rapi
-		$mapped = array_values($mapped);
-
-		$data['rows'] = $mapped;
+		$data['rows'] = array_values($mapped); // Reset index
 		$this->load->view('main', $data);
 	}
 
-	public function create() {
+
+	public function create()
+	{
 		$current_user = $this->session->userdata('current_user');
 		$input = $this->input->post(NULL, TRUE);
 
@@ -97,9 +116,58 @@ class PemberianPekerjaan extends CI_Controller
 			[
 				'field'  => 'id_pegawai[]',
 				'label'  => 'Penerima',
+				'rules'  => 'required|callback_validate_team_member_count',
+				'errors' => [
+					'required' => 'Pilih salah satu {field} terlebih dahulu.',
+					'validate_team_member_count' => '{field} harus lebih dari satu orang jika tipe pelaksanaan adalah Team.'
+				]
+			],
+			[
+				'field'  => 'freq_mon',
+				'label'  => 'Freq Mon',
 				'rules'  => 'required',
 				'errors' => [
-					'required' => 'Pilih salah satu {field} terlebih dahulu.'
+					'required' => 'Kolom {field} wajib diisi.'
+				]
+			],
+			[
+				'field'  => 'bobot',
+				'label'  => 'Bobot',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} wajib diisi.'
+				]
+			],
+			[
+				'field'  => 'satuan',
+				'label'  => 'Satuan',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} wajib diisi.'
+				]
+			],
+			[
+				'field'  => 'annual_target',
+				'label'  => 'Target Tahunan',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} wajib diisi.'
+				]
+			],
+			[
+				'field'  => 'target_semester_1',
+				'label'  => 'Target Semester 1',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} wajib diisi.'
+				]
+			],
+			[
+				'field'  => 'target_semester_2',
+				'label'  => 'Target Semester 2',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} wajib diisi.'
 				]
 			],
 		]);
@@ -120,13 +188,13 @@ class PemberianPekerjaan extends CI_Controller
 			'tipe_pelaksanaan'	=> $input['tipe_pelaksanaan'],
 			'pemberi'  					=> $current_user['nama'],
 			'created_id'  			=> $current_user['user_id'],
-			'freq_mon'					=> 'Tahunan',
-			'bobot'							=> 15.00,
-			'satuan'						=> '%',
-			'annual_target'			=> 90.00,
-			'target_semester_1'	=> 40.00,
-			'target_semester_2'	=> 50.00,
-			'priode'						=> '2025',
+			'freq_mon'					=> $input['freq_mon'],
+			'bobot'							=> floatval($input['bobot']),
+			'progress'					=> 0,
+			'satuan'						=> $input['satuan'],
+			'annual_target'			=> floatval($input['annual_target']),
+			'target_semester_1'	=> floatval($input['target_semester_1']),
+			'target_semester_2'	=> floatval($input['target_semester_2']),
 		];
 
 		$pekerjaan_id = $this->Pekerjaan_model->insert($data);
@@ -140,19 +208,20 @@ class PemberianPekerjaan extends CI_Controller
 
 		$this->session->set_flashdata('toast', [
 			'message' => 'Data berhasil disimpan!',
-			'type'    => 'success' 
+			'type'    => 'success'
 		]);
 		redirect('pemberianpekerjaan');
 	}
 
-	public function edit($pekerjaan_id = null) {
+	public function edit($pekerjaan_id = null)
+	{
 		$current_user = $this->session->userdata('current_user');
 		$input = $this->input->post(NULL, TRUE);
 
 		if (!$pekerjaan_id) {
 			$this->session->set_flashdata('toast', [
 				'message' => 'Data gagal dihapus, ID tidak ditemukan!',
-				'type'    => 'danger' 
+				'type'    => 'danger'
 			]);
 			redirect('pemberianpekerjaan');
 		};
@@ -207,9 +276,58 @@ class PemberianPekerjaan extends CI_Controller
 			[
 				'field'  => 'id_pegawai[]',
 				'label'  => 'Penerima',
+				'rules'  => 'required|callback_validate_team_member_count',
+				'errors' => [
+					'required' => 'Pilih salah satu {field} terlebih dahulu.',
+					'validate_team_member_count' => '{field} harus lebih dari satu orang jika tipe pelaksanaan adalah Team.'
+				]
+			],
+			[
+				'field'  => 'freq_mon',
+				'label'  => 'Freq Mon',
 				'rules'  => 'required',
 				'errors' => [
-					'required' => 'Pilih salah satu {field} terlebih dahulu.'
+					'required' => 'Kolom {field} wajib diisi.'
+				]
+			],
+			[
+				'field'  => 'bobot',
+				'label'  => 'Bobot',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} wajib diisi.'
+				]
+			],
+			[
+				'field'  => 'satuan',
+				'label'  => 'Satuan',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} wajib diisi.'
+				]
+			],
+			[
+				'field'  => 'annual_target',
+				'label'  => 'Target Tahunan',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} wajib diisi.'
+				]
+			],
+			[
+				'field'  => 'target_semester_1',
+				'label'  => 'Target Semester 1',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} wajib diisi.'
+				]
+			],
+			[
+				'field'  => 'target_semester_2',
+				'label'  => 'Target Semester 2',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} wajib diisi.'
 				]
 			],
 		]);
@@ -229,11 +347,17 @@ class PemberianPekerjaan extends CI_Controller
 			'deskripsi'   		=> $input['deskripsi'],
 			'tipe_pelaksanaan'	=> $input['tipe_pelaksanaan'],
 			'updated_id'  		=> $current_user['user_id'],
+			'freq_mon'					=> $input['freq_mon'],
+			'bobot'							=> floatval($input['bobot']),
+			'satuan'						=> $input['satuan'],
+			'annual_target'			=> floatval($input['annual_target']),
+			'target_semester_1'	=> floatval($input['target_semester_1']),
+			'target_semester_2'	=> floatval($input['target_semester_2']),
 		];
 
 		$this->Pekerjaan_model->update($pekerjaan_id, $data);
 		// Hapus dulu relasi lama
-    $this->Pekerjaan_model->delete_pegawai_relasi($pekerjaan_id);
+		$this->Pekerjaan_model->delete_pegawai_relasi($pekerjaan_id);
 		foreach ($input['id_pegawai'] as $pegawai) {
 			$this->Pekerjaan_model->insert_pekerjaan_pegawai([
 				'pekerjaan_id' => $pekerjaan_id,
@@ -247,7 +371,8 @@ class PemberianPekerjaan extends CI_Controller
 		redirect('pemberianpekerjaan');
 	}
 
-	public function delete($id = null) {
+	public function delete($id = null)
+	{
 		if (!$id) {
 			$this->session->set_flashdata('toast', [
 				'message' => 'Data gagal dihapus, ID tidak ditemukan!',
@@ -272,4 +397,16 @@ class PemberianPekerjaan extends CI_Controller
 
 	// 	$this->load->view('pekerjaan/view', $data);
 	// }
+
+	public function validate_team_member_count()
+	{
+		$tipe = $this->input->post('tipe_pelaksanaan');
+		$pegawai = $this->input->post('id_pegawai');
+
+		if ($tipe === 'Team' && is_array($pegawai) && count($pegawai) <= 1) {
+			return false;
+		}
+
+		return true;
+	}
 }

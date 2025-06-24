@@ -13,7 +13,7 @@
 				<!-- form pekerjaan -->
 				<form id="kt_modal_new_target_form" class="form form_pekerjaan" action="" method="POST">
 					<div class="mb-13 text-center">
-						<h1 class="mb-3 form_pekerjaan_title" >Pemberian Pekerjaan</h1>
+						<h1 class="mb-3 form_pekerjaan_title">Pemberian Pekerjaan</h1>
 					</div>
 					<div class="d-flex flex-column mb-8 fv-row">
 						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -59,6 +59,43 @@
 							<option value="Medium">Medium</option>
 							<option value="High">High</option>
 						</select>
+					</div>
+					<div class="d-flex flex-column mb-8 fv-row">
+						<label class="required fs-6 fw-semibold mb-2">Freq Mon</label>
+						<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Freq Mon" name="freq_mon" form-field="freq_mon">
+							<option value="Tahunan">Tahunan</option>
+							<option value="Semi-Annually">Semi-Annually</option>
+						</select>
+					</div>
+					<div class="d-flex flex-column mb-8 fv-row">
+						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+							<span class="required">Bobot</span>
+						</label>
+						<input type="number" class="form-control form-control-solid" placeholder="Tambahkan Bobot" name="bobot" form-field="bobot" />
+					</div>
+					<div class="d-flex flex-column mb-8 fv-row">
+						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+							<span class="required">Satuan</span>
+						</label>
+						<input type="text" class="form-control form-control-solid" placeholder="Tambahkan Satuan" name="satuan" form-field="satuan" />
+					</div>
+					<div class="d-flex flex-column mb-8 fv-row">
+						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+							<span class="required">Target Tahunan</span>
+						</label>
+						<input type="number" class="form-control form-control-solid" placeholder="Tambahkan Target Tahunan" name="annual_target" form-field="annual_target" />
+					</div>
+					<div class="d-flex flex-column mb-8 fv-row">
+						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+							<span class="required">Target Semester 1</span>
+						</label>
+						<input type="number" class="form-control form-control-solid" placeholder="Tambahkan Target Semester 1" name="target_semester_1" form-field="target_semester_1" />
+					</div>
+					<div class="d-flex flex-column mb-8 fv-row">
+						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+							<span class="required">Target Semester 2</span>
+						</label>
+						<input type="number" class="form-control form-control-solid" placeholder="Tambahkan Target Semester 2" name="target_semester_2" form-field="target_semester_2" />
 					</div>
 					<div class="d-flex flex-column mb-8 fv-row">
 						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">

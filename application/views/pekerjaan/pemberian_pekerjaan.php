@@ -19,22 +19,28 @@
 <?php $this->load->view('partials/form_pemberian_pekerjaan.php', ['pegawai_list' => $pegawai_list]); ?>
 <!-- end modal -->
 <script>
-const root = document.querySelector(".form_pekerjaan");
-const formErrorAlert = document.getElementById("form-error-alert");
-const form = {
-	title: document.querySelector(".form_pekerjaan_title"),
-	element: root,
-	fields: {
-		judul: root.querySelector('[form-field="judul"]'),
-		deskripsi: root.querySelector('[form-field="deskripsi"]'),
-		jenis_pekerjaan: root.querySelector('[form-field="jenis_pekerjaan"]'),
-		deadline: root.querySelector('[form-field="deadline"]'),
-		id_pegawai: root.querySelector('[form-field="id_pegawai"]'),
-		prioritas: root.querySelector('[form-field="prioritas"]'),
-	},
-};
+	const root = document.querySelector(".form_pekerjaan");
+	const formErrorAlert = document.getElementById("form-error-alert");
+	const form = {
+		title: document.querySelector(".form_pekerjaan_title"),
+		element: root,
+		fields: {
+			judul: root.querySelector('[form-field="judul"]'),
+			deskripsi: root.querySelector('[form-field="deskripsi"]'),
+			jenis_pekerjaan: root.querySelector('[form-field="jenis_pekerjaan"]'),
+			deadline: root.querySelector('[form-field="deadline"]'),
+			id_pegawai: root.querySelector('[form-field="id_pegawai"]'),
+			prioritas: root.querySelector('[form-field="prioritas"]'),
+			freq_mon: root.querySelector('[form-field="freq_mon"]'),
+			bobot: root.querySelector('[form-field="bobot"]'),
+			satuan: root.querySelector('[form-field="satuan"]'),
+			annual_target: root.querySelector('[form-field="annual_target"]'),
+			target_semester_1: root.querySelector('[form-field="target_semester_1"]'),
+			target_semester_2: root.querySelector('[form-field="target_semester_2"]'),
+		},
+	};
 
-function setValue(el, value = "") {
+	function setValue(el, value = "") {
 		if (!el) return;
 		el.value = value;
 		if ($(el).hasClass("select2-hidden-accessible")) {
@@ -42,7 +48,11 @@ function setValue(el, value = "") {
 		}
 	}
 
-	const openForm = ({ data = {}, formTitle, actionUrl } = {}) => {
+	const openForm = ({
+		data = {},
+		formTitle,
+		actionUrl
+	} = {}) => {
 		form.title.innerText = formTitle;
 		form.element.action = BASE_URL + actionUrl;
 
@@ -51,7 +61,9 @@ function setValue(el, value = "") {
 		}
 	};
 
-	const clearErrorForm = ({ isClickEdit = false } = {}) => {
+	const clearErrorForm = ({
+		isClickEdit = false
+	} = {}) => {
 		if (formErrorAlert) formErrorAlert.innerHTML = "";
 
 		if (!isClickEdit) {
@@ -75,7 +87,9 @@ function setValue(el, value = "") {
 	};
 
 	function handleClickEditPekerjaan(data) {
-		clearErrorForm({ isClickEdit: true });
+		clearErrorForm({
+			isClickEdit: true
+		});
 		openForm({
 			data,
 			formTitle: "Edit Pemberian Pekerjaan",
@@ -129,32 +143,31 @@ function setValue(el, value = "") {
 
 <!-- Flashdata Handling -->
 <?php if ($this->session->flashdata('validation_errors')): ?>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-	const modal = new bootstrap.Modal(document.getElementById('modalPemberianPekerjaan'));
-	const oldInput = <?= json_encode($this->session->flashdata('old_input') ?? []) ?>;
-	const validationErrors = `<?= $this->session->flashdata('validation_errors') ?>`;
-	const isEdit = !!oldInput.pekerjaan_id;
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const modal = new bootstrap.Modal(document.getElementById('modalPemberianPekerjaan'));
+			const oldInput = <?= json_encode($this->session->flashdata('old_input') ?? []) ?>;
+			const validationErrors = `<?= $this->session->flashdata('validation_errors') ?>`;
+			const isEdit = !!oldInput.pekerjaan_id;
 
-	// Tampilkan error
-	if (formErrorAlert) {
-		formErrorAlert.innerHTML = `
+			// Tampilkan error
+			if (formErrorAlert) {
+				formErrorAlert.innerHTML = `
 			<div class="alert alert-danger fs-7 fw-bold mt-10">
 				${validationErrors}
 			</div>
 		`;
-	}
+			}
 
-	// Open form kembali dengan data sebelumnya
-	openForm({
-		data: oldInput,
-		formTitle: isEdit ? "Edit Pemberian Pekerjaan" : "Pemberian Pekerjaan",
-		actionUrl: isEdit ? `pemberianpekerjaan/edit/${oldInput.pekerjaan_id}` : "pemberianpekerjaan/create",
-	});
-	updateSelect(oldInput.tipe_pelaksanaan, oldInput.id_pegawai);
+			// Open form kembali dengan data sebelumnya
+			openForm({
+				data: oldInput,
+				formTitle: isEdit ? "Edit Pemberian Pekerjaan" : "Pemberian Pekerjaan",
+				actionUrl: isEdit ? `pemberianpekerjaan/edit/${oldInput.pekerjaan_id}` : "pemberianpekerjaan/create",
+			});
+			updateSelect(oldInput.tipe_pelaksanaan, oldInput.id_pegawai);
 
-	modal.show();
-});
-</script>
+			modal.show();
+		});
+	</script>
 <?php endif; ?>
-
