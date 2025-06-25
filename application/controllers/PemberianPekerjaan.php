@@ -43,7 +43,7 @@ class PemberianPekerjaan extends CI_Controller
 
 		$data['pegawai_list'] = $this->Pegawai_model->get_pegawai($payload);
 
-		$original_data = $this->Pekerjaan_model->get_all();
+		$original_data = $this->Pekerjaan_model->get_all($payload);
 		$mapped = [];
 
 		foreach ($original_data as $row) {
@@ -195,6 +195,7 @@ class PemberianPekerjaan extends CI_Controller
 			'annual_target'			=> floatval($input['annual_target']),
 			'target_semester_1'	=> floatval($input['target_semester_1']),
 			'target_semester_2'	=> floatval($input['target_semester_2']),
+			'hasil_kerja'				=> 'Menunggu Persetujuan',
 		];
 
 		$pekerjaan_id = $this->Pekerjaan_model->insert($data);

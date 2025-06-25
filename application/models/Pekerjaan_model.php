@@ -6,13 +6,21 @@ class Pekerjaan_model extends CI_Model
 
   private $table = 'pekerjaan';
 
-  public function get_all()
+  public function get_all($payload = null)
   {
     $this->db->select('pekerjaan.*, pegawai.nama, pegawai.id_pegawai');
     $this->db->from('pekerjaan');
     $this->db->join('pekerjaan_pegawai', 'pekerjaan.pekerjaan_id = pekerjaan_pegawai.pekerjaan_id');
     $this->db->join('pegawai', 'pekerjaan_pegawai.id_pegawai = pegawai.id_pegawai');
+    $this->db->join('pegawai_penempatan', 'pegawai.id_pegawai = pegawai_penempatan.id_pegawai', 'left');
     $this->db->order_by('deadline', 'ASC');
+
+    if (!empty($payload['id_unit_level'])) {
+      $this->db->where('pegawai_penempatan.id_unit_level', $payload['id_unit_level']);
+    }
+    if (!empty($payload['id_unit_kerja'])) {
+      $this->db->where('pegawai_penempatan.id_unit_kerja', $payload['id_unit_kerja']);
+    }
     return $this->db->get()->result_array();
   }
 

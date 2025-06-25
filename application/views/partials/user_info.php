@@ -1,7 +1,7 @@
 <div class="aside-toolbar flex-column-auto" id="kt_aside_toolbar">
   <div class="aside-user d-flex align-items-sm-center justify-content-center py-5">
-    <div class="symbol symbol-50px">
-      <img src="<?= base_url('assets/') ?>media/avatars/300-1.jpg" alt="" />
+    <div class="symbol symbol-40px border border-light p-3 rounded-circle" style="background-color: #6b7280">
+      <img src="https://api.iconify.design/solar:user-bold.svg?color=%23ffffff" alt="" />
     </div>
     <div class="aside-user-info flex-row-fluid flex-wrap ms-5">
       <div class="d-flex">
@@ -24,8 +24,8 @@
           <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
             <div class="menu-item px-3">
               <div class="menu-content d-flex align-items-center px-3">
-                <div class="symbol symbol-50px me-5">
-                  <img alt="Logo" src="<?= base_url('assets/') ?>media/avatars/300-1.jpg" />
+                <div class="symbol symbol-50px me-5 p-3 rounded-circle" style="background-color: #6b7280">
+                  <img alt="Logo" src="https://api.iconify.design/solar:user-bold.svg?color=%23ffffff" />
                 </div>
                 <div class="d-flex flex-column">
                   <div class="fw-bold d-flex align-items-center fs-5">

@@ -78,6 +78,11 @@ class PekerjaanSelesai extends CI_Controller
 			'status' => $input['status'],
 			'progress' => intval($input['progress'])
 		];
+
+		if ($input['status'] === 'Done') {
+			$payload['tanggal_selesai'] = date('Y-m-d H:i:s');
+		}
+
 		$this->Pekerjaan_model->update($pekerjaan_id, $payload);
 		$this->session->set_flashdata('toast', [
 			'message' => 'Data berhasil diubah!',
