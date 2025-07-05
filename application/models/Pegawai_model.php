@@ -3,7 +3,7 @@ class Pegawai_model extends CI_Model
 {
   public function get_pegawai($payload = null)
   {
-    $this->db->select('pegawai.id_pegawai, pegawai.nama');
+    $this->db->select('pegawai.id_pegawai, pegawai.nama, unit_kerja.nm_unit_kerja, unit_level.nm_unit_level');
     $this->db->from('pegawai');
     $this->db->join('pegawai_penempatan', 'pegawai.id_pegawai = pegawai_penempatan.id_pegawai', 'left');
     $this->db->join('unit_level', 'pegawai_penempatan.id_unit_level = unit_level.id_unit_level', 'left');

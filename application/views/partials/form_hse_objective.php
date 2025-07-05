@@ -13,7 +13,7 @@
 				<!-- form pekerjaan -->
 				<form id="kt_modal_new_target_form" class="form form_pekerjaan" action="" method="POST">
 					<div class="mb-13 text-center">
-						<h1 class="mb-3 form_hse_objective_title" >HSSE Participation</h1>
+						<h1 class="mb-3 form_hse_objective_title">HSSE Participation</h1>
 					</div>
 					<div class="d-flex flex-column mb-8 fv-row">
 						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -27,12 +27,18 @@
 						</label>
 						<input type="date" class="form-control form-control-solid" name="tanggal_pelaksanaan" form-field="tanggal_pelaksanaan" />
 					</div>
+					<div class="d-flex flex-column mb-8 fv-row">
+						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+							<span class="required">Point</span>
+						</label>
+						<input type="number" class="form-control form-control-solid" placeholder="point" name="point" form-field="point" />
+					</div>
 					<div class="d-flex flex-column mb-8">
-						<label class="fs-6 fw-semibold mb-2">Lokasi</label>
+						<label class="required fs-6 fw-semibold mb-2">Lokasi</label>
 						<textarea class="form-control form-control-solid" rows="3" name="lokasi" form-field="lokasi" placeholder="Lokasi"></textarea>
 					</div>
 					<div class="d-flex flex-column mb-8">
-						<label class="fs-6 fw-semibold mb-2">Keterangan</label>
+						<label class="required fs-6 fw-semibold mb-2">Keterangan</label>
 						<textarea class="form-control form-control-solid" rows="3" name="keterangan" form-field="keterangan" placeholder="Keterangan"></textarea>
 					</div>
 					<div class="text-center">

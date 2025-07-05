@@ -112,6 +112,7 @@ class PekerjaanSaya extends CI_Controller
 		];
 
 		if ($input['status'] === 'Done') {
+			$payload['progress'] = 100;
 			$payload['tanggal_selesai'] = date('Y-m-d H:i:s');
 		}
 

@@ -35,6 +35,11 @@
     cursor: pointer;
     border: none;
   }
+
+  input.progress-slider:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 </style>
 
 <div class="container">
@@ -331,13 +336,20 @@
 
     // Set status
     const statusSelect = document.getElementById('status_select');
+    const progressSlider = document.getElementById('progress_slider');
     if (statusSelect && data.status) {
       statusSelect.value = data.status;
       statusSelect.style.color = getStatusColor(data.status);
+
+      // Cek status untuk enable/disable slider
+      if (data.status !== 'In Progress') {
+        progressSlider.disabled = true;
+      } else {
+        progressSlider.disabled = false;
+      }
     }
 
     // Set progress - FIXED: Ensure progress value is properly handled
-    const progressSlider = document.getElementById('progress_slider');
     const progressLabel = document.getElementById('progress_label');
 
     if (progressSlider && progressLabel) {
@@ -371,6 +383,11 @@
     if (statusSelect) {
       statusSelect.addEventListener('change', function() {
         this.style.color = getStatusColor(this.value);
+        if (this.value !== 'In Progress') {
+          progressSlider.disabled = true;
+        } else {
+          progressSlider.disabled = false;
+        }
       });
     }
   });

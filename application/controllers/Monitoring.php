@@ -10,6 +10,7 @@ class Monitoring extends CI_Controller
 		$this->load->library('AuthMiddleware');
 
 		$this->load->model('Pekerjaan_model');
+		$this->load->model('Reports_model');
 
 		$this->load->helper('format');
 		$menu_access = $this->session->userdata('menu_access');
@@ -22,6 +23,11 @@ class Monitoring extends CI_Controller
 
 		$current_user = $this->session->userdata('current_user');
 		$role = $this->session->userdata('role');
+		$is_dirut = $role == 'Direktur Utama';
+
+		if ($is_dirut) {
+			$data['rows_reports'] = $this->Reports_model->get_reports($current_user['id_pegawai']);
+		}
 
 		// Role-to-payload mapping
 		$payload_map = [

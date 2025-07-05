@@ -2,7 +2,9 @@
 // echo '<pre>';
 // print_r($rows);
 // echo '</pre>';
+$is_dirut = $this->session->userdata('role') == 'Direktur Utama';
 ?>
+<!-- monitoring -->
 <div class="col-xl-12 mb-10">
 	<div class="row g-5 g-xl-10">
 		<?php if (empty($rows)) : ?>
@@ -216,83 +218,88 @@
 			</div>
 		</div>
 	</div>
+</div>
+<!-- reports -->
+<?php if ($is_dirut): ?>
+	<h3 style="margin: 50px 0 20px;">Individual Goal Setting</h3>
+	<?php $this->load->view('analytics/reports.php', ['rows' => $rows_reports]); ?>
+<?php endif; ?>
+<script>
+	const formatTanggalIndo = (tanggalString) => {
+		if (!tanggalString) return "-";
 
-	<script>
-		const formatTanggalIndo = (tanggalString) => {
-			if (!tanggalString) return "-";
+		const bulanIndo = [
+			"Januari", "Februari", "Maret", "April", "Mei", "Juni",
+			"Juli", "Agustus", "September", "Oktober", "November", "Desember"
+		];
 
-			const bulanIndo = [
-				"Januari", "Februari", "Maret", "April", "Mei", "Juni",
-				"Juli", "Agustus", "September", "Oktober", "November", "Desember"
-			];
+		const tanggal = new Date(tanggalString);
+		if (isNaN(tanggal)) return tanggalString;
 
-			const tanggal = new Date(tanggalString);
-			if (isNaN(tanggal)) return tanggalString;
+		const hari = tanggal.getDate();
+		const bulan = bulanIndo[tanggal.getMonth()];
+		const tahun = tanggal.getFullYear();
 
-			const hari = tanggal.getDate();
-			const bulan = bulanIndo[tanggal.getMonth()];
-			const tahun = tanggal.getFullYear();
+		return `${hari} ${bulan} ${tahun}`;
+	};
+	const showJobDetail = (data) => {
+		if (!data || typeof data !== 'object') {
+			console.error('Invalid job data');
+			return;
+		}
 
-			return `${hari} ${bulan} ${tahun}`;
+		// Populate form fields
+		const fields = {
+			'detail_judul': data.judul || '-',
+			'detail_pekerjaan_id': data.pekerjaan_id || '-',
+			'detail_deskripsi': data.deskripsi || '-',
+			'detail_status': data.status || '-',
+			'detail_deadline': formatTanggalIndo(data.deadline),
+			'detail_hasil_kerja': data.hasil_kerja || '-'
 		};
-		const showJobDetail = (data) => {
-			if (!data || typeof data !== 'object') {
-				console.error('Invalid job data');
-				return;
-			}
 
-			// Populate form fields
-			const fields = {
-				'detail_judul': data.judul || '-',
-				'detail_pekerjaan_id': data.pekerjaan_id || '-',
-				'detail_deskripsi': data.deskripsi || '-',
-				'detail_status': data.status || '-',
-				'detail_deadline': formatTanggalIndo(data.deadline),
-				'detail_hasil_kerja': data.hasil_kerja || '-'
-			};
-
-			// Set basic fields
-			Object.entries(fields).forEach(([id, value]) => {
-				const element = document.getElementById(id);
-				if (element) {
-					if (element.tagName === 'INPUT') {
-						element.value = value;
-					} else {
-						element.textContent = value;
-					}
+		// Set basic fields
+		Object.entries(fields).forEach(([id, value]) => {
+			const element = document.getElementById(id);
+			if (element) {
+				if (element.tagName === 'INPUT') {
+					element.value = value;
+				} else {
+					element.textContent = value;
 				}
-			});
-
-			const namaPegawaiElement = document.getElementById('detail_nama_pegawai');
-			if (namaPegawaiElement && data.nama_pegawai) {
-				namaPegawaiElement.textContent = data.nama_pegawai.join(', ');
 			}
+		});
 
-			// Set priority with color
-			const prioritasElement = document.getElementById('detail_prioritas');
-			if (prioritasElement && data.prioritas) {
-				prioritasElement.textContent = data.prioritas;
-				prioritasElement.style.color = getPriorityColor(data.prioritas);
-			}
+		const namaPegawaiElement = document.getElementById('detail_nama_pegawai');
+		if (namaPegawaiElement && data.nama_pegawai) {
+			namaPegawaiElement.textContent = data.nama_pegawai.join(', ');
+		}
 
-			// Set status
-			const approvalSelect = document.getElementById('approval_select');
-			if (approvalSelect && data.hasil_kerja) {
-				approvalSelect.value = data.hasil_kerja;
-				approvalSelect.style.color = getStatusColor(data.hasil_kerja);
-			}
+		// Set priority with color
+		const prioritasElement = document.getElementById('detail_prioritas');
+		if (prioritasElement && data.prioritas) {
+			prioritasElement.textContent = data.prioritas;
+			prioritasElement.style.color = getPriorityColor(data.prioritas);
+		}
 
-			// Set progress - FIXED: Ensure progress value is properly handled
-			const progressSlider = document.getElementById('progress_slider');
-			const progressLabel = document.getElementById('progress_label');
+		// Set status
+		const approvalSelect = document.getElementById('approval_select');
+		if (approvalSelect && data.hasil_kerja) {
+			approvalSelect.value = data.hasil_kerja;
+			approvalSelect.style.color = getStatusColor(data.hasil_kerja);
+		}
 
-			if (progressSlider && progressLabel) {
-				// Convert progress to number and handle potential undefined/null values
-				const progressValue = data.progress ? parseInt(data.progress) : 0;
+		// Set progress - FIXED: Ensure progress value is properly handled
+		const progressSlider = document.getElementById('progress_slider');
+		const progressLabel = document.getElementById('progress_label');
 
-				progressSlider.value = progressValue;
-				progressLabel.textContent = progressValue;
-				updateProgressSlider(progressSlider);
-			}
-		};
-	</script>
+		if (progressSlider && progressLabel) {
+			// Convert progress to number and handle potential undefined/null values
+			const progressValue = data.progress ? parseInt(data.progress) : 0;
+
+			progressSlider.value = progressValue;
+			progressLabel.textContent = progressValue;
+			updateProgressSlider(progressSlider);
+		}
+	};
+</script>

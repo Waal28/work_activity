@@ -193,7 +193,7 @@ class Dashboard_model extends CI_Model
       'rata_progress'      => $total > 0 ? round(($total_progress / $total) * 100, 1) : 0,
     ];
   }
-  public function get_monthly_activity_chart($id_pegawai, $month = null, $year = null, $priode = '2025')
+  public function get_monthly_activity_chart($id_pegawai, $month = null, $year = null, $periode = '2025')
   {
     if (!$year) $year = date('Y');
 
@@ -207,7 +207,7 @@ class Dashboard_model extends CI_Model
     }
 
     // 2. Fungsi bantu untuk menghitung per bulan
-    $count_by_month = function ($table, $date_column, $join_type) use ($months, $id_pegawai, $priode) {
+    $count_by_month = function ($table, $date_column, $join_type) use ($months, $id_pegawai, $periode) {
       $result = array_fill(0, count($months), 0);
 
       $this->db->select("DATE_FORMAT($date_column, '%Y-%m') AS bulan, COUNT(*) AS total");
@@ -216,9 +216,9 @@ class Dashboard_model extends CI_Model
       if ($table === 'pekerjaan') {
         $this->db->join('pekerjaan_pegawai', 'pekerjaan.pekerjaan_id = pekerjaan_pegawai.pekerjaan_id');
         $this->db->where('pekerjaan_pegawai.id_pegawai', $id_pegawai);
-      } elseif ($join_type === 'join_priode') {
-        $this->db->join('priode_objectives', "$table.priode_objective_id = priode_objectives.id");
-        $this->db->where('priode_objectives.priode', $priode);
+      } elseif ($join_type === 'join_periode') {
+        $this->db->join('periode_objectives', "$table.periode_objective_id = periode_objectives.id");
+        $this->db->where('periode_objectives.periode', $periode);
         $this->db->where("$table.id_pegawai", $id_pegawai);
       }
 
@@ -241,9 +241,9 @@ class Dashboard_model extends CI_Model
     return [
       'labels'     => $labels,
       'pekerjaan'  => $count_by_month('pekerjaan', 'pekerjaan.created_at', 'join_pekerjaan'),
-      'community'  => $count_by_month('community_envelopment', 'community_envelopment.created_at', 'join_priode'),
-      'development' => $count_by_month('dev_commitment', 'dev_commitment.created_at', 'join_priode'),
-      'hsse'       => $count_by_month('hse_objective', 'hse_objective.created_at', 'join_priode'),
+      'community'  => $count_by_month('community_envelopment', 'community_envelopment.created_at', 'join_periode'),
+      'development' => $count_by_month('dev_commitment', 'dev_commitment.created_at', 'join_periode'),
+      'hsse'       => $count_by_month('hse_objective', 'hse_objective.created_at', 'join_periode'),
     ];
   }
 }

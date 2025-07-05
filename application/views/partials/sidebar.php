@@ -1,5 +1,6 @@
 <?php
 $menu_access = $this->session->userdata('menu_access');
+$is_dirut = $this->session->userdata('role') == 'Direktur Utama';
 ?>
 
 <div class="aside-menu flex-column-fluid">
@@ -39,13 +40,13 @@ $menu_access = $this->session->userdata('menu_access');
 							<span class="path3"></span>
 						</i>
 					</span>
-					<span class="menu-title">Cascading KPI</span>
+					<span class="menu-title"><?= $is_dirut ? "Management" : "Cascading KPI" ?></span>
 					<span class="menu-arrow"></span>
 				</span>
 				<?php
-				$menu_pekerjaan = ["Pekerjaan Saya", "Pekerjaan Tim", "Pekerjaan Selesai", "Pemberian Pekerjaan"]
+				$menu_pekerjaan = ["Pekerjaan Saya", "Pekerjaan Tim", "Pekerjaan Selesai", "Pemberian Pekerjaan"];
 				?>
-				<div class="menu-sub menu-sub-accordion <?= in_array($page_title, $menu_pekerjaan) ? "show" : "" ?>">
+				<div class="menu-sub menu-sub-accordion <?= in_array($page_title, $menu_pekerjaan) || ($is_dirut && $page_title == "Monitoring Pekerjaan") ? "show" : "" ?>">
 					<?php if ($menu_access['pekerjaan_saya']): ?>
 						<div class="menu-item">
 							<a class="menu-link <?= $page_title == "Pekerjaan Saya" ? "active" : "" ?>" href="<?= base_url() . 'pekerjaansaya' ?>">
@@ -78,11 +79,19 @@ $menu_access = $this->session->userdata('menu_access');
 							</a>
 						</div>
 					<?php endif; ?>
+					<?php if ($is_dirut && $menu_access['monitoring']): ?>
+						<div class="menu-item">
+							<a class="menu-link <?= $page_title == "Monitoring Pekerjaan" ? "active" : "" ?>" href="<?= base_url() . 'monitoring' ?>">
+								<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+								<span class="menu-title">Monitoring</span>
+							</a>
+						</div>dashb
+					<?php endif; ?>
 				</div>
 			</div>
 
 			<!-- Monitoring -->
-			<?php if ($menu_access['monitoring']): ?>
+			<?php if (!$is_dirut && $menu_access['monitoring']): ?>
 				<div class="menu-item">
 					<a class="menu-link <?= $page_title == "Monitoring Pekerjaan" ? "active" : "" ?>" href="<?= base_url() . 'monitoring' ?>">
 						<span class="menu-icon">
@@ -155,7 +164,7 @@ $menu_access = $this->session->userdata('menu_access');
 				</div>
 			</div>
 			<div class="menu-item">
-				<a class="menu-link <?= $page_title == "PENILAIAN AKHLAK Behavior Survey" ? "active" : "" ?>" href="<?= base_url() . 'abs' ?>">
+				<a class="menu-link <?= $page_title == "Penilaian Akhlak Behavior Survey" ? "active" : "" ?>" href="<?= base_url() . 'abs' ?>">
 					<span class="menu-icon">
 						<i class="ki-duotone ki-check-square fs-2">
 							<span class="path1"></span><span class="path2"></span>
@@ -164,25 +173,37 @@ $menu_access = $this->session->userdata('menu_access');
 					<span class="menu-title">ABS</span>
 				</a>
 			</div>
-
-			<!-- ANALYTICS -->
-			<div class="menu-item pt-5">
-				<div class="menu-content">
-					<span class="menu-heading fw-bold text-uppercase fs-7">Analytics</span>
-				</div>
-			</div>
 			<div class="menu-item">
-				<a class="menu-link <?= $page_title == "Individual Goal Setting" ? "active" : "" ?>" href="<?= base_url() . 'reports' ?>">
+				<a class="menu-link <?= $page_title == "Daftar Penilaian Akhlak" ? "active" : "" ?>" href="<?= base_url() . 'abs/daftarpenilaian' ?>">
 					<span class="menu-icon">
-						<i class="ki-duotone ki-chart-pie-4 fs-2">
-							<span class="path1"></span>
-							<span class="path2"></span>
-							<span class="path3"></span>
+						<i class="ki-duotone ki-tablet-text-down fs-2">
+							<span class="path1"></span><span class="path2"></span>
 						</i>
 					</span>
-					<span class="menu-title">Reports</span>
+					<span class="menu-title">Daftar Penilaian</span>
 				</a>
 			</div>
+
+			<!-- ANALYTICS -->
+			<?php if (!$is_dirut): ?>
+				<div class="menu-item pt-5">
+					<div class="menu-content">
+						<span class="menu-heading fw-bold text-uppercase fs-7">Analytics</span>
+					</div>
+				</div>
+				<div class="menu-item">
+					<a class="menu-link <?= $page_title == "Individual Goal Setting" ? "active" : "" ?>" href="<?= base_url() . 'reports' ?>">
+						<span class="menu-icon">
+							<i class="ki-duotone ki-chart-pie-4 fs-2">
+								<span class="path1"></span>
+								<span class="path2"></span>
+								<span class="path3"></span>
+							</i>
+						</span>
+						<span class="menu-title">Reports</span>
+					</a>
+				</div>
+			<?php endif; ?>
 		</div>
 	</div>
 </div>

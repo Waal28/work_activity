@@ -13,7 +13,7 @@
 				<!-- form pekerjaan -->
 				<form id="kt_modal_new_target_form" class="form form_pekerjaan" action="" method="POST">
 					<div class="mb-13 text-center">
-						<h1 class="mb-3 form_development_commitment_title" >Development Commitment</h1>
+						<h1 class="mb-3 form_development_commitment_title">Development Commitment</h1>
 					</div>
 					<div class="d-flex flex-column mb-8 fv-row">
 						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -26,6 +26,12 @@
 							<span class="required">Tanggal Pelaksanaan</span>
 						</label>
 						<input type="date" class="form-control form-control-solid" name="tanggal_pelaksanaan" form-field="tanggal_pelaksanaan" />
+					</div>
+					<div class="d-flex flex-column mb-8 fv-row">
+						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+							<span class="required">Lh</span>
+						</label>
+						<input type="number" class="form-control form-control-solid" placeholder="lh" name="lh" form-field="lh" />
 					</div>
 					<div class="d-flex flex-column mb-8">
 						<label class="fs-6 fw-semibold mb-2">Lokasi</label>

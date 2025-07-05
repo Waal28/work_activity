@@ -12,16 +12,16 @@ $current_user = $this->session->userdata('current_user');
 					<td>: <?= !empty($current_user['nik']) ? $current_user['nik'] : '-' ?></td>
 				</tr>
 				<tr>
-					<td class="fw-bold">Unit</td>
-					<td>: <?= !empty($current_user['nm_unit_kerja']) ? $current_user['nm_unit_kerja'] : '-' ?></td>
+					<td class="fw-bold">Unit Bisnis</td>
+					<td>: <?= !empty($current_user['nm_unit_bisnis']) ? $current_user['nm_unit_bisnis'] : '-' ?></td>
 					<td class="fw-bold">Fungsi</td>
-					<td>: <?= !empty($current_user['fungsi']) ? $current_user['fungsi'] : '-' ?></td>
+					<td>: <?= !empty($current_user['nm_unit_kerja']) ? $current_user['nm_unit_kerja'] : '-' ?></td>
 				</tr>
 				<tr>
 					<td class="fw-bold">Jabatan</td>
 					<td>: <?= !empty($current_user['nm_unit_level']) ? $current_user['nm_unit_level'] : '-' ?></td>
-					<td class="fw-bold">Priode</td>
-					<td>: <?= !empty($current_user['priode']) ? $current_user['priode'] : '-' ?></td>
+					<td class="fw-bold">Periode</td>
+					<td>: Tahunan / 2025</td>
 				</tr>
 			</tbody>
 		</table>
@@ -61,6 +61,7 @@ $current_user = $this->session->userdata('current_user');
 			aktivitas: root.querySelector('[form-field="aktivitas"]'),
 			keterangan: root.querySelector('[form-field="keterangan"]'),
 			lokasi: root.querySelector('[form-field="lokasi"]'),
+			point: root.querySelector('[form-field="point"]'),
 			tanggal_pelaksanaan: root.querySelector('[form-field="tanggal_pelaksanaan"]'),
 		},
 	};

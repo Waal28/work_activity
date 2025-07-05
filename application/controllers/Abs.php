@@ -3,95 +3,158 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Abs extends CI_Controller
 {
+	private $current_user;
+	private $user_role;
+
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('session');
-		$this->load->library('AuthMiddleware');
+		$this->load->library(['session', 'AuthMiddleware']);
+		$this->load->model(['Abs_model', 'Pegawai_model']);
+		$this->load->helper('format');
 
-		$this->load->model('Abs_model');
-		$this->load->model('Pegawai_model');
-
+		// Check access
 		$menu_access = $this->session->userdata('menu_access');
 		$this->authmiddleware->check($menu_access['abs']);
+
+		// Set user data
+		$this->current_user = $this->session->userdata('current_user');
+		$this->user_role = $this->session->userdata('role');
 	}
+
 	public function index()
 	{
-		$data['page_title'] = 'PENILAIAN AKHLAK Behavior Survey';
-		$data['content_view'] = 'assessment/abs';
-
-		$current_user = $this->session->userdata('current_user');
-		$role = $this->session->userdata('role');
-
-		$pegawai_list = [];
-		$selected_id = $current_user['id_pegawai'];
-
-		$unit_level_map = [
-			'Manager Unit' => ['id_unit_level' => 'A16', 'id_unit_kerja' => $current_user['id_unit_kerja']],
-			'Vice President' => ['id_unit_level' => 'A11'],
-			'Direktur Utama' => ['id_unit_level' => 'A6'],
+		$data = [
+			'page_title' => 'Penilaian Akhlak Behavior Survey',
+			'content_view' => 'assessment/abs',
+			'pegawai_list' => $this->get_pegawai_list(),
+			'current_pegawai' => $this->get_current_pegawai(),
+			'perilaku' => $this->Abs_model->get_all_perilaku()
 		];
-
-		if (isset($unit_level_map[$role])) {
-			$payload = $unit_level_map[$role];
-			$pegawai_list = $this->Pegawai_model->get_pegawai($payload);
-			$data['pegawai_list'] = $pegawai_list;
-
-			if (!empty($pegawai_list)) {
-				$selected_id = $pegawai_list[0]['id_pegawai'];
-				$data['current_pegawai'] = $this->Pegawai_model->get_details_pegawai($selected_id);
-			}
-		} else {
-			// Role staf
-			$data['current_pegawai'] = $this->Pegawai_model->get_details_pegawai($selected_id);
-		}
-
-		$data['rows'] = $this->Abs_model->get_core_values_pegawai($selected_id);
 
 		$this->load->view('main', $data);
 	}
 
-
-	public function update()
+	public function daftarpenilaian()
 	{
-		$input = $this->input->post();
-		$levels = $input['levels'];
-		$bhv_assessments = [];
+		$data = [
+			'page_title' => 'Daftar Penilaian Akhlak',
+			'content_view' => 'assessment/daftar_penilaian_abs',
+			'rows' => $this->Abs_model->getAllPenilaian($this->current_user['id_pegawai'])
+		];
 
-		foreach ($levels as $item) {
-			list($level_id, $assessment_id) = explode('|', $item);
-			$bhv_assessments[] = [
-				'level_id' => $level_id,
-				'assessment_id' => $assessment_id
-			];
+		$this->load->view('main', $data);
+	}
+
+	public function detail($id_penilaian_session = null)
+	{
+		$response = $this->Abs_model->getDetailPenilaian($id_penilaian_session);
+
+		$data = [
+			'page_title' => 'Detail Penilaian Akhlak',
+			'content_view' => 'assessment/detail_daftar_penilaian_abs',
+			'penilaian_session' => $response['penilaian_session'],
+			'penilaian' => $response['penilaian'],
+			'pegawai' => $response['pegawai'],
+			'perilaku' => $response['perilaku'],
+			'komentar_penilaian' => $response['komentar_penilaian']
+		];
+
+		$this->load->view('main', $data);
+	}
+
+	public function simpan()
+	{
+		$perilaku = $this->input->post('perilaku');
+		$area_kekuatan = $this->input->post('area_kekuatan');
+		$area_pengembangan = $this->input->post('area_pengembangan');
+		$komentar_umum = $this->input->post('komentar_umum');
+
+		if (!$perilaku) {
+			$this->session->set_flashdata('toast', [
+				'message' => 'Data gagal disimpan, core values belum diisi!',
+				'type' => 'danger'
+			]);
+			redirect('abs');
 		}
 
-		$this->Abs_model->update_behavior_assessments($bhv_assessments);
+		if (!$area_kekuatan || !$area_pengembangan || !$komentar_umum) {
+			$this->session->set_flashdata('toast', [
+				'message' => 'Data gagal disimpan, komentar belum diisi!',
+				'type' => 'danger'
+			]);
+			redirect('abs');
+		}
+
+		$this->Abs_model->simpanPenilaian($this->input->post(), $this->current_user['id_pegawai']);
+
 		$this->session->set_flashdata('toast', [
 			'message' => 'Data berhasil diupdate!',
-			'type'    => 'success'
+			'type' => 'success'
 		]);
+
 		redirect('abs');
-		// echo '<pre>';
-		//   print_r($bhv_assessments);
-		// echo '</pre>';
 	}
+
+
+	public function delete($id = null)
+	{
+		if (!$id) {
+			$this->session->set_flashdata('toast', [
+				'message' => 'Data gagal dihapus, ID tidak ditemukan!',
+				'type' => 'danger'
+			]);
+			redirect('abs');
+		}
+
+		$this->Abs_model->delete($id);
+
+		$this->session->set_flashdata('toast', [
+			'message' => 'Data berhasil dihapus!',
+			'type' => 'success'
+		]);
+
+		redirect('abs/daftarpenilaian');
+	}
+
 	public function detail_pegawai()
 	{
-		$current_user = $this->session->userdata('current_user');
-		$role = $this->session->userdata('role');
-
-		if ($role !== 'Staf') {
-			$pegawai_list = $this->Pegawai_model->get_pegawai();
-			$data['pegawai_list'] = $pegawai_list;
-			$selected_id = $this->input->post('id');
-			$data['current_pegawai'] = $this->Pegawai_model->get_details_pegawai($selected_id);
-		} else {
-			$selected_id = $current_user['id_pegawai'];
-		}
-		$data['rows'] = $this->Abs_model->get_core_values_pegawai($selected_id);
-
+		$id_pegawai = $this->input->post('id');
+		$data = [
+			'pegawai_list' => $this->get_pegawai_list(),
+			'current_pegawai' => $this->get_current_pegawai($id_pegawai),
+			'perilaku' => $this->Abs_model->get_all_perilaku()
+		];
 
 		$this->load->view('assessment/detail_ajax', $data);
+	}
+
+	// Private helper methods
+	private function get_pegawai_list()
+	{
+		// $unit_level_map = [
+		// 	'Manager Unit' => ['id_unit_level' => 'A16', 'id_unit_kerja' => $this->current_user['id_unit_kerja']],
+		// 	'Vice President' => ['id_unit_level' => 'A11'],
+		// 	'Direktur Utama' => ['id_unit_level' => 'A6'],
+		// ];
+
+		// if (isset($unit_level_map[$this->user_role])) {
+		// 	return $this->Pegawai_model->get_pegawai($unit_level_map[$this->user_role]);
+		// }
+
+		// return [];
+		return $this->Pegawai_model->get_pegawai();
+	}
+
+	private function get_current_pegawai($id_pegawai = null)
+	{
+		$pegawai_list = $this->get_pegawai_list();
+
+		if (!empty($pegawai_list)) {
+			$selected_id = !empty($id_pegawai) ? $id_pegawai : $pegawai_list[0]['id_pegawai'];
+			return $this->Pegawai_model->get_details_pegawai($selected_id);
+		}
+
+		return [];
 	}
 }

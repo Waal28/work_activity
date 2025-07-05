@@ -36,9 +36,27 @@
 					<div class="d-flex flex-column mb-8 fv-row">
 						<label class="required fs-6 fw-semibold mb-2">Tujuan Pemberian</label>
 						<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Pegawai" name="id_pegawai[]" form-field="id_pegawai">
-							<?php foreach ($pegawai_list as $pegawai): ?>
-								<option value="<?= $pegawai['id_pegawai']; ?>"><?= $pegawai['nama']; ?></option>
-							<?php endforeach; ?>
+							<?php if (empty($pegawai_list)): ?>
+								<option value="">Tidak ada pegawai</option>
+							<?php else: ?>
+								<?php
+								// Kelompokkan data berdasarkan nm_unit_level
+								$grouped_pegawai = [];
+								foreach ($pegawai_list as $pegawai) {
+									$grouped_pegawai[$pegawai['nm_unit_level']][] = $pegawai;
+								}
+								?>
+								<?php foreach ($grouped_pegawai as $unit_level => $pegawais): ?>
+									<optgroup label="<?= htmlspecialchars($unit_level); ?>">
+										<?php foreach ($pegawais as $pegawai): ?>
+											<option
+												value="<?= $pegawai['id_pegawai']; ?>">
+												<?= $pegawai['nama'] . ' | ' . $pegawai['nm_unit_kerja']; ?>
+											</option>
+										<?php endforeach; ?>
+									</optgroup>
+								<?php endforeach; ?>
+							<?php endif; ?>
 						</select>
 					</div>
 					<div class="d-flex flex-column mb-8">
@@ -105,7 +123,7 @@
 					</div>
 					<div class="text-center">
 						<button type="reset" id="kt_modal_new_target_cancel" class="btn btn-light me-3" data-bs-dismiss="modal" onclick="handleClearForm()">Cancel</button>
-						<button type="submit" id="kt_modal_new_target_submit" class="btn btn-primary">
+						<button type="submit" id="kt_modal_new_target_submit" class="btn btn-primary" <?= empty($pegawai_list) ? 'disabled' : '' ?>>
 							<span class="indicator-label">Submit</span>
 							<div class="spinner-border indicator-spinner d-none" style="width: 1rem; height: 1rem;" role="status">
 								<span class="sr-only">Loading...</span>

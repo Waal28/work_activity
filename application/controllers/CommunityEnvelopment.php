@@ -3,7 +3,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class CommunityEnvelopment extends CI_Controller
 {
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library('AuthMiddleware');
@@ -25,7 +26,8 @@ class CommunityEnvelopment extends CI_Controller
 		$data['rows'] = $this->Community_envelopment_model->get_community_by_pegawai($current_user['id_pegawai']);
 		$this->load->view('main', $data);
 	}
-	public function create() {
+	public function create()
+	{
 		$current_user = $this->session->userdata('current_user');
 		$input = $this->input->post(NULL, TRUE);
 
@@ -55,6 +57,14 @@ class CommunityEnvelopment extends CI_Controller
 				]
 			],
 			[
+				'field'  => 'point',
+				'label'  => 'Point',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} harus diisi.'
+				]
+			],
+			[
 				'field'  => 'keterangan',
 				'label'  => 'Keterangan',
 				'rules'  => 'required',
@@ -75,25 +85,27 @@ class CommunityEnvelopment extends CI_Controller
 			'tanggal_pelaksanaan' => $input['tanggal_pelaksanaan'],
 			'lokasi' 							=> $input['lokasi'],
 			'keterangan'   				=> $input['keterangan'],
+			'point'   						=> $input['point'],
 			'id_pegawai'  				=> $current_user['id_pegawai'],
-			'priode_objective_id' => 3,
+			'periode_objective_id' => 3,
 		];
 
 		$this->Community_envelopment_model->insert($data);
 		$this->session->set_flashdata('toast', [
 			'message' => 'Data berhasil disimpan!',
-			'type'    => 'success' 
+			'type'    => 'success'
 		]);
 		redirect('communityenvelopment');
 	}
 
-	public function edit($id = null) {
+	public function edit($id = null)
+	{
 		$input = $this->input->post(NULL, TRUE);
 
 		if (!$id) {
 			$this->session->set_flashdata('toast', [
 				'message' => 'Data gagal dihapus, ID tidak ditemukan!',
-				'type'    => 'danger' 
+				'type'    => 'danger'
 			]);
 			redirect('communityenvelopment');
 		};
@@ -127,6 +139,14 @@ class CommunityEnvelopment extends CI_Controller
 				]
 			],
 			[
+				'field'  => 'point',
+				'label'  => 'Point',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} harus diisi.'
+				]
+			],
+			[
 				'field'  => 'keterangan',
 				'label'  => 'Keterangan',
 				'rules'  => 'required',
@@ -148,6 +168,7 @@ class CommunityEnvelopment extends CI_Controller
 			'tanggal_pelaksanaan' => $input['tanggal_pelaksanaan'],
 			'lokasi' 							=> $input['lokasi'],
 			'keterangan'   				=> $input['keterangan'],
+			'point'   						=> $input['point'],
 		];
 
 		$this->Community_envelopment_model->update($id, $data);
@@ -158,7 +179,8 @@ class CommunityEnvelopment extends CI_Controller
 		redirect('communityenvelopment');
 	}
 
-	public function delete($id = null) {
+	public function delete($id = null)
+	{
 		if (!$id) {
 			$this->session->set_flashdata('toast', [
 				'message' => 'Data gagal dihapus, ID tidak ditemukan!',

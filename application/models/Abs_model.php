@@ -1,68 +1,129 @@
 <?php
-class Abs_model extends CI_Model {
-  public function get_core_values_pegawai($id_pegawai) {
-    // Jika belum ada penilaian, isi default
-    if ($this->check_penilaian_pegawai($id_pegawai) == 0) {
-        $this->insert_default_penilaian($id_pegawai);
-    }
+class Abs_model extends CI_Model
+{
+  public function getCoreValues()
+  {
+    return $this->db->get('core_values')->result();
+  }
 
-    $this->db->select('
-        cv.id AS core_value_id,
-        cv.nama AS core_value_nama,
-        cv.arti AS core_value_arti,
-        b.id AS behavior_id,
-        b.no_urut,
-        b.deskripsi AS behavior_deskripsi,
-        al.label AS level_label,
-        ba.tanggal,
-        ba.level_id,
-        ba.id AS assessment_id,
-    ');
-    $this->db->from('behavior_assessments ba');
-    $this->db->join('behaviors b', 'ba.behavior_id = b.id');
-    $this->db->join('core_values cv', 'b.core_value_id = cv.id');
-    $this->db->join('assessment_levels al', 'ba.level_id = al.id');
-    $this->db->where('ba.id_pegawai', $id_pegawai);
-    $this->db->order_by('cv.id, b.no_urut');
+  public function get_all_perilaku()
+  {
+    $this->db->select('p.*, cv.nama as core_value_nama, cv.arti as core_value_arti');
+    $this->db->from('perilaku p');
+    $this->db->join('core_values cv', 'cv.id = p.core_value_id');
+    $this->db->order_by('p.core_value_id, p.no_urut');
+    return $this->db->get()->result();
+  }
 
+  public function getAllPenilaian($id_pemberi)
+  {
+    $this->db->select('penilaian_session.*, pegawai.nama as nama_pegawai, pegawai.nik as nik_pegawai, unit_level.nm_unit_level');
+    $this->db->from('penilaian_session');
+    $this->db->join('pegawai', 'pegawai.id_pegawai = penilaian_session.id_pegawai');
+    $this->db->join('pegawai_penempatan', 'pegawai.id_pegawai = pegawai_penempatan.id_pegawai');
+    $this->db->join('unit_level', 'pegawai_penempatan.id_unit_level = unit_level.id_unit_level');
+    $this->db->where('penilaian_session.id_pemberi', $id_pemberi);
     return $this->db->get()->result_array();
   }
 
-  public function check_penilaian_pegawai($id_pegawai) {
-    return $this->db->where('id_pegawai', $id_pegawai)
-                    ->count_all_results('behavior_assessments');
-  }
-
-  public function insert_default_penilaian($id_pegawai, $default_level_id = 5) {
-    // Ambil semua perilaku
-    $behaviors = $this->db->get('behaviors')->result_array();
-
-    $data = [];
-    $today = date('Y-m-d');
-
-    foreach ($behaviors as $b) {
-        $data[] = [
-            'id_pegawai' => $id_pegawai,
-            'behavior_id' => $b['id'],
-            'level_id' => $default_level_id,
-            'tanggal' => $today
-        ];
-    }
-
-    if (!empty($data)) {
-        $this->db->insert_batch('behavior_assessments', $data);
-    }
-  }
-
-  public function update_behavior_assessments($data_array)
+  public function getDetailPenilaian($id_penilaian_session)
   {
-    foreach ($data_array as $item) {
-      $this->db->where('id', $item['assessment_id']);
-      $this->db->update('behavior_assessments', [
-          'level_id' => $item['level_id'],
-      ]);
+    $penilaian_session = $this->db->select('penilaian_session.*, pegawai.nama as nama_pemberi, unit_level.nm_unit_level as jabatan_pemberi')
+      ->join('pegawai', 'pegawai.id_pegawai = penilaian_session.id_pemberi')
+      ->join('pegawai_penempatan', 'pegawai.id_pegawai = pegawai_penempatan.id_pegawai')
+      ->join('unit_level', 'pegawai_penempatan.id_unit_level = unit_level.id_unit_level')
+      ->join('unit_kerja', 'pegawai_penempatan.id_unit_kerja = unit_kerja.id_unit_kerja')
+      ->where('penilaian_session.id', $id_penilaian_session)
+      ->get('penilaian_session')
+      ->row_array();
+
+    if (!$penilaian_session) {
+      return null; // atau lempar exception jika mau
     }
+
+    $penilaian = $this->db->select('*')
+      ->where('id_penilaian_session', $id_penilaian_session)
+      ->get('penilaian')
+      ->result_array();
+
+    $pegawai = $this->db->select('pegawai.nama, pegawai.nik, unit_level.nm_unit_level, unit_kerja.nm_unit_kerja')
+      ->join('pegawai_penempatan', 'pegawai.id_pegawai = pegawai_penempatan.id_pegawai')
+      ->join('unit_level', 'pegawai_penempatan.id_unit_level = unit_level.id_unit_level')
+      ->join('unit_kerja', 'pegawai_penempatan.id_unit_kerja = unit_kerja.id_unit_kerja')
+      ->where('pegawai.id_pegawai', $penilaian_session['id_pegawai'])
+      ->get('pegawai')
+      ->row_array();
+
+    $perilaku = $this->db->select('p.*, cv.nama as core_value_nama, cv.arti as core_value_arti')
+      ->from('perilaku p')
+      ->join('core_values cv', 'cv.id = p.core_value_id')
+      ->order_by('p.core_value_id, p.no_urut')
+      ->get()
+      ->result_array();
+
+    $komentar_penilaian = $this->db->select('k.id as id_komentar_penilaian, k.komentar_umum, k.area_kekuatan, k.area_pengembangan')
+      ->from('komentar_penilaian k')
+      ->where('k.id_penilaian_session', $id_penilaian_session)
+      ->get()
+      ->row_array();
+
+    return [
+      'penilaian_session' => $penilaian_session,
+      'penilaian' => $penilaian,
+      'pegawai' => $pegawai,
+      'perilaku' => $perilaku,
+      'komentar_penilaian' => $komentar_penilaian
+    ];
   }
 
 
+  public function delete($id)
+  {
+    // Hapus anak-anaknya dulu
+    $this->db->where('id_penilaian_session', $id);
+    $this->db->delete('komentar_penilaian');
+
+    $this->db->where('id_penilaian_session', $id);
+    $this->db->delete('penilaian');
+
+    // Baru hapus parent-nya
+    $this->db->where('id', $id);
+    $this->db->delete('penilaian_session');
+  }
+
+
+  public function simpanPenilaian($post, $id_pemberi)
+  {
+    // Simpan ke penilaian_session
+    $this->db->insert('penilaian_session', [
+      'id_pegawai' => $post['id_pegawai'],
+      'periode' => $post['periode'],
+      'id_pemberi' => $id_pemberi,
+    ]);
+
+    // Ambil ID terakhir yang disisipkan
+    $session_id = $this->db->insert_id();
+
+    // Siapkan data penilaian
+    $data = [];
+    foreach ($post['perilaku'] as $id_perilaku => $skor) {
+      $data[] = [
+        'id_perilaku' => $id_perilaku,
+        'id_penilaian_session' => $session_id,
+        'skor' => $skor
+      ];
+    }
+
+    // Simpan semua skor ke tabel penilaian
+    $this->db->insert_batch('penilaian', $data);
+
+    // Simpan komentar
+    $komentar = [
+      'id_penilaian_session' => $session_id,
+      'komentar_umum' => $post['komentar_umum'],
+      'area_kekuatan' => $post['area_kekuatan'],
+      'area_pengembangan' => $post['area_pengembangan'],
+    ];
+    $this->db->insert('komentar_penilaian', $komentar);
+  }
 }
