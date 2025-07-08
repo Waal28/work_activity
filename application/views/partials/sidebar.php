@@ -85,7 +85,7 @@ $is_dirut = $this->session->userdata('role') == 'Direktur Utama';
 								<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
 								<span class="menu-title">Monitoring</span>
 							</a>
-						</div>dashb
+						</div>
 					<?php endif; ?>
 				</div>
 			</div>
