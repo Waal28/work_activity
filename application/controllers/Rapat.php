@@ -59,7 +59,7 @@ class Rapat extends CI_Controller
     if ($this->form_validation->run() === FALSE) {
       $this->session->set_flashdata('validation_errors', validation_errors());
       $this->session->set_flashdata('old_input', $input); // agar value form tidak hilang
-      redirect('communityenvelopment');
+      redirect('rapat');
     }
 
     $data = [
@@ -99,7 +99,7 @@ class Rapat extends CI_Controller
         'message' => 'Data gagal dihapus, ID tidak ditemukan!',
         'type'    => 'danger'
       ]);
-      redirect('communityenvelopment');
+      redirect('rapat');
     };
 
     $data['pekerjaan'] = $this->Rapat_model->get_by_id($id);
@@ -112,7 +112,7 @@ class Rapat extends CI_Controller
       $input['id'] = $id;
       $this->session->set_flashdata('validation_errors', validation_errors());
       $this->session->set_flashdata('old_input', $input); // agar value form tidak hilang
-      redirect('communityenvelopment');
+      redirect('rapat');
     }
 
     $data = [
@@ -130,7 +130,7 @@ class Rapat extends CI_Controller
       'message' => 'Data berhasil diupdate!',
       'type'    => 'success' // success, danger, warning, info
     ]);
-    redirect('communityenvelopment');
+    redirect('rapat');
   }
 
   public function delete($id = null)
@@ -141,7 +141,7 @@ class Rapat extends CI_Controller
         'message' => 'Data gagal dihapus, ID tidak ditemukan!',
         'type'    => 'danger' // success, danger, warning, info
       ]);
-      redirect('communityenvelopment');
+      redirect('rapat');
     };
 
     $this->session->set_flashdata('toast', [
@@ -149,7 +149,7 @@ class Rapat extends CI_Controller
       'type'    => 'success' // success, danger, warning, info
     ]);
     $this->Rapat_model->delete($id);
-    redirect('communityenvelopment');
+    redirect('rapat');
   }
 
   public function daftarrapat()
