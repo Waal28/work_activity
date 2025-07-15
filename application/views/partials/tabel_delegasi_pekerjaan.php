@@ -7,11 +7,9 @@
   <thead>
     <tr class="fw-bold thead-tabel-objective">
       <th class="ps-4 rounded-start">No</th>
-      <th>Aktivitas</th>
-      <th>Poin</th>
-      <th>Tanggal Pelaksanaan</th>
-      <th>Lokasi</th>
-      <th>Keterangan</th>
+      <th>Nama Pekerjaan</th>
+      <th>Diberikan Kepada</th>
+      <th>Tanggal Delegasi</th>
       <th>Aksi</th>
     </tr>
   </thead>
@@ -20,18 +18,16 @@
       <?php foreach ($rows as $index => $row): ?>
         <tr>
           <td class="ps-4 rounded-start"><?= $index + 1 ?></td>
-          <td><?= htmlspecialchars($row['aktivitas']) ?></td>
-          <td><?= !empty($row['point']) ? $row['point'] : '-' ?></td>
-          <td><?= !empty($row['tanggal_pelaksanaan']) ? formatTanggalIndo($row['tanggal_pelaksanaan']) : '-' ?></td>
-          <td><?= !empty($row['lokasi']) ? htmlspecialchars($row['lokasi']) : '-' ?></td>
-          <td><?= !empty($row['keterangan']) ? htmlspecialchars($row['keterangan']) : '-' ?></td>
+          <td><?= htmlspecialchars($row['judul']) ?></td>
+          <td><?= !empty($row['ke_nama_pegawai']) ? htmlspecialchars($row['ke_nama_pegawai']) : '-' ?></td>
+          <td><?= !empty($row['tanggal_delegasi']) ? formatTanggalIndo($row['tanggal_delegasi']) : '-' ?></td>
           <td>
             <button
               type="button"
               data-bs-toggle="modal"
-              data-bs-target="#modalCommunityEnvelopment"
+              data-bs-target="#modalDelegasiPekerjaan"
               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
-              onclick="handleClickEditPekerjaan(<?= htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8') ?>)">
+              onclick='handleClickEditDelegasi(<?= json_encode($row) ?>)'>
               <i class="ki-duotone ki-pencil fs-2 text-primary">
                 <span class="path1"></span>
                 <span class="path2"></span>
@@ -42,7 +38,7 @@
               data-bs-toggle="modal"
               data-bs-target="#modalKonfirmasiHapus"
               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
-              data-href="<?= base_url('communityEnvelopment/delete/' . $row['id']) ?>">
+              data-href="<?= base_url('delegasipekerjaan/delete') . '?pekerjaan_id=' . $row['pekerjaan_id'] . '&id_pegawai=' . $row['ke_id_pegawai'] ?>">
               <i class="ki-duotone ki-trash fs-2 text-danger">
                 <span class="path1"></span>
                 <span class="path2"></span>

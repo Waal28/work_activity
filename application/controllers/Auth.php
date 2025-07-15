@@ -7,6 +7,7 @@ class Auth extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('User_model');
+		$this->load->model('Rapat_model');
 		$this->load->library('session');
 		$this->load->helper('access'); // tanpa _helper
 
@@ -41,6 +42,11 @@ class Auth extends CI_Controller
 
 			// redirect jika role sesuai
 			if (in_array($user->nm_unit_level, $this->roles)) {
+				$total_rapat_terjadwal = $this->Rapat_model->get_data_rapat_pegawai([
+					'id_pegawai' => $user->id_pegawai,
+					'status' => 'Terjadwal'
+				]);
+				$this->session->set_userdata(['total_rapat_terjadwal' => count($total_rapat_terjadwal)]);
 				redirect('dashboard');
 			} else {
 				$this->session->set_flashdata('error', 'Role tidak sesuai');

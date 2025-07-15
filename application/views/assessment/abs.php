@@ -12,7 +12,7 @@ $role = $this->session->userdata('role');
             <span class="fs-6 fw-semibold">Nama Pegawai</span>
         </div>
         <div class="col-10 mb-3 d-flex align-items-center">:
-            <select id="selectPegawai" class="form-select ms-3 border-dark">
+            <select id="selectPegawai" class="form-select ms-3">
                 <?php if (empty($pegawai_list)): ?>
                     <option value="">Tidak ada pegawai</option>
                 <?php else: ?>
@@ -53,14 +53,14 @@ $role = $this->session->userdata('role');
             <span class="fs-6 fw-semibold">periode</span>
         </div>
         <div class="col-10 mb-3 d-flex align-items-center">:
-            <select id="selectPeriode" class="form-select ms-3 border-dark" <?= empty($pegawai_list) ? 'disabled' : '' ?>>
-                <option value="Tahunan / 2025" selected>Tahunan / 2025</option>
+            <select id="selectPeriode" class="form-select ms-3" readonly>
+                <option value="2025" selected>2025</option>
             </select>
         </div>
     </div>
     <form method="post" action="<?= base_url('abs/simpan') ?>">
         <input type="hidden" name="id_pegawai" value="<?= empty($current_pegawai['id_pegawai']) ? '' : $current_pegawai['id_pegawai']; ?>">
-        <input type="hidden" id="inputperiode" name="periode" value="Tahunan / 2025">
+        <input type="hidden" id="inputperiode" name="periode" value="2025">
 
         <table class="table table-bordered border-dark">
             <thead class="thead-dark text-center align-middle">

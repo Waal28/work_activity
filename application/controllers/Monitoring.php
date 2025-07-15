@@ -29,23 +29,9 @@ class Monitoring extends CI_Controller
 			$data['rows_reports'] = $this->Reports_model->get_reports($current_user['id_pegawai']);
 		}
 
-		// Role-to-payload mapping
-		$payload_map = [
-			'Manager Unit' => [
-				'id_unit_level' => 'A16',
-				'id_unit_kerja' => $current_user['id_unit_kerja']
-			],
-			'Vice President' => [
-				'id_unit_level' => 'A11',
-			],
-			'Direktur Utama' => [
-				'id_unit_level' => 'A6',
-			]
-		];
+		$payload_pekerjaan = ['created_id' => $current_user['user_id']];
 
-		$payload = $payload_map[$role] ?? null;
-
-		$original_data = $this->Pekerjaan_model->get_all($payload);
+		$original_data = $this->Pekerjaan_model->get_all($payload_pekerjaan);
 		$mapped = [];
 
 		foreach ($original_data as $row) {

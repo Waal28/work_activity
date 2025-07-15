@@ -13,7 +13,7 @@
 				<!-- form pekerjaan -->
 				<form id="kt_modal_new_target_form" class="form form_pekerjaan" action="" method="POST">
 					<div class="mb-13 text-center">
-						<h1 class="mb-3 form_community_envelopment_title">Community Envelopment</h1>
+						<h1 class="mb-3 form_community_envelopment_title title-form-data">Community Involvement</h1>
 					</div>
 					<div class="d-flex flex-column mb-8 fv-row">
 						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -41,9 +41,9 @@
 						<label class="fs-6 fw-semibold mb-2">Keterangan</label>
 						<textarea class="form-control form-control-solid" rows="3" name="keterangan" form-field="keterangan" placeholder="Keterangan"></textarea>
 					</div>
-					<div class="text-center">
+					<div class="d-flex justify-content-end">
 						<button type="reset" id="kt_modal_new_target_cancel" class="btn btn-light me-3" data-bs-dismiss="modal" onclick="handleClearForm()">Cancel</button>
-						<button type="submit" id="kt_modal_new_target_submit" class="btn btn-primary">
+						<button type="submit" id="kt_modal_new_target_submit" class="btn tombol-tambah">
 							<span class="indicator-label">Submit</span>
 							<div class="spinner-border indicator-spinner d-none" style="width: 1rem; height: 1rem;" role="status">
 								<span class="sr-only">Loading...</span>

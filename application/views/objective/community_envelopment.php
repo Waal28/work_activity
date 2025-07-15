@@ -2,8 +2,8 @@
 $current_user = $this->session->userdata('current_user');
 ?>
 <div class="card mb-5 mb-xl-12">
-	<div class="ps-8 pe-8">
-		<table class="table table-bordered border-dark">
+	<div class="ps-8 pe-8 mt-3">
+		<table class="table table-bordered pegawai-info-objective">
 			<tbody>
 				<tr>
 					<td class="fw-bold">Nama</td>
@@ -21,18 +21,18 @@ $current_user = $this->session->userdata('current_user');
 					<td class="fw-bold">Jabatan</td>
 					<td>: <?= !empty($current_user['nm_unit_level']) ? $current_user['nm_unit_level'] : '-' ?></td>
 					<td class="fw-bold">Periode</td>
-					<td>: Tahunan / 2025</td>
+					<td>: 2025</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 	<div class="card-header border-0 pt-5">
 		<h3 class="card-title align-items-start flex-column">
-			<span class="card-label fw-bold fs-3 mb-1">Community Envelopment</span>
+			<span class="card-label fw-bold fs-3 mb-1">Community Involvement</span>
 		</h3>
 		<div class="card-toolbar">
-			<button type="button" class="btn btn-sm btn-primary" onclick="handleClickTambahPekerjaan()" data-bs-toggle="modal" data-bs-target="#modalCommunityEnvelopment">
-				<i class="ki-duotone ki-plus fs-2"></i>Tambah</button>
+			<button type="button" class="btn btn-sm tombol-tambah" onclick="handleClickTambahPekerjaan()" data-bs-toggle="modal" data-bs-target="#modalCommunityEnvelopment">
+				<i class="ki-duotone ki-plus fs-2 text-white"></i>Tambah</button>
 		</div>
 	</div>
 	<div class="card-body py-3">
@@ -45,7 +45,7 @@ $current_user = $this->session->userdata('current_user');
 			$total_point += $row['point'];
 		}
 		?>
-		<span class="badge bg-primary text-white" style="font-size: 14px;">Total Point: <?= $total_point ?></span>
+		<span class="badge text-white" style="font-size: 14px; background-color: #0f4c89 !important;">Total Point: <?= $total_point ?></span>
 	</div>
 </div>
 <!-- Modal -->
@@ -107,7 +107,7 @@ $current_user = $this->session->userdata('current_user');
 		clearErrorForm();
 		openForm({
 			data: {},
-			formTitle: "Community Envelopment Form",
+			formTitle: "Community Involvement Form",
 			actionUrl: "communityEnvelopment/create",
 		});
 	};
@@ -118,7 +118,7 @@ $current_user = $this->session->userdata('current_user');
 		});
 		openForm({
 			data,
-			formTitle: "Edit Community Envelopment",
+			formTitle: "Edit Community Involvement",
 			actionUrl: `communityEnvelopment/edit/${data.id}`,
 		});
 	};
@@ -155,7 +155,7 @@ $current_user = $this->session->userdata('current_user');
 			// Open form kembali dengan data sebelumnya
 			openForm({
 				data: oldInput,
-				formTitle: isEdit ? "Edit Community Envelopment" : "Community Envelopment Form",
+				formTitle: isEdit ? "Edit Community Involvement" : "Community Involvement Form",
 				actionUrl: isEdit ? `communityEnvelopment/edit/${oldInput.id}` : "communityEnvelopment/create",
 			});
 			modal.show();

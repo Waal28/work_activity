@@ -1,7 +1,7 @@
 <div class="aside-toolbar flex-column-auto" id="kt_aside_toolbar">
   <div class="aside-user d-flex align-items-sm-center justify-content-center py-5">
-    <div class="symbol symbol-40px border border-light p-3 rounded-circle" style="background-color: #6b7280">
-      <img src="https://api.iconify.design/solar:user-bold.svg?color=%23ffffff" alt="" />
+    <div class="symbol symbol-40px border p-3 rounded-circle" style="background-color: rgba(9, 44, 79, 1); border-color: #8fc240 !important;">
+      <img src="https://api.iconify.design/solar:user-bold.svg?color=%238fc240" alt="" />
     </div>
     <div class="aside-user-info flex-row-fluid flex-wrap ms-5">
       <div class="d-flex">
@@ -9,14 +9,14 @@
           <a href="#" class="text-white text-hover-primary fs-6 fw-bold">
             <?= $this->session->userdata('current_user')['nama'] ?>
           </a>
-          <div class="d-flex align-items-center text-success fs-9">
-            <span class="bullet bullet-dot bg-success me-1"></span><?= $this->session->userdata('role') ?>
-          </div>
-          <span class="text-gray-600 fw-semibold d-block fs-8 mb-1"><?= $this->session->userdata('current_user')['nm_unit_kerja'] ?></span>
+          <span class="d-flex align-items-center fs-9 mb-2" style="color: #8fc240 !important;">
+            <?= $this->session->userdata('role') ?>
+          </span>
+          <span class="fw-semibold d-block fs-8 mb-1" style="color: rgba(165, 165, 165, 1)"><?= $this->session->userdata('current_user')['nm_unit_kerja'] ?></span>
         </div>
         <div class="me-n2">
-          <a href="#" class="btn btn-icon btn-sm btn-active-color-primary mt-n2" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-overflow="true">
-            <i class="ki-duotone ki-setting-2 text-muted fs-1">
+          <a href="#" class="btn btn-icon btn-sm mt-n2" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-overflow="true">
+            <i class="ki-duotone ki-setting-2 text-muted fs-1" style="color: #ffff !important">
               <span class="path1"></span>
               <span class="path2"></span>
             </i>

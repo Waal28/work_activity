@@ -8,21 +8,39 @@ class Pekerjaan_model extends CI_Model
 
   public function get_all($payload = null)
   {
-    $this->db->select('pekerjaan.*, pegawai.nama, pegawai.id_pegawai');
+    $this->db->select('
+      pekerjaan.*, 
+      pegawai.nama, 
+      pegawai.id_pegawai,
+      (
+        SELECT COUNT(*) 
+        FROM riwayat_delegasi_pekerjaan 
+        WHERE riwayat_delegasi_pekerjaan.pekerjaan_id = pekerjaan.pekerjaan_id
+      ) > 0 AS is_delegasi
+    ', false);
+
+
     $this->db->from('pekerjaan');
     $this->db->join('pekerjaan_pegawai', 'pekerjaan.pekerjaan_id = pekerjaan_pegawai.pekerjaan_id');
     $this->db->join('pegawai', 'pekerjaan_pegawai.id_pegawai = pegawai.id_pegawai');
     $this->db->join('pegawai_penempatan', 'pegawai.id_pegawai = pegawai_penempatan.id_pegawai', 'left');
+
     $this->db->order_by('deadline', 'ASC');
 
+    // Filter opsional
     if (!empty($payload['id_unit_level'])) {
       $this->db->where('pegawai_penempatan.id_unit_level', $payload['id_unit_level']);
     }
     if (!empty($payload['id_unit_kerja'])) {
       $this->db->where('pegawai_penempatan.id_unit_kerja', $payload['id_unit_kerja']);
     }
+    if (!empty($payload['created_id'])) {
+      $this->db->where('pekerjaan.created_id', $payload['created_id']);
+    }
+
     return $this->db->get()->result_array();
   }
+
 
   public function get_by_id($id)
   {
@@ -72,10 +90,42 @@ class Pekerjaan_model extends CI_Model
   {
     $this->db->insert('pekerjaan_pegawai', $data);
   }
-  public function delete_pegawai_relasi($id)
+
+  public function update_pekerjaan_pegawai($where = [])
   {
-    $this->db->delete('pekerjaan_pegawai', ['pekerjaan_id' => $id]);
+    if (empty($where)) return false;
+
+    $this->db->from('pekerjaan_pegawai');
+
+    foreach ($where as $key => $value) {
+      if (is_array($value)) {
+        $this->db->where_in($key, $value);
+      } else {
+        $this->db->where($key, $value);
+      }
+    }
+
+    return $this->db->update();
   }
+
+  public function delete_pekerjaan_pegawai($where = [])
+  {
+    if (empty($where)) return false;
+
+    $this->db->from('pekerjaan_pegawai');
+
+    foreach ($where as $key => $value) {
+      if (is_array($value)) {
+        $this->db->where_in($key, $value);
+      } else {
+        $this->db->where($key, $value);
+      }
+    }
+
+    return $this->db->delete();
+  }
+
+
 
   public function get_by_id_pegawai($id_pegawai, $payload = [])
   {
@@ -99,5 +149,75 @@ class Pekerjaan_model extends CI_Model
     }
 
     return $this->db->get()->result_array();
+  }
+
+  public function get_delegasi_pekerjaan($where = [])
+  {
+    $this->db
+      ->select('
+      p.*, 
+      rdp.id AS delegasi_id,
+      rdp.dari_id_pegawai, 
+      rdp.ke_id_pegawai, 
+      rdp.tanggal_delegasi,
+      dari_peg.nama AS dari_nama_pegawai, 
+      ke_peg.nama AS ke_nama_pegawai
+    ')
+      ->from('pekerjaan p')
+      ->join('riwayat_delegasi_pekerjaan rdp', 'p.pekerjaan_id = rdp.pekerjaan_id')
+      ->join('pegawai dari_peg', 'rdp.dari_id_pegawai = dari_peg.id_pegawai')
+      ->join('pegawai ke_peg', 'rdp.ke_id_pegawai = ke_peg.id_pegawai');
+
+    if (!empty($where['pekerjaan_id'])) {
+      $this->db->where('rdp.pekerjaan_id', $where['pekerjaan_id']);
+    }
+    if (!empty($where['id_pegawai'])) {
+      $this->db->where('rdp.dari_id_pegawai', $where['id_pegawai']);
+    }
+    if (!empty($where['ke_id_pegawai'])) {
+      $this->db->where('rdp.ke_id_pegawai', $where['ke_id_pegawai']);
+    }
+
+    return $this->db->get()->result_array();
+  }
+
+
+  public function insert_delegasi_pekerjaan($data)
+  {
+    $this->db->insert('riwayat_delegasi_pekerjaan', $data);
+  }
+
+  public function update_delegasi_pekerjaan($where = [])
+  {
+    if (empty($where)) return false;
+
+    $this->db->from('riwayat_delegasi_pekerjaan');
+
+    foreach ($where as $key => $value) {
+      if (is_array($value)) {
+        $this->db->where_in($key, $value);
+      } else {
+        $this->db->where($key, $value);
+      }
+    }
+
+    return $this->db->update();
+  }
+
+  public function delete_delegasi_pekerjaan($where = [])
+  {
+    if (empty($where)) return false;
+
+    $this->db->from('riwayat_delegasi_pekerjaan');
+
+    foreach ($where as $key => $value) {
+      if (is_array($value)) {
+        $this->db->where_in($key, $value);
+      } else {
+        $this->db->where($key, $value);
+      }
+    }
+
+    return $this->db->delete();
   }
 }

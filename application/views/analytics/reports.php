@@ -32,13 +32,8 @@
     <tbody>
       <!-- Cascading KPI Fungsi -->
       <?php
-      $total_bobot_kpi = 0;
       $weighted_performance_obj = 0;
       $weighted_performance_kpi = 0;
-
-      foreach ($rows['pekerjaan'] as $item) {
-        $total_bobot_kpi += $item['bobot'];
-      }
       ?>
       <?php if (empty($rows['pekerjaan'])): ?>
         <tr>
@@ -50,7 +45,7 @@
           <?php
           $realisasi = $item['target_semester_1'] + $item['target_semester_2'];
           $performance = hitung_performance($realisasi, $item['annual_target']);
-          $weighted_performance = hitung_weighted_performance($performance, $item['bobot'], $total_bobot_kpi);
+          $weighted_performance = hitung_weighted_performance($performance, $item['bobot'], 80, 0.8);
           $weighted_performance_kpi += $weighted_performance;
           ?>
           <?php if ($index === 0): ?>
@@ -85,41 +80,41 @@
       <?php endif; ?>
 
       <!-- Objectives -->
-      <?php
-      $total_bobot_obj = 0;
-      foreach ($rows['objectives'] as $item) {
-        $total_bobot_obj += $item['bobot'];
-      }
-      ?>
-      <?php if ($this->session->userdata('role') === 'Staf'): ?>
-        <?php if (empty($rows['objectives'])): ?>
+      <?php if (empty($rows['objectives'])): ?>
+        <tr>
+          <td class="bg-primary text-white fw-bold text-capitalize">Objectives</td>
+          <td class="text-center" colspan="11">Objectives masih kosong</td>
+        </tr>
+      <?php else: ?>
+        <?php foreach ($rows['objectives'] as $objective): ?>
+          <?php
+          $target_total = $objective['target_semester_1'] + $objective['target_semester_2'];
+          $realisasi = 0;
+          if (isset($objective['hse_point'])) {
+            $realisasi = $objective['hse_point'];
+          } elseif (isset($objective['dev_point'])) {
+            $realisasi = $objective['dev_point'];
+          } elseif (isset($objective['community_point'])) {
+            $realisasi = $objective['community_point'];
+          }
+          $performance = hitung_performance_objective($realisasi, $target_total);
+          $weighted_performance = hitung_weighted_performance($performance, $objective['bobot'], 20, 0.2);
+          $weighted_performance_obj += $weighted_performance;
+          ?>
           <tr>
-            <td class="bg-primary text-white fw-bold text-capitalize">Objectives</td>
-            <td class="text-center" colspan="11">Objectives masih kosong</td>
+            <td class="bg-primary text-white fw-bold"><?= $objective['nama_objective'] ?></td>
+            <td><?= $objective['deskripsi'] ?></td>
+            <td><?= $objective['freq_mon'] ?></td>
+            <td><?= formatAngka($objective['bobot']) ?>%</td>
+            <td><?= $objective['satuan'] ?></td>
+            <td><?= formatAngka($objective['annual_target']) ?>%</td>
+            <td><?= formatAngka($objective['target_semester_1']) ?>%</td>
+            <td><?= formatAngka($objective['target_semester_2']) ?>%</td>
+            <td><?= $realisasi ?>%</td>
+            <td><?= number_format($performance, 2) ?>%</td>
+            <td><?= number_format($weighted_performance, 2) ?>%</td>
           </tr>
-        <?php else: ?>
-          <?php foreach ($rows['objectives'] as $objective): ?>
-            <?php
-            $realisasi = $objective['target_semester_1'] + $objective['target_semester_2'];
-            $performance = $objective['hse_point'] + $objective['dev_point'] + $objective['community_point'];
-            $weighted_performance = hitung_weighted_performance($performance, $objective['bobot'], $total_bobot_obj);
-            $weighted_performance_obj += $weighted_performance;
-            ?>
-            <tr>
-              <td class="bg-primary text-white fw-bold"><?= $objective['nama_objective'] ?></td>
-              <td><?= $objective['deskripsi'] ?></td>
-              <td><?= $objective['freq_mon'] ?></td>
-              <td><?= formatAngka($objective['bobot']) ?>%</td>
-              <td><?= $objective['satuan'] ?></td>
-              <td><?= formatAngka($objective['annual_target']) ?>%</td>
-              <td><?= formatAngka($objective['target_semester_1']) ?>%</td>
-              <td><?= formatAngka($objective['target_semester_2']) ?>%</td>
-              <td><?= $realisasi ?>%</td>
-              <td><?= number_format($performance, 2) ?>%</td>
-              <td><?= number_format($weighted_performance, 2) ?>%</td>
-            </tr>
-          <?php endforeach; ?>
-        <?php endif; ?>
+        <?php endforeach; ?>
       <?php endif; ?>
       <tr>
         <td colspan="10"></td>

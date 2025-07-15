@@ -22,9 +22,53 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<style>
+		body {
+			background: linear-gradient(135deg, #0f4c89, #8fc240);
+			height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.login-card {
+			width: 100%;
+			max-width: 400px;
+			border: 1px solid #ccc;
+			padding: 2rem;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			background-color: #ffffff;
+		}
+
+		.login-title {
+			color: #0f4c89;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.form-label {
+			color: #000000;
+		}
+
+		.btn-login {
+			background-color: #8fc240;
+			color: #000000;
+			font-weight: bold;
+		}
+
+		.btn-login:hover {
+			background-color: #76aa34;
+		}
+
+		input.form-control:focus {
+			border-color: #5f8f1f !important;
+			box-shadow: 0 0 0 0.2rem rgba(95, 143, 31, 0.25);
+		}
+	</style>
 </head>
 
-<body id="kt_body" class="aside-enabled">
+<body id="kt_body">
 	<script>
 		var defaultThemeMode = "light";
 		var themeMode;
@@ -44,60 +88,44 @@
 			document.documentElement.setAttribute("data-bs-theme", themeMode);
 		}
 	</script>
-	<div class="d-flex flex-column flex-root">
-		<!-- Toast -->
-		<?php if ($this->session->flashdata('toast')): ?>
-			<?php $toast = $this->session->flashdata('toast'); ?>
-			<div class="position-fixed top-0 end-0 p-3" style="z-index: 1080">
-				<div id="ciToast" class="toast align-items-center text-white bg-<?= $toast['type'] ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
-					<div class="d-flex">
-						<div class="toast-body ps-5 pe-5" style="font-size: 14px">
-							<?= $toast['message'] ?>
-						</div>
-						<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+	<!-- Toast -->
+	<?php if ($this->session->flashdata('toast')): ?>
+		<?php $toast = $this->session->flashdata('toast'); ?>
+		<div class="position-fixed top-0 end-0 p-3" style="z-index: 1080">
+			<div id="ciToast" class="toast align-items-center text-white bg-<?= $toast['type'] ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="d-flex">
+					<div class="toast-body ps-5 pe-5" style="font-size: 14px">
+						<?= $toast['message'] ?>
 					</div>
+					<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
 				</div>
 			</div>
-		<?php endif; ?>
-		<!-- end Toast -->
-		<div class="d-flex flex-column flex-lg-row flex-column-fluid">
-			<div class="d-flex flex-column flex-column-fluid flex-center w-lg-50 p-10">
-				<div class="d-flex justify-content-between flex-column-fluid flex-column w-100 mw-450px">
-					<div class="d-flex flex-stack py-2">
-						<div class="me-2"></div>
-					</div>
-					<div class="py-20">
-						<form class="form w-100" novalidate="novalidate" method="POST" action="<?= site_url('auth/login') ?>">
-							<div class="card-body">
-								<div class="text-start mb-10">
-									<h1 class="text-gray-900 mb-3 fs-3x" data-kt-translate="sign-in-title">Work Activity</h1>
-									<div class="text-gray-500 fw-semibold fs-6" data-kt-translate="general-desc">Masukkan Username dan Password</div>
-								</div>
-								<div class="fv-row mb-8">
-									<input type="text" placeholder="Username" name="username" required class=" form-control form-control-solid" />
-								</div>
-								<div class="fv-row mb-7">
-									<input type="password" placeholder="Password" name="password" required class="form-control form-control-solid" />
-								</div>
-								<div class="d-flex flex-stack">
-									<button id="kt_sign_in_submit" class="btn btn-primary me-2 flex-shrink-0">
-										<span class="indicator-label" data-kt-translate="sign-in-submit" type="submit">Login</span>
-									</button>
-								</div>
-							</div>
-						</form>
-						<?php if ($this->session->flashdata('error')): ?>
-							<span class="badge badge-danger fs-7 fw-bold mt-10">
-								<?= $this->session->flashdata('error') ?>
-							</span>
-						<?php endif; ?>
-					</div>
-					<div class="m-0">
-					</div>
-				</div>
-			</div>
-			<div class="d-none d-lg-flex flex-lg-row-fluid w-50 bgi-size-cover bgi-position-y-center bgi-position-x-start bgi-no-repeat" style="background-image: url(assets/media/auth/bg3.jpg)"></div>
 		</div>
+	<?php endif; ?>
+	<!-- end Toast -->
+
+	<div class="login-card">
+		<div class="d-flex flex-column align-items-center">
+			<h1 class="login-title w-100" style="border-bottom: 3px solid #8fc240; padding-bottom: 25px; margin-bottom: 20px;">Work Activity System</h1>
+			<img src="https://api.iconify.design/streamline:interface-share-user-human-person-share-signal-transmit-user.svg?color=%230f4c89" alt="...." style="width: 80px; height: 80px" class="mb-3">
+			<h4 class="login-title mt-5" style="margin-bottom: 20px">Login</h4>
+		</div>
+		<form novalidate="novalidate" method="POST" action="<?= site_url('auth/login') ?>">
+			<div class="mb-3">
+				<label for="username" class="form-label" style="color: #0f4c89;">Username</label>
+				<input type="text" class="form-control" id="username" name="username" placeholder="Username" style="border: 1px solid #8fc240;">
+			</div>
+			<div class="mb-3">
+				<label for="password" class="form-label" style="color: #0f4c89;">Password</label>
+				<input type="password" class="form-control" id="password" name="password" placeholder="Password" style="border: 1px solid #8fc240;">
+			</div>
+			<button type="submit" class="btn btn-login w-100 text-white">Login</button>
+		</form>
+		<?php if ($this->session->flashdata('error')): ?>
+			<span class="badge badge-danger fs-7 fw-bold mt-10">
+				<?= $this->session->flashdata('error') ?>
+			</span>
+		<?php endif; ?>
 	</div>
 	<script>
 		var hostUrl = "<?= base_url('assets/') ?>";

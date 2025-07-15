@@ -13,7 +13,11 @@
 				<!-- form pekerjaan -->
 				<form id="kt_modal_new_target_form" class="form form_pekerjaan" action="" method="POST">
 					<div class="mb-13 text-center">
-						<h1 class="mb-3 form_pekerjaan_title">Pemberian Pekerjaan</h1>
+						<h1 class="mb-3 form_pekerjaan_title title-form-data">Pemberian Pekerjaan</h1>
+						<span id="info_delegasi" class="badge badge-danger fs-7 fw-bold mt-10" style="display: none;">
+							Tidak bisa mengubah tipe pekerjaan dan tujuan pemberian<br>
+							karena pekerjaan sudah di delegasikan
+						</span>
 					</div>
 					<div class="d-flex flex-column mb-8 fv-row">
 						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -21,9 +25,9 @@
 						</label>
 						<input type="text" class="form-control form-control-solid" placeholder="Nama Pekerjaan" name="judul" form-field="judul" />
 					</div>
-					<!-- Radio Button Tipe Pelaksanaan -->
+					<!-- Radio Button Tipe Pengerjaan -->
 					<div class="d-flex flex-column mb-8 fv-row">
-						<label class="required fs-6 fw-semibold mb-2">Tipe Pelaksanaan</label>
+						<label class="required fs-6 fw-semibold mb-2">Tipe Pengerjaan</label>
 						<div class="mt-2">
 							<label class="me-4 ms-3">
 								<input type="radio" name="tipe_pelaksanaan" value="Individu" checked onchange="updateSelect()"> Individu
@@ -35,7 +39,7 @@
 					</div>
 					<div class="d-flex flex-column mb-8 fv-row">
 						<label class="required fs-6 fw-semibold mb-2">Tujuan Pemberian</label>
-						<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Pegawai" name="id_pegawai[]" form-field="id_pegawai">
+						<select class="form-select form-select-solid" style="border: 1px solid red;" data-control="select2" data-hide-search="true" data-placeholder="Pilih Pegawai" name="id_pegawai[]" form-field="id_pegawai">
 							<?php if (empty($pegawai_list)): ?>
 								<option value="">Tidak ada pegawai</option>
 							<?php else: ?>
@@ -95,7 +99,7 @@
 						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
 							<span class="required">Satuan</span>
 						</label>
-						<input type="text" class="form-control form-control-solid" placeholder="Tambahkan Satuan" name="satuan" form-field="satuan" />
+						<input type="text" class="form-control form-control-solid" placeholder="Tambahkan Satuan" name="satuan" readonly form-field="satuan" />
 					</div>
 					<div class="d-flex flex-column mb-8 fv-row">
 						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -121,9 +125,10 @@
 						</label>
 						<input type="date" class="form-control form-control-solid" name="deadline" form-field="deadline" />
 					</div>
-					<div class="text-center">
+					<input type="hidden" name="is_delegasi" form-field="is_delegasi" />
+					<div class="d-flex justify-content-end">
 						<button type="reset" id="kt_modal_new_target_cancel" class="btn btn-light me-3" data-bs-dismiss="modal" onclick="handleClearForm()">Cancel</button>
-						<button type="submit" id="kt_modal_new_target_submit" class="btn btn-primary" <?= empty($pegawai_list) ? 'disabled' : '' ?>>
+						<button type="submit" id="kt_modal_new_target_submit" class="btn tombol-tambah" <?= empty($pegawai_list) ? 'disabled' : '' ?>>
 							<span class="indicator-label">Submit</span>
 							<div class="spinner-border indicator-spinner d-none" style="width: 1rem; height: 1rem;" role="status">
 								<span class="sr-only">Loading...</span>

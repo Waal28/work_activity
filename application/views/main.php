@@ -22,6 +22,52 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<style>
+		.tombol-tambah {
+			background-color: #0f4c89;
+			color: white;
+		}
+
+		.tombol-tambah:hover {
+			background-color: rgba(12, 58, 103, 1);
+			color: white;
+		}
+
+		.thead-tabel-objective {
+			border-bottom: 2px solid #8fc240 !important;
+			background-color: #ccec9c !important;
+			color: #0f4c89 !important
+		}
+
+		.pegawai-info-objective {
+			border: 1px solid #8ec63f !important;
+		}
+
+		input,
+		textarea,
+		select,
+		span.select2-selection {
+			border: 1px solid #8fc240 !important;
+		}
+
+		input:focus,
+		textarea:focus,
+		span.select2-selection:focus,
+		select:focus {
+			border-color: #5f8f1f !important;
+			box-shadow: 0 0 0 0.2rem rgba(95, 143, 31, 0.25);
+		}
+
+		textarea.select2-search__field {
+			border: none !important;
+		}
+
+		.title-form-data {
+			width: fit-content !important;
+			padding-bottom: 12px;
+			border-bottom: 2px solid #8fc240 !important;
+		}
+	</style>
 </head>
 
 <body id="kt_body" class="aside-enabled">
@@ -62,29 +108,32 @@
 		<!-- end Toast -->
 		<div class="page d-flex flex-row flex-column-fluid">
 			<!-- Sidebar -->
-			<div id="kt_aside" class="aside" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
+			<div id="kt_aside" class="aside" style="background-color: #0f4c89" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
 				<?php include "partials/user_info.php"; ?>
 				<?php include "partials/sidebar.php"; ?>
 			</div>
 			<div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 				<div id="kt_header" class="header align-items-stretch">
-					<div class="header-brand">
-						<a href="index.html">
-							<img alt="Logo" src="<?= base_url('assets/') ?>media/logos/default-dark.svg" class="h-25px h-lg-25px" />
-						</a>
+					<div class="header-brand" style="background-color: rgba(9, 44, 79, 1);">
+						<div class="d-flex align-items-center">
+							<a href="index.html" class="me-5">
+								<img alt="Logo" src="https://api.iconify.design/devicon-plain:cloudflareworkers.svg?color=%23ffffff" class="h-25px h-lg-25px" />
+							</a>
+							<h4 class="text-white p-0 m-0">Work Activity System</h4>
+						</div>
 						<div id="kt_aside_toggle" class="btn btn-icon w-auto px-0 btn-active-color-primary aside-minimize" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="aside-minimize">
-							<i class="ki-duotone ki-entrance-right fs-1 me-n1 minimize-default">
+							<i class="ki-duotone ki-entrance-right fs-1 me-n1 minimize-default" style="color: #ffff !important">
 								<span class="path1"></span>
 								<span class="path2"></span>
 							</i>
-							<i class="ki-duotone ki-entrance-left fs-1 minimize-active">
+							<i class="ki-duotone ki-entrance-left fs-1 minimize-active" style="color: #ffff !important">
 								<span class="path1"></span>
 								<span class="path2"></span>
 							</i>
 						</div>
 						<div class="d-flex align-items-center d-lg-none me-n2" title="Show aside menu">
 							<div class="btn btn-icon btn-active-color-primary w-30px h-30px" id="kt_aside_mobile_toggle">
-								<i class="ki-duotone ki-abstract-14 fs-1">
+								<i class="ki-duotone ki-abstract-14 fs-1" style="color: #ffff !important">
 									<span class="path1"></span>
 									<span class="path2"></span>
 								</i>
@@ -94,7 +143,7 @@
 					<!-- Header -->
 					<div class="toolbar d-flex align-items-stretch">
 						<div class="container-xxl py-6 py-lg-0 d-flex flex-column flex-lg-row align-items-lg-stretch justify-content-lg-between">
-							<div class="page-title d-flex justify-content-center flex-column me-5">
+							<div class="page-title d-flex justify-content-center flex-column me-5" style="border-bottom: 2px solid #8fc240;">
 								<h1 class="d-flex flex-column text-gray-900 fw-bold fs-3 mb-0"><?= $page_title ?></h1>
 								<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 pt-1">
 									<li class="breadcrumb-item text-muted"><?= $page_title ?></li>

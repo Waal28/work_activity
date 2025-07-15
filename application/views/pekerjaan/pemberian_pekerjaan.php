@@ -5,8 +5,8 @@
 			<span class="text-muted mt-1 fw-semibold fs-7">Pekerjaan</span>
 		</h3>
 		<div class="card-toolbar">
-			<button type="button" class="btn btn-sm btn-primary" onclick="handleClickTambahPekerjaan()" data-bs-toggle="modal" data-bs-target="#modalPemberianPekerjaan">
-				<i class="ki-duotone ki-plus fs-2"></i>Tambah</button>
+			<button type="button" class="btn btn-sm tombol-tambah" onclick="handleClickTambahPekerjaan()" data-bs-toggle="modal" data-bs-target="#modalPemberianPekerjaan">
+				<i class="ki-duotone ki-plus fs-2 text-white"></i>Tambah</button>
 		</div>
 	</div>
 	<div class="card-body py-3">
@@ -37,6 +37,7 @@
 			annual_target: root.querySelector('[form-field="annual_target"]'),
 			target_semester_1: root.querySelector('[form-field="target_semester_1"]'),
 			target_semester_2: root.querySelector('[form-field="target_semester_2"]'),
+			is_delegasi: root.querySelector('[form-field="is_delegasi"]'),
 		},
 	};
 
@@ -57,8 +58,14 @@
 		form.element.action = BASE_URL + actionUrl;
 
 		for (const [key, el] of Object.entries(form.fields)) {
-			setValue(el, data?.[key] ?? "");
+			if (key === "satuan" && !data.satuan) {
+				setValue(el, "%");
+			} else {
+				setValue(el, data?.[key] ?? "");
+			}
 		}
+		const info_delegasi = root.querySelector("#info_delegasi");
+		info_delegasi.style.display = Number(data.is_delegasi) === 1 ? "block" : "none";
 	};
 
 	const clearErrorForm = ({
@@ -95,7 +102,7 @@
 			formTitle: "Edit Pemberian Pekerjaan",
 			actionUrl: `pemberianpekerjaan/edit/${data.pekerjaan_id}`,
 		});
-		updateSelect(data.tipe_pelaksanaan, data.id_pegawai);
+		updateSelect(data.tipe_pelaksanaan, data.id_pegawai, data.is_delegasi);
 	};
 
 	// Handle disable tombol submit
@@ -109,7 +116,7 @@
 	});
 
 	// Fungsi untuk update radio & select2
-	function updateSelect(paramsTipe = null, paramsIdPegawai = []) {
+	function updateSelect(paramsTipe = null, paramsIdPegawai = [], isDelegasi = 0) {
 		const radios = [...root.querySelectorAll('input[name="tipe_pelaksanaan"]')];
 		const tipe = paramsTipe || radios.find(radio => radio.checked)?.value;
 		const select = root.querySelector('[form-field="id_pegawai"]');
@@ -117,6 +124,9 @@
 		// Sinkronkan radio yang dipilih
 		radios.forEach(radio => {
 			radio.checked = radio.value === tipe;
+			if (Number(isDelegasi) === 1) {
+				radio.disabled = true;
+			}
 		});
 
 		// Atur multiple
@@ -137,6 +147,7 @@
 			placeholder: 'Pilih Pegawai',
 			multiple: isTeam,
 			minimumResultsForSearch: Infinity,
+			disabled: Number(isDelegasi) === 1
 		});
 	}
 </script>
@@ -165,7 +176,7 @@
 				formTitle: isEdit ? "Edit Pemberian Pekerjaan" : "Pemberian Pekerjaan",
 				actionUrl: isEdit ? `pemberianpekerjaan/edit/${oldInput.pekerjaan_id}` : "pemberianpekerjaan/create",
 			});
-			updateSelect(oldInput.tipe_pelaksanaan, oldInput.id_pegawai);
+			updateSelect(oldInput.tipe_pelaksanaan, oldInput.id_pegawai, oldInput.is_delegasi);
 
 			modal.show();
 		});

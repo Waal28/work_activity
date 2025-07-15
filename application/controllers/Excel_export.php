@@ -67,7 +67,7 @@ class Excel_export extends CI_Controller
             'unit_bisnis' => !empty($current_user['nm_unit_bisnis']) ? $current_user['nm_unit_bisnis'] : '-',
             'fungsi' => !empty($current_user['nm_unit_kerja']) ? $current_user['nm_unit_kerja'] : '-',
             'jabatan' => !empty($current_user['nm_unit_level']) ? $current_user['nm_unit_level'] : '-',
-            'periode' => 'Tahunan / 2025',
+            'periode' => '2025',
         ];
 
         // Sheet 1 - Development Commitment Form
@@ -194,7 +194,6 @@ class Excel_export extends CI_Controller
 
         // KPI data from database
         $row = 2;
-        $total_bobot_kpi = 0;
         $weighted_performance_obj = 0;
         $weighted_performance_kpi = 0;
 
@@ -202,14 +201,10 @@ class Excel_export extends CI_Controller
             $kpiCount = count($reports['pekerjaan']);
             $sheet->mergeCells('A2:A' . ($row + $kpiCount - 1));
 
-            foreach ($reports['pekerjaan'] as $item) {
-                $total_bobot_kpi += $item['bobot'];
-            }
-
             foreach ($reports['pekerjaan'] as $pekerjaan) {
                 $realisasi = $pekerjaan['target_semester_1'] + $pekerjaan['target_semester_2'];
                 $performance = hitung_performance($realisasi, $pekerjaan['annual_target']);
-                $weighted_performance = hitung_weighted_performance($performance, $pekerjaan['bobot'], $total_bobot_kpi);
+                $weighted_performance = hitung_weighted_performance($performance, $pekerjaan['bobot'], 80, 0.8);
                 $weighted_performance_kpi += $weighted_performance;
 
                 $sheet->setCellValue('B' . $row, $pekerjaan['judul']);
@@ -278,20 +273,20 @@ class Excel_export extends CI_Controller
 
         // Objectives sections (HSSE, Development, Community)
         $objectivesStartRow = $row;
-        $total_bobot_obj = 0;
 
         if (!empty($reports['objectives'])) {
-            foreach ($reports['objectives'] as $item) {
-                $total_bobot_obj += $item['bobot'];
-            }
-
             foreach ($reports['objectives'] as $objective) {
-                // Calculate realization based on objective type
-                $total_bobot_obj += $objective['bobot'];
-
-                $realisasi = $objective['target_semester_1'] + $objective['target_semester_2'];
-                $performance = $objective['hse_point'] + $objective['dev_point'] + $objective['community_point'];
-                $weighted_performance = hitung_weighted_performance($performance, $objective['bobot'], $total_bobot_obj);
+                $target_total = $objective['target_semester_1'] + $objective['target_semester_2'];
+                $realisasi = 0;
+                if (isset($objective['hse_point'])) {
+                    $realisasi = $objective['hse_point'];
+                } elseif (isset($objective['dev_point'])) {
+                    $realisasi = $objective['dev_point'];
+                } elseif (isset($objective['community_point'])) {
+                    $realisasi = $objective['community_point'];
+                }
+                $performance = hitung_performance_objective($realisasi, $target_total);
+                $weighted_performance = hitung_weighted_performance($performance, $objective['bobot'], 20, 0.2);
                 $weighted_performance_obj += $weighted_performance;
 
                 $sheet->setCellValue('A' . $row, $objective['nama_objective']);
@@ -407,7 +402,7 @@ class Excel_export extends CI_Controller
         $sheet->setCellValue('A5', 'Jabatan');
         $sheet->setCellValue('B5', ': ' . $employeeData['jabatan']);
         $sheet->setCellValue('D5', 'periode');
-        $sheet->setCellValue('E5', ': ' . 'Tahunan / 2025');
+        $sheet->setCellValue('E5', ': ' . '2025');
 
         // Apply borders to employee info
         $this->applyBorders($sheet, 'A3:F5');
@@ -527,7 +522,7 @@ class Excel_export extends CI_Controller
         $sheet->setCellValue('A5', 'Jabatan');
         $sheet->setCellValue('B5', ': ' . $employeeData['jabatan']);
         $sheet->setCellValue('D5', 'periode');
-        $sheet->setCellValue('E5', ': ' . 'Tahunan / 2025');
+        $sheet->setCellValue('E5', ': ' . '2025');
 
         $this->applyBorders($sheet, 'A3:E5');
 
@@ -632,7 +627,7 @@ class Excel_export extends CI_Controller
         $sheet->setCellValue('A5', 'Jabatan');
         $sheet->setCellValue('B5', ': ' . $employeeData['jabatan']);
         $sheet->setCellValue('D5', 'periode');
-        $sheet->setCellValue('E5', ': ' . 'Tahunan / 2025');
+        $sheet->setCellValue('E5', ': ' . '2025');
 
         $this->applyBorders($sheet, 'A3:F5');
 

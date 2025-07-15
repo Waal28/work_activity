@@ -5,7 +5,7 @@
       ?> -->
 <table class="table align-middle gs-0 gy-4">
   <thead>
-    <tr class="fw-bold text-muted bg-light">
+    <tr class="fw-bold thead-tabel-objective">
       <th class="ps-4 rounded-start">No</th>
       <th>Aktivitas</th>
       <th>Poin</th>

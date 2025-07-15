@@ -19,7 +19,7 @@ class CommunityEnvelopment extends CI_Controller
 	}
 	public function index()
 	{
-		$data['page_title'] = 'Community Envelopment';
+		$data['page_title'] = 'Community Involvement';
 		$data['content_view'] = 'objective/community_envelopment';;
 		$current_user = $this->session->userdata('current_user');
 

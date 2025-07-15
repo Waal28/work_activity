@@ -51,20 +51,29 @@ if (!function_exists('hitung_performance')) {
         }
     }
 }
-
-if (!function_exists('hitung_weighted_performance')) {
-    function hitung_weighted_performance(float $performance, float $bobot, float $total_bobot = 100): float
+if (!function_exists('hitung_performance_objective')) {
+    function hitung_performance_objective(float $realisasi, float $target_total): float
     {
-        $bobot = floatval($bobot);
-        $total_bobot = floatval($total_bobot);
-
-        // Cegah pembagian nol
-        if ($total_bobot == 0) {
-            return 0.0;
+        $raw_performance = 1 + (($realisasi - $target_total) / $target_total);
+        if ($raw_performance <= 0) {
+            $performance = 0;
+        } elseif ($raw_performance >= 1.05) {
+            $performance = 1.05;
+        } else {
+            $performance = $raw_performance;
         }
 
-        $performance_decimal = $performance / 100;
-        return round($performance_decimal * 0.8 * ($bobot / $total_bobot), 4);
+        $performance_percent = round($performance * 100, 2); // misal: 105.00
+        return $performance_percent;
+    }
+}
+
+if (!function_exists('hitung_weighted_performance')) {
+    function hitung_weighted_performance(float $performance, float $bobot, float $total_bobot = 100, float $performance_weight_factor = 0.8): float
+    {
+        if ($total_bobot == 0) return 0.0;
+
+        return round($performance * $performance_weight_factor * ($bobot / $total_bobot), 2);
     }
 }
 

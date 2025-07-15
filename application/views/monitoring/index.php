@@ -37,16 +37,14 @@ $is_dirut = $this->session->userdata('role') == 'Direktur Utama';
 											</div>
 										</div>
 										<div class="m-0">
-											<?php foreach ($row['nama_pegawai'] as $pegawai) : ?>
-												<h4 class="fw-bold text-gray-800 mb-3"><?= $pegawai ?></h4>
-											<?php endforeach; ?>
+											<h4 class="fw-bold text-gray-800 mb-3"><?= count($row['nama_pegawai']) > 1 ? $row['nama_pegawai'][0] . '...' : $row['nama_pegawai'][0] ?></h4>
 											<div class="d-flex d-grid gap-5">
 												<div class="d-flex flex-column flex-shrink-0 me-4">
 													<span class="d-flex align-items-center fs-7 fw-bold mb-2">
 														<i class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
 															<span class="path1"></span>
 															<span class="path2"></span>
-														</i>Dedline</span>
+														</i>Deadline</span>
 													<span class="d-flex align-items-center fw-bold fs-7">
 														<i class="ki-duotone ki-right-square fs-6 text-gray-600 me-2">
 															<span class="path1"></span>
@@ -177,7 +175,7 @@ $is_dirut = $this->session->userdata('role') == 'Direktur Utama';
 															</span>
 														</span>
 														<span class="d-flex flex-column">
-															<span class="fw-bold fs-6">Dedline</span>
+															<span class="fw-bold fs-6">Deadline</span>
 															<span class="fs-7 text-muted" id="detail_deadline"></span>
 														</span>
 													</span>
