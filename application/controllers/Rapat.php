@@ -151,6 +151,7 @@ class Rapat extends CI_Controller
     $this->Rapat_model->delete($id);
     redirect('rapat');
   }
+
   public function daftarrapat()
   {
     $this->authmiddleware->check($this->menu_access['daftar_rapat']);
@@ -172,7 +173,6 @@ class Rapat extends CI_Controller
     $data['rows'] = $this->Rapat_model->get_data_rapat_pegawai($where);
     $this->session->set_userdata(['total_rapat_terjadwal' => count($total_rapat_terjadwal)]);
     $this->load->view('main', $data);
-    //tes ajari commit
   }
 
   private function get_validation_rules()
