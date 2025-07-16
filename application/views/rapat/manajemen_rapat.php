@@ -67,158 +67,161 @@
         </tbody>
       </table>
     </div>
-    <div class="col-3">
-      <h4 class="mb-3">Rapat Mendatang</h4>
-      <?php if (!empty($list_rapat_mendatang)): ?>
-        <?php foreach ($list_rapat_mendatang as $index => $row): ?>
-          <p>• <?= $row['nama_rapat'] ?> (<?= formatTanggalIndo($row['tanggal_rapat']) ?>)</p>
-        <?php endforeach; ?>
-      <?php else: ?>
-        <span>Tidak ada rapat mendatang.</span>
-      <?php endif; ?>
+    <!-- Tambahkan baris baru agar tampil di bawah tabel -->
+    <div class="row mt-5">
+      <div class="col-12">
+        <h4 class="mb-3">Rapat Mendatang</h4>
+        <?php if (!empty($list_rapat_mendatang)): ?>
+          <?php foreach ($list_rapat_mendatang as $index => $row): ?>
+            <p>• <?= $row['nama_rapat'] ?> (<?= formatTanggalIndo($row['tanggal_rapat']) ?>)</p>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <span>Tidak ada rapat mendatang.</span>
+        <?php endif; ?>
+      </div>
     </div>
+
+    <?php $this->load->view('partials/form_tambah_rapat.php', ['pegawai_list' => $pegawai_list]); ?>
   </div>
-  <?php $this->load->view('partials/form_tambah_rapat.php', ['pegawai_list' => $pegawai_list]); ?>
-</div>
 
-<script>
-  const root = document.querySelector(".form_tambah_rapat");
-  const formErrorAlert = document.getElementById("form-error-alert");
-  const form = {
-    title: document.querySelector(".form_tambah_rapat_title"),
-    element: root,
-    fields: {
-      nama_rapat: root.querySelector('[form-field="nama_rapat"]'),
-      deskripsi: root.querySelector('[form-field="deskripsi"]'),
-      waktu_mulai: root.querySelector('[form-field="waktu_mulai"]'),
-      waktu_selesai: root.querySelector('[form-field="waktu_selesai"]'),
-      id_pegawai: root.querySelector('[form-field="id_pegawai"]'),
-      tanggal_rapat: root.querySelector('[form-field="tanggal_rapat"]'),
-      link_undangan: root.querySelector('[form-field="link_undangan"]'),
-      tempat_pelaksanaan: root.querySelector('[form-field="tempat_pelaksanaan"]'),
-    },
-  };
-
-  function setValue(el, value = "") {
-    if (!el) return;
-    el.value = value;
-    if ($(el).hasClass("select2-hidden-accessible")) {
-      $(el).trigger("change");
-    }
-  }
-
-  const openForm = ({
-    data = {},
-    formTitle,
-    actionUrl
-  } = {}) => {
-    form.title.innerText = formTitle;
-    form.element.action = BASE_URL + actionUrl;
-
-    for (const [key, el] of Object.entries(form.fields)) {
-      if (key === "satuan" && !data.satuan) {
-        setValue(el, "%");
-      } else {
-        setValue(el, data?.[key] ?? "");
-      }
-    }
-  };
-
-  const clearErrorForm = ({
-    isClickEdit = false
-  } = {}) => {
-    if (formErrorAlert) formErrorAlert.innerHTML = "";
-
-    if (!isClickEdit) {
-      for (const el of Object.values(form.fields)) {
-        setValue(el, "");
-      }
-    }
-  };
-  // Expose ke global scope
-  function handleClearForm() {
-    clearErrorForm();
-  };
-
-  function handleClickTambahRapat() {
-    clearErrorForm();
-    openForm({
-      data: {},
-      formTitle: "Tambah Rapat",
-      actionUrl: "rapat/create",
-    });
-  };
-
-  function handleClickEditRapat(data) {
-    clearErrorForm({
-      isClickEdit: true
-    });
-    openForm({
-      data,
-      formTitle: "Edit Rapat",
-      actionUrl: `rapat/edit/${data.id}`,
-    });
-    updateSelect(data.id_pegawai);
-  };
-
-  // Handle disable tombol submit
-  const formModal = document.getElementById("kt_modal_new_target_form");
-  const submitButton = document.getElementById("kt_modal_new_target_submit");
-
-  formModal.addEventListener("submit", () => {
-    submitButton.disabled = true;
-    submitButton.querySelector(".indicator-label")?.classList.add("d-none");
-    submitButton.querySelector(".indicator-spinner")?.classList.remove("d-none");
-  });
-
-  // Fungsi untuk update radio & select2
-  function updateSelect(paramsIdPegawai = []) {
-    const select = root.querySelector('[form-field="id_pegawai"]');
-
-    // Reset dan pilih berdasarkan parameter
-    Array.from(select.options).forEach(option => {
-      option.selected = paramsIdPegawai.includes(option.value);
-    });
-
-    // Reinit Select2
-    if ($(select).hasClass("select2-hidden-accessible")) {
-      $(select).select2('destroy');
-    }
-
-    $(select).select2({
-      placeholder: 'Pilih Pegawai',
-      minimumResultsForSearch: Infinity,
-    });
-  }
-</script>
-
-<!-- Flashdata Handling -->
-<?php if ($this->session->flashdata('validation_errors')): ?>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const modal = new bootstrap.Modal(document.getElementById('modalTambahRapat'));
-      const oldInput = <?= json_encode($this->session->flashdata('old_input') ?? []) ?>;
-      const validationErrors = `<?= $this->session->flashdata('validation_errors') ?>`;
-      const isEdit = !!oldInput.id;
+    const root = document.querySelector(".form_tambah_rapat");
+    const formErrorAlert = document.getElementById("form-error-alert");
+    const form = {
+      title: document.querySelector(".form_tambah_rapat_title"),
+      element: root,
+      fields: {
+        nama_rapat: root.querySelector('[form-field="nama_rapat"]'),
+        deskripsi: root.querySelector('[form-field="deskripsi"]'),
+        waktu_mulai: root.querySelector('[form-field="waktu_mulai"]'),
+        waktu_selesai: root.querySelector('[form-field="waktu_selesai"]'),
+        id_pegawai: root.querySelector('[form-field="id_pegawai"]'),
+        tanggal_rapat: root.querySelector('[form-field="tanggal_rapat"]'),
+        link_undangan: root.querySelector('[form-field="link_undangan"]'),
+        tempat_pelaksanaan: root.querySelector('[form-field="tempat_pelaksanaan"]'),
+      },
+    };
 
-      // Tampilkan error
-      if (formErrorAlert) {
-        formErrorAlert.innerHTML = `
+    function setValue(el, value = "") {
+      if (!el) return;
+      el.value = value;
+      if ($(el).hasClass("select2-hidden-accessible")) {
+        $(el).trigger("change");
+      }
+    }
+
+    const openForm = ({
+      data = {},
+      formTitle,
+      actionUrl
+    } = {}) => {
+      form.title.innerText = formTitle;
+      form.element.action = BASE_URL + actionUrl;
+
+      for (const [key, el] of Object.entries(form.fields)) {
+        if (key === "satuan" && !data.satuan) {
+          setValue(el, "%");
+        } else {
+          setValue(el, data?.[key] ?? "");
+        }
+      }
+    };
+
+    const clearErrorForm = ({
+      isClickEdit = false
+    } = {}) => {
+      if (formErrorAlert) formErrorAlert.innerHTML = "";
+
+      if (!isClickEdit) {
+        for (const el of Object.values(form.fields)) {
+          setValue(el, "");
+        }
+      }
+    };
+    // Expose ke global scope
+    function handleClearForm() {
+      clearErrorForm();
+    };
+
+    function handleClickTambahRapat() {
+      clearErrorForm();
+      openForm({
+        data: {},
+        formTitle: "Tambah Rapat",
+        actionUrl: "rapat/create",
+      });
+    };
+
+    function handleClickEditRapat(data) {
+      clearErrorForm({
+        isClickEdit: true
+      });
+      openForm({
+        data,
+        formTitle: "Edit Rapat",
+        actionUrl: `rapat/edit/${data.id}`,
+      });
+      updateSelect(data.id_pegawai);
+    };
+
+    // Handle disable tombol submit
+    const formModal = document.getElementById("kt_modal_new_target_form");
+    const submitButton = document.getElementById("kt_modal_new_target_submit");
+
+    formModal.addEventListener("submit", () => {
+      submitButton.disabled = true;
+      submitButton.querySelector(".indicator-label")?.classList.add("d-none");
+      submitButton.querySelector(".indicator-spinner")?.classList.remove("d-none");
+    });
+
+    // Fungsi untuk update radio & select2
+    function updateSelect(paramsIdPegawai = []) {
+      const select = root.querySelector('[form-field="id_pegawai"]');
+
+      // Reset dan pilih berdasarkan parameter
+      Array.from(select.options).forEach(option => {
+        option.selected = paramsIdPegawai.includes(option.value);
+      });
+
+      // Reinit Select2
+      if ($(select).hasClass("select2-hidden-accessible")) {
+        $(select).select2('destroy');
+      }
+
+      $(select).select2({
+        placeholder: 'Pilih Pegawai',
+        minimumResultsForSearch: Infinity,
+      });
+    }
+  </script>
+
+  <!-- Flashdata Handling -->
+  <?php if ($this->session->flashdata('validation_errors')): ?>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const modal = new bootstrap.Modal(document.getElementById('modalTambahRapat'));
+        const oldInput = <?= json_encode($this->session->flashdata('old_input') ?? []) ?>;
+        const validationErrors = `<?= $this->session->flashdata('validation_errors') ?>`;
+        const isEdit = !!oldInput.id;
+
+        // Tampilkan error
+        if (formErrorAlert) {
+          formErrorAlert.innerHTML = `
 			<div class="alert alert-danger fs-7 fw-bold mt-10">
 				${validationErrors}
 			</div>
 		`;
-      }
+        }
 
-      // Open form kembali dengan data sebelumnya
-      openForm({
-        data: oldInput,
-        formTitle: isEdit ? "Edit Rapat" : "Tambah Rapat",
-        actionUrl: isEdit ? `rapat/edit/${oldInput.id}` : "rapat/create",
+        // Open form kembali dengan data sebelumnya
+        openForm({
+          data: oldInput,
+          formTitle: isEdit ? "Edit Rapat" : "Tambah Rapat",
+          actionUrl: isEdit ? `rapat/edit/${oldInput.id}` : "rapat/create",
+        });
+        updateSelect(oldInput.id_pegawai);
+
+        modal.show();
       });
-      updateSelect(oldInput.id_pegawai);
-
-      modal.show();
-    });
-  </script>
-<?php endif; ?>
+    </script>
+  <?php endif; ?>

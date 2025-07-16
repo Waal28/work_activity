@@ -65,6 +65,16 @@
               <?php endif; ?>
             </select>
           </div>
+
+          <div class="d-flex flex-column mb-8 fv-row">
+            <label class="required fs-6 fw-semibold mb-2">Jenis Meeting</label>
+            <select class="form-select form-select-solid" name="jenis_meeting" id="jenis_meeting" onchange="toggleMeetingFields()">
+              <option value="" selected disabled>Pilih Jenis Meeting</option>
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+            </select>
+          </div>
+
           <div class="d-flex flex-column mb-8">
             <label class="required fs-6 fw-semibold mb-2">Link Rapat</label>
             <textarea class="form-control form-control-solid" rows="3" name="link_undangan" form-field="link_undangan" placeholder="Jika tidak ada, input '-'"></textarea>
