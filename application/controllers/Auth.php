@@ -24,10 +24,10 @@ class Auth extends CI_Controller
 
 	public function login()
 	{
-		$username = $this->input->post('username');
+		$nik = $this->input->post('nik');
 		$password = $this->input->post('password');
 
-		$user = $this->User_model->get_user($username, $password);
+		$user = $this->User_model->get_user($nik, $password);
 		$menu_access = generate_menu_access($user->nm_unit_level);
 
 		$user_array = (array) $user;
@@ -53,7 +53,7 @@ class Auth extends CI_Controller
 				redirect('auth');
 			}
 		} else {
-			$this->session->set_flashdata('error', 'Username atau password salah');
+			$this->session->set_flashdata('error', 'NIK Pegawai atau password salah');
 			redirect('auth');
 		}
 	}
@@ -64,5 +64,10 @@ class Auth extends CI_Controller
 
 		// redirect ke halaman login
 		redirect('auth');
+	}
+
+	public function register_all_pegawai()
+	{
+		$this->User_model->generate_users_from_pegawai();
 	}
 }

@@ -1,6 +1,7 @@
 <?php
 $menu_access = $this->session->userdata('menu_access');
 $is_dirut = $this->session->userdata('role') == 'Direktur Utama';
+$is_corsec = $this->session->userdata('role') == 'Corporate Secretary';
 $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 ?>
 <style>
@@ -45,7 +46,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 
 			<!-- Pekerjaan -->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-				<?php if ($menu_access['pekerjaan_saya'] && $menu_access['pekerjaan_tim'] && $menu_access['pekerjaan_selesai'] && $menu_access['delegasi_pekerjaan'] && $menu_access['pemberian_pekerjaan']): ?>
+				<?php if (!$is_corsec): ?>
 					<span class="menu-link">
 						<span class="menu-icon">
 							<i class="menu-icon-color ki-duotone ki-message-text-2 fs-2">
@@ -54,7 +55,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 								<span class="path3"></span>
 							</i>
 						</span>
-						<span class="menu-title menu-text-color"><?= $is_dirut ? "Management" : "Cascading KPI" ?></span>
+						<span class="menu-title menu-text-color"><?= $is_dirut || $is_corsec ? "Management" : "Cascading KPI" ?></span>
 						<span class="menu-arrow"></span>
 					</span>
 				<?php endif; ?>
@@ -150,7 +151,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 			<?php endif; ?>
 			<?php if ($menu_access['daftar_rapat']): ?>
 				<div class="menu-item">
-					<a class="menu-link menu-hover <?= $page_title == "Daftar Rapat" ? "active" : "" ?>" href="<?= base_url() . 'rapat/daftarrapat?' . 'status=Terjadwal' ?>">
+					<a class="menu-link menu-hover <?= $page_title == "Undangan Rapat" ? "active" : "" ?>" href="<?= base_url() . 'rapat/daftarRapat?' . 'status=Terjadwal' ?>">
 						<span class="menu-icon">
 							<i class="menu-icon-color ki-duotone ki-note-2 fs-2">
 								<span class="path1"></span>
@@ -161,7 +162,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 								<span class="path6"></span>
 							</i>
 						</span>
-						<span class="menu-title menu-text-color">Daftar Rapat</span>
+						<span class="menu-title menu-text-color">Undangan Rapat</span>
 						<?php if ($total_rapat_terjadwal > 0): ?>
 							<span class="badge rounded-pill bg-danger text-white fw-semibold">
 								<?= $total_rapat_terjadwal ?>

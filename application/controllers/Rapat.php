@@ -68,6 +68,7 @@ class Rapat extends CI_Controller
       'tanggal_rapat'       => $input['tanggal_rapat'],
       'waktu_mulai'         => $input['waktu_mulai'],
       'waktu_selesai'       => $input['waktu_selesai'],
+      'metode_pelaksanaan'  => $input['metode_pelaksanaan'],
       'status'              => 'Terjadwal',
       'link_undangan'       => $input['link_undangan'],
       'tempat_pelaksanaan'  => $input['tempat_pelaksanaan'],
@@ -102,8 +103,8 @@ class Rapat extends CI_Controller
       redirect('rapat');
     };
 
-    $data['pekerjaan'] = $this->Rapat_model->get_by_id($id);
-    if (!$data['pekerjaan']) show_404();
+    $rapat = $this->Rapat_model->get_by_id($id);
+    if (!$rapat) show_404();
 
     $rules = $this->get_validation_rules();
     $this->form_validation->set_rules($rules);
@@ -121,6 +122,7 @@ class Rapat extends CI_Controller
       'tanggal_rapat'       => $input['tanggal_rapat'],
       'waktu_mulai'         => $input['waktu_mulai'],
       'waktu_selesai'       => $input['waktu_selesai'],
+      'metode_pelaksanaan'  => $input['metode_pelaksanaan'],
       'link_undangan'       => $input['link_undangan'],
       'tempat_pelaksanaan'  => $input['tempat_pelaksanaan'],
     ];
@@ -152,13 +154,13 @@ class Rapat extends CI_Controller
     redirect('rapat');
   }
 
-  public function daftarrapat()
+  public function daftarRapat()
   {
     $this->authmiddleware->check($this->menu_access['daftar_rapat']);
     $current_user = $this->session->userdata('current_user');
 
     $input = $this->input->get(NULL, TRUE);
-    $data['page_title'] = 'Daftar Rapat';
+    $data['page_title'] = 'Undangan Rapat';
     $data['content_view'] = 'rapat/daftar_rapat';
     $data['tab_active'] = $input['status'];
 
@@ -173,6 +175,39 @@ class Rapat extends CI_Controller
     $data['rows'] = $this->Rapat_model->get_data_rapat_pegawai($where);
     $this->session->set_userdata(['total_rapat_terjadwal' => count($total_rapat_terjadwal)]);
     $this->load->view('main', $data);
+  }
+
+  public function setStatus()
+  {
+    $this->authmiddleware->check($this->menu_access['manajemen_rapat']);
+    $input = $this->input->post(NULL, TRUE);
+    $rapat_id = $input['rapat_id'];
+    $status = $input['status'];
+    $list_status = ['Terjadwal', 'Dibatalkan', 'Selesai'];
+
+
+    if (!$rapat_id || !$status || !in_array($status, $list_status)) {
+      $this->session->set_flashdata('toast', [
+        'message' => 'Data gagal dihapus, data belum lengkap!',
+        'type'    => 'danger'
+      ]);
+      redirect('rapat');
+    };
+
+    $rapat = $this->Rapat_model->get_by_id($rapat_id);
+    if (!$rapat) show_404();
+
+
+    $data = [
+      'status'  => $status,
+    ];
+
+    $this->Rapat_model->update($rapat_id, $data);
+    $this->session->set_flashdata('toast', [
+      'message' => 'Berhasil mengubah status!',
+      'type'    => 'success' // success, danger, warning, info
+    ]);
+    redirect('rapat');
   }
 
   private function get_validation_rules()
@@ -216,6 +251,15 @@ class Rapat extends CI_Controller
         'rules' => 'required',
         'errors' => [
           'required' => 'Pilih minimal satu {field}.',
+        ]
+      ],
+      [
+        'field' => 'metode_pelaksanaan',
+        'label' => 'Metode Pelaksanaan',
+        'rules' => 'required',
+        'errors' => [
+          'required' => 'Kolom {field} wajib diisi.',
+          'in_list'  => '{field} hanya boleh berisi: Online, Offline.'
         ]
       ],
       [

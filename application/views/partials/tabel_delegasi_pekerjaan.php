@@ -52,7 +52,12 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-        <td colspan="6" class="text-center text-muted">Tidak ada data.</td>
+        <td colspan="6">
+          <div class="d-flex flex-column align-items-center" style="margin-top: 100px;">
+            <img src="https://api.iconify.design/line-md:coffee-half-empty-filled-loop.svg?color=%23000" alt="..." style="width: 100px; height: 100px">
+            <h3 class="mt-3">Belum ada data</h3>
+          </div>
+        </td>
       </tr>
     <?php endif; ?>
   </tbody>

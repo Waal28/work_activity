@@ -112,8 +112,8 @@
 		</div>
 		<form novalidate="novalidate" method="POST" action="<?= site_url('auth/login') ?>">
 			<div class="mb-3">
-				<label for="username" class="form-label" style="color: #0f4c89;">Username</label>
-				<input type="text" class="form-control" id="username" name="username" placeholder="Username" style="border: 1px solid #8fc240;">
+				<label for="nik" class="form-label" style="color: #0f4c89;">NIK Pegawai</label>
+				<input type="text" class="form-control" id="nik" name="nik" placeholder="NIK" style="border: 1px solid #8fc240;">
 			</div>
 			<div class="mb-3">
 				<label for="password" class="form-label" style="color: #0f4c89;">Password</label>

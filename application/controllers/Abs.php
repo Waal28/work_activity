@@ -89,7 +89,7 @@ class Abs extends CI_Controller
 		$this->Abs_model->simpanPenilaian($this->input->post(), $this->current_user['id_pegawai']);
 
 		$this->session->set_flashdata('toast', [
-			'message' => 'Data berhasil diupdate!',
+			'message' => 'Data berhasil disimpan!',
 			'type' => 'success'
 		]);
 

@@ -66,6 +66,13 @@
             </select>
           </div>
           <div class="d-flex flex-column mb-8">
+            <label class="required fs-6 fw-semibold mb-2">Metode Pelaksanaan</label>
+            <select class="form-select form-select-solid" style="border: 1px solid red;" data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis Rapat" name="metode_pelaksanaan" form-field="metode_pelaksanaan">
+              <option value="Online">Online</option>
+              <option value="Offline">Offline</option>
+            </select>
+          </div>
+          <div class="d-flex flex-column mb-8">
             <label class="required fs-6 fw-semibold mb-2">Link Rapat</label>
             <textarea class="form-control form-control-solid" rows="3" name="link_undangan" form-field="link_undangan" placeholder="Jika tidak ada, input '-'"></textarea>
           </div>

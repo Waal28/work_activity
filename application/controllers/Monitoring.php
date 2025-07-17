@@ -29,7 +29,7 @@ class Monitoring extends CI_Controller
 			$data['rows_reports'] = $this->Reports_model->get_reports($current_user['id_pegawai']);
 		}
 
-		$payload_pekerjaan = ['created_id' => $current_user['user_id']];
+		$payload_pekerjaan = ['created_id' => $current_user['id_pegawai']];
 
 		$original_data = $this->Pekerjaan_model->get_all($payload_pekerjaan);
 		$mapped = [];

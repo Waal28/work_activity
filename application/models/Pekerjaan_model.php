@@ -130,11 +130,11 @@ class Pekerjaan_model extends CI_Model
   public function get_by_id_pegawai($id_pegawai, $payload = [])
   {
     $this->db
-      ->select('pekerjaan.*, pegawai.nama, users.username')
+      ->select('pekerjaan.*, pegawai.nama')
       ->from('pekerjaan')
       ->join('pekerjaan_pegawai', 'pekerjaan.pekerjaan_id = pekerjaan_pegawai.pekerjaan_id')
       ->join('pegawai', 'pekerjaan_pegawai.id_pegawai = pegawai.id_pegawai')
-      ->join('users', 'pekerjaan.created_id = users.user_id')
+      ->join('users', 'pekerjaan.created_id = users.id_pegawai')
       ->where('pekerjaan_pegawai.id_pegawai', $id_pegawai)
       ->order_by('pekerjaan.deadline', 'ASC');
 

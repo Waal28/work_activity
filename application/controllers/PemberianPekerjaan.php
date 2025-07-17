@@ -40,7 +40,7 @@ class PemberianPekerjaan extends CI_Controller
 		];
 
 		$payload_pegawai = $payload_map[$role] ?? null;
-		$payload_pekerjaan = ['created_id' => $current_user['user_id']];
+		$payload_pekerjaan = ['created_id' => $current_user['id_pegawai']];
 
 		$data['pegawai_list'] = $this->Pegawai_model->get_pegawai($payload_pegawai);
 
@@ -92,7 +92,7 @@ class PemberianPekerjaan extends CI_Controller
 			'status'      			=> 'To Do',
 			'tipe_pelaksanaan'	=> $input['tipe_pelaksanaan'],
 			'pemberi'  					=> $current_user['nama'],
-			'created_id'  			=> $current_user['user_id'],
+			'created_id'  			=> $current_user['id_pegawai'],
 			'freq_mon'					=> $input['freq_mon'],
 			'bobot'							=> floatval($input['bobot']),
 			'progress'					=> 0,
@@ -151,7 +151,7 @@ class PemberianPekerjaan extends CI_Controller
 			'jenis_pekerjaan'    => $input['jenis_pekerjaan'],
 			'prioritas'          => $input['prioritas'],
 			'deskripsi'          => $input['deskripsi'],
-			'updated_id'         => $current_user['user_id'],
+			'updated_id'         => $current_user['id_pegawai'],
 			'freq_mon'           => $input['freq_mon'],
 			'bobot'              => floatval($input['bobot']),
 			'satuan'             => $input['satuan'],

@@ -7,8 +7,9 @@ class Rapat_model extends CI_Model
   public function get_data_rapat($where = [])
   {
     $this->db
-      ->select('rapat.*')
+      ->select('rapat.*, pegawai.nama as pemberi_rapat')
       ->from('rapat')
+      ->join('pegawai', 'rapat.created_id = pegawai.id_pegawai')
       ->order_by('rapat.tanggal_rapat', 'ASC');
 
     foreach ($where as $key => $value) {

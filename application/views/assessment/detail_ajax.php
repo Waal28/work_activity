@@ -53,9 +53,10 @@ $role = $this->session->userdata('role');
       <span class="fs-6 fw-semibold">periode</span>
     </div>
     <div class="col-10 mb-3 d-flex align-items-center">:
-      <select id="selectPeriode" class="form-select ms-3" readonly>
+      <!-- <select id="selectPeriode" class="form-select ms-3" readonly>
         <option value="2025" selected>2025</option>
-      </select>
+      </select> -->
+      <span class="fs-6 ms-3">2025</span>
     </div>
   </div>
   <form method="post" action="<?= base_url('abs/simpan') ?>">

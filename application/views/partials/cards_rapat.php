@@ -100,6 +100,17 @@
               </div>
               <div class="mb-2">
                 <strong class="me-3">
+                  <img src="https://api.iconify.design/material-symbols:component-exchange.svg?color=%23000" alt="...">
+                  Metode:
+                </strong>
+                <?php if (!empty($row['metode_pelaksanaan'])) : ?>
+                  <span class=""><?= htmlspecialchars($row['metode_pelaksanaan']) ?></span>
+                <?php else : ?>
+                  <span>-</span>
+                <?php endif; ?>
+              </div>
+              <div class="mb-2">
+                <strong class="me-3">
                   <img src="https://api.iconify.design/lineicons:google-meet.svg?color=%23000" alt="...">
                   Link Rapat:
                 </strong>
@@ -128,7 +139,7 @@
                 class="btn btn-secondary btn-sm rounded-pill"
                 style="background-color: #dcdcdc"
                 data-bs-toggle="modal"
-                data-bs-target="#modalDetailPekerjaan"
+                data-bs-target="#modalDetailRapat"
                 onclick='showJobDetail(<?= json_encode($row) ?>)'>
                 Detail
               </button>
@@ -150,7 +161,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalDetailPekerjaan" tabindex="-1" aria-labelledby="modalDetailPekerjaanLabel" aria-hidden="true">
+<div class="modal fade" id="modalDetailRapat" tabindex="-1" aria-labelledby="modalDetailPekerjaanLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <form class="modal-content" id="formDetailPekerjaan" method="post">
       <div class="modal-header">
@@ -196,6 +207,10 @@
             : <span class="badge badge-status text-light" id="detail_status"></span>
             </select>
           </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-4"><span class="fs-6 fw-semibold">Metode Pelaksanaan</span></div>
+          <div class="col-8">: <span id="detail_metode_pelaksanaan"></span></div>
         </div>
         <div class="row mb-3">
           <div class="col-4"><span class="fs-6 fw-semibold">Link Rapat</span></div>
@@ -249,6 +264,7 @@
       'detail_waktu_selesai': data.waktu_selesai || '-',
       'detail_pemberi_rapat': data.pemberi_rapat || '-',
       'detail_status': data.status || '-',
+      'detail_metode_pelaksanaan': data.metode_pelaksanaan || '-',
       'detail_link_undangan': data.link_undangan || '-',
       'detail_tempat_pelaksanaan': data.tempat_pelaksanaan || '-'
     };

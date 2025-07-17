@@ -7,19 +7,19 @@
           'id' => 'Terjadwal',
           'title' => 'Rapat Terjadwal',
           'icon' => 'https://api.iconify.design/material-symbols:meeting-room-outline.svg?color=%23',
-          'url' => site_url('rapat/daftarrapat?status=Terjadwal')
+          'url' => site_url('rapat/daftarRapat?status=Terjadwal')
         ],
         [
           'id' => 'Selesai',
           'title' => 'Rapat Selesai',
           'icon' => 'https://api.iconify.design/material-symbols:auto-meeting-room-outline.svg?color=%23',
-          'url' => site_url('rapat/daftarrapat?status=Selesai')
+          'url' => site_url('rapat/daftarRapat?status=Selesai')
         ],
         [
           'id' => 'Dibatalkan',
           'title' => 'Rapat Dibatalkan',
           'icon' => 'https://api.iconify.design/material-symbols:no-meeting-room-outline.svg?color=%23',
-          'url' => site_url('rapat/daftarrapat?status=Dibatalkan')
+          'url' => site_url('rapat/daftarRapat?status=Dibatalkan')
         ]
       ]
       ?>
