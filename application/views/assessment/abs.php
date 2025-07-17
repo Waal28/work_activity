@@ -9,7 +9,7 @@ $role = $this->session->userdata('role');
 <div id="detailPegawai">
     <div class="row mb-5">
         <div class="col-2 mb-3">
-            <span class="fs-6 fw-semibold mt-3 d-inline-block">Nama Pegawai</span>
+            <span class="fs-6 fw-semibold">Nama Pegawai</span>
         </div>
         <div class="col-10 mb-3 d-flex align-items-center">:
             <select id="selectPegawai" class="form-select ms-3">
@@ -38,7 +38,7 @@ $role = $this->session->userdata('role');
             </select>
         </div>
         <div class="col-2 mb-3">
-            <span class="fs-6 fw-semibold">NIP</span>
+            <span class="fs-6 fw-semibold">NIK</span>
         </div>
         <div class="col-10 mb-3 d-flex align-items-center">:
             <span class="fs-6 ms-3"><?= empty($current_pegawai['nik']) ? '-' : $current_pegawai['nik']; ?></span>
@@ -50,14 +50,13 @@ $role = $this->session->userdata('role');
             <span class="fs-6 ms-3"><?= empty($current_pegawai['nm_unit_level']) ? '-' : $current_pegawai['nm_unit_level']; ?></span>
         </div>
         <div class="col-2 mb-3">
-            <span class="fs-6 fw-semibold mt-3 d-inline-block">Periode</span>
+            <span class="fs-6 fw-semibold">periode</span>
         </div>
-        <div class="col-10 mb-3 d-flex align-items-center">
-            <span class="me-2">:</span>
-            <input type="text" class="form-control ms-2" value="2025" readonly>
+        <div class="col-10 mb-3 d-flex align-items-center">:
+            <select id="selectPeriode" class="form-select ms-3" readonly>
+                <option value="2025" selected>2025</option>
+            </select>
         </div>
-
-
     </div>
     <form method="post" action="<?= base_url('abs/simpan') ?>">
         <input type="hidden" name="id_pegawai" value="<?= empty($current_pegawai['id_pegawai']) ? '' : $current_pegawai['id_pegawai']; ?>">
