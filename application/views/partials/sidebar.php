@@ -45,7 +45,11 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 
 			<!-- Pekerjaan -->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-				<?php if ($menu_access['pekerjaan_saya'] && $menu_access['pekerjaan_tim'] && $menu_access['pekerjaan_selesai'] && $menu_access['delegasi_pekerjaan'] && $menu_access['pemberian_pekerjaan']): ?>
+				<?php if (
+					($is_dirut && ($menu_access['pemberian_pekerjaan'] || $menu_access['monitoring'])) ||
+					(!$is_dirut && $menu_access['pekerjaan_saya'] && $menu_access['pekerjaan_tim'] && $menu_access['delegasi_pekerjaan'] && $menu_access['pekerjaan_selesai'] && $menu_access['pemberian_pekerjaan'])
+				): ?>
+
 					<span class="menu-link">
 						<span class="menu-icon">
 							<i class="menu-icon-color ki-duotone ki-message-text-2 fs-2">
@@ -54,7 +58,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 								<span class="path3"></span>
 							</i>
 						</span>
-						<span class="menu-title menu-text-color"><?= $is_dirut ? "Management" : "Cascading KPI" ?></span>
+						<span class="menu-title menu-text-color"><?= $is_dirut ? "Management" : "Objectives" ?></span>
 						<span class="menu-arrow"></span>
 					</span>
 				<?php endif; ?>
@@ -62,7 +66,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 				$menu_pekerjaan = ["Pekerjaan Saya", "Pekerjaan Tim", "Pekerjaan Selesai", "Delegasi Pekerjaan", "Pemberian Pekerjaan"];
 				?>
 				<div class="menu-sub menu-sub-accordion <?= in_array($page_title, $menu_pekerjaan) || ($is_dirut && $page_title == "Monitoring Pekerjaan") ? "show" : "" ?>">
-					<?php if ($menu_access['pekerjaan_saya']): ?>
+					<?php if (!$is_dirut && $menu_access['pekerjaan_saya']): ?>
 						<div class="menu-item">
 							<a class="menu-link menu-hover <?= $page_title == "Pekerjaan Saya" ? "active" : "" ?>" href="<?= base_url() . 'pekerjaansaya' ?>">
 								<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
@@ -70,7 +74,8 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 							</a>
 						</div>
 					<?php endif; ?>
-					<?php if ($menu_access['pekerjaan_tim']): ?>
+
+					<?php if (!$is_dirut && $menu_access['pekerjaan_tim']): ?>
 						<div class="menu-item">
 							<a class="menu-link menu-hover <?= $page_title == "Pekerjaan Tim" ? "active" : "" ?>" href="<?= base_url() . 'pekerjaantim' ?>">
 								<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
@@ -78,7 +83,8 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 							</a>
 						</div>
 					<?php endif; ?>
-					<?php if ($menu_access['delegasi_pekerjaan']): ?>
+
+					<?php if (!$is_dirut && $menu_access['delegasi_pekerjaan']): ?>
 						<div class="menu-item">
 							<a class="menu-link menu-hover <?= $page_title == "Delegasi Pekerjaan" ? "active" : "" ?>" href="<?= base_url() . 'delegasipekerjaan' ?>">
 								<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
@@ -86,7 +92,8 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 							</a>
 						</div>
 					<?php endif; ?>
-					<?php if ($menu_access['pekerjaan_selesai']): ?>
+
+					<?php if (!$is_dirut && $menu_access['pekerjaan_selesai']): ?>
 						<div class="menu-item">
 							<a class="menu-link menu-hover <?= $page_title == "Pekerjaan Selesai" ? "active" : "" ?>" href="<?= base_url() . 'pekerjaanselesai' ?>">
 								<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
@@ -94,7 +101,8 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 							</a>
 						</div>
 					<?php endif; ?>
-					<?php if ($menu_access['pemberian_pekerjaan']): ?>
+
+					<?php if ($is_dirut && $menu_access['pemberian_pekerjaan']): ?>
 						<div class="menu-item">
 							<a class="menu-link menu-hover <?= $page_title == "Pemberian Pekerjaan" ? "active" : "" ?>" href="<?= base_url() . 'pemberianpekerjaan' ?>">
 								<span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
@@ -102,6 +110,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 							</a>
 						</div>
 					<?php endif; ?>
+
 					<?php if ($is_dirut && $menu_access['monitoring']): ?>
 						<div class="menu-item">
 							<a class="menu-link menu-hover <?= $page_title == "Monitoring Pekerjaan" ? "active" : "" ?>" href="<?= base_url() . 'monitoring' ?>">
@@ -110,6 +119,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 							</a>
 						</div>
 					<?php endif; ?>
+
 				</div>
 			</div>
 
@@ -161,7 +171,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 								<span class="path6"></span>
 							</i>
 						</span>
-						<span class="menu-title menu-text-color">Daftar Rapat</span>
+						<span class="menu-title menu-text-color">Undangan Rapat</span>
 						<?php if ($total_rapat_terjadwal > 0): ?>
 							<span class="badge rounded-pill bg-danger text-white fw-semibold">
 								<?= $total_rapat_terjadwal ?>
@@ -175,7 +185,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 			<?php if ($menu_access['hse_objective'] || $menu_access['development_commitment'] || $menu_access['development_commitment']): ?>
 				<div class="menu-item pt-5">
 					<div class="menu-content">
-						<span class="menu-heading fw-bold text-uppercase fs-7" style="color: #8fc240; padding-bottom: 3px;">Objectives</span>
+						<span class="menu-heading fw-bold text-uppercase fs-7" style="color: #8fc240; padding-bottom: 3px;">Cascading KPI</span>
 					</div>
 				</div>
 
@@ -242,7 +252,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 							<span class="path1"></span><span class="path2"></span>
 						</i>
 					</span>
-					<span class="menu-title menu-text-color">Daftar Penilaian</span>
+					<span class="menu-title menu-text-color">Daftar Penilaian ABS</span>
 				</a>
 			</div>
 
