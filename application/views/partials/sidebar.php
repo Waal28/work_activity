@@ -55,7 +55,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 								<span class="path3"></span>
 							</i>
 						</span>
-						<span class="menu-title menu-text-color"><?= $is_dirut || $is_corsec ? "Management" : "Cascading KPI" ?></span>
+						<span class="menu-title menu-text-color"><?= $is_dirut || $is_corsec ? "Management" : "Objectives" ?></span>
 						<span class="menu-arrow"></span>
 					</span>
 				<?php endif; ?>
@@ -176,7 +176,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 			<?php if ($menu_access['hse_objective'] || $menu_access['development_commitment'] || $menu_access['development_commitment']): ?>
 				<div class="menu-item pt-5">
 					<div class="menu-content">
-						<span class="menu-heading fw-bold text-uppercase fs-7" style="color: #8fc240; padding-bottom: 3px;">Objectives</span>
+						<span class="menu-heading fw-bold text-uppercase fs-7" style="color: #8fc240; padding-bottom: 3px;">CASCADING KPI</span>
 					</div>
 				</div>
 
