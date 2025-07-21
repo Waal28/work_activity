@@ -12,6 +12,7 @@
       <th>Tanggal Pelaksanaan</th>
       <th>Lokasi</th>
       <th>Keterangan</th>
+      <th>Bukti</th>
       <th>Aksi</th>
     </tr>
   </thead>
@@ -25,6 +26,13 @@
           <td><?= !empty($row['tanggal_pelaksanaan']) ? formatTanggalIndo($row['tanggal_pelaksanaan']) : '-' ?></td>
           <td><?= !empty($row['lokasi']) ? htmlspecialchars($row['lokasi']) : '-' ?></td>
           <td><?= !empty($row['keterangan']) ? htmlspecialchars($row['keterangan']) : '-' ?></td>
+          <td>
+            <?php if (!empty($row['bukti'])): ?>
+              <a href="<?= base_url('uploads/' . $row['bukti']) ?>" target="_blank">Lihat Bukti</a>
+            <?php else: ?>
+              -
+            <?php endif; ?>
+          </td>
           <td>
             <button
               type="button"

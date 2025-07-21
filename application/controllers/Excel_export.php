@@ -34,10 +34,10 @@ class Excel_export extends CI_Controller
         $payload = [];
         if ($role === 'Staf') {
             $payload = [
-                'id_unit_level' => 'A11',
+                'id_unit_level' => 'A7',
                 'id_unit_kerja' => $current_user['id_unit_kerja']
             ];
-        } else if ($role === 'Manager Unit') {
+        } else if ($role === 'Manager') {
             $payload = [
                 'id_unit_level' => 'A6',
                 'id_unit_kerja' => $current_user['id_unit_kerja']

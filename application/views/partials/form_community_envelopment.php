@@ -11,7 +11,7 @@
 			</div>
 			<div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
 				<!-- form pekerjaan -->
-				<form id="kt_modal_new_target_form" class="form form_pekerjaan" action="" method="POST">
+				<form id="kt_modal_new_target_form" class="form form_pekerjaan" action="" method="POST" enctype="multipart/form-data">
 					<div class="mb-13 text-center">
 						<h1 class="mb-3 form_community_envelopment_title title-form-data">Community Involvement</h1>
 					</div>
@@ -40,6 +40,21 @@
 					<div class="d-flex flex-column mb-8">
 						<label class="fs-6 fw-semibold mb-2">Keterangan</label>
 						<textarea class="form-control form-control-solid" rows="3" name="keterangan" form-field="keterangan" placeholder="Keterangan"></textarea>
+					</div>
+					<div class="d-flex flex-column mb-8">
+						<label class="fs-6 fw-semibold mb-2">Bukti</label>
+						<input class="form-control form-control-solid" type="file" accept="image/*" name="bukti" form-field="bukti" placeholder="Bukti">
+						<input type="hidden" name="bukti_lama" form-field="bukti_lama">
+						<div class="px-3 row d-none" id="preview-bukti">
+							<div class="badge bg-light row mx-auto" style="border: 1px solid #8fc240;">
+								<div class="col-9 text-truncate text-start">
+									<a href="#" target="_blank"></a>
+								</div>
+								<div class="col-3 d-flex justify-content-end">
+									<button type="button" class="btn btn-sm btn-light fw-bold" onclick="handleClearImage()">X</button>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="d-flex justify-content-end">
 						<button type="reset" id="kt_modal_new_target_cancel" class="btn btn-light me-3" data-bs-dismiss="modal" onclick="handleClearForm()">Cancel</button>

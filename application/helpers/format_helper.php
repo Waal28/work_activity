@@ -92,3 +92,43 @@ if (!function_exists('formatAngka')) {
         return ($angka == floor($angka)) ? (int)$angka : $angka;
     }
 }
+
+if (!function_exists('upload_file')) {
+    function upload_file($field_name, $redirect_url = 'hseobjective')
+    {
+        $CI = &get_instance(); // akses CI instance
+        $CI->load->library('upload');
+        $CI->load->library('session');
+
+        $config['upload_path']   = './uploads/';
+        $config['allowed_types'] = 'gif|jpg|jpeg|png';
+        $config['max_size']      = 2048;
+        $config['encrypt_name']  = TRUE;
+
+        $CI->upload->initialize($config);
+
+        if (!$CI->upload->do_upload($field_name)) {
+            $error = $CI->upload->display_errors('', '');
+
+            // Translasi pesan error ke bahasa Indonesia
+            $translations = [
+                'The filetype you are attempting to upload is not allowed.' => 'Tipe file yang diunggah tidak diizinkan.',
+                'The file you are attempting to upload is larger than the permitted size.' => 'Ukuran file terlalu besar. Maksimal 2MB.',
+                'You did not select a file to upload.' => 'Silakan pilih file untuk diunggah.',
+            ];
+
+            foreach ($translations as $en => $id) {
+                $error = str_replace($en, $id, $error);
+            }
+
+            $CI->session->set_flashdata('toast', [
+                'message' => $error,
+                'type'    => 'danger'
+            ]);
+            redirect($redirect_url);
+        }
+
+        $upload_data = $CI->upload->data();
+        return $upload_data['file_name'];
+    }
+}

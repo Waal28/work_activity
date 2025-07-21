@@ -82,8 +82,22 @@ $current_user = $this->session->userdata('current_user');
 		form.title.innerText = formTitle;
 		form.element.action = BASE_URL + actionUrl;
 
+		const previewBox = document.getElementById("preview-bukti");
+		const buktiInput = document.querySelector('[form-field="bukti"]');
+		const buktiInputLama = document.querySelector('[form-field="bukti_lama"]');
+		const previewLink = previewBox.querySelector("a");
+
 		for (const [key, el] of Object.entries(form.fields)) {
 			setValue(el, data?.[key] ?? "");
+		}
+		if (data.bukti || data.bukti_lama) {
+			const value = data.bukti || data.bukti_lama;
+			previewLink.href = BASE_URL + 'uploads/' + value;
+			previewLink.innerText = value; // hanya nama file
+			buktiInputLama.value = value;
+
+			previewBox.classList.remove("d-none");
+			buktiInput.classList.add("d-none");
 		}
 	};
 
@@ -97,7 +111,22 @@ $current_user = $this->session->userdata('current_user');
 				setValue(el, "");
 			}
 		}
+		handleClearImage();
 	};
+
+	function handleClearImage() {
+		const previewBox = document.getElementById("preview-bukti");
+		const buktiInput = document.querySelector('[form-field="bukti"]');
+		const buktiInputLama = document.querySelector('[form-field="bukti_lama"]');
+
+		previewBox.classList.add("d-none");
+		buktiInput.classList.remove("d-none");
+
+		// Optional: reset file input
+		buktiInput.value = '';
+		buktiInputLama.value = '';
+	}
+
 	// Expose ke global scope
 	function handleClearForm() {
 		clearErrorForm();

@@ -3,75 +3,75 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 // variabel global
 
-$config['roles'] = ['Direktur Utama', 'Corporate Secretary', 'Vice President', 'Manager Unit', 'Staf'];
+$config['roles'] = ['Direktur Utama', 'Corporate Secretary', 'Vice President', 'Manager', 'Staf'];
 
 $config['page_roles'] = [
   'dashboard' => [
     'Direktur Utama',
     'Corporate Secretary',
     'Vice President',
-    'Manager Unit',
+    'Manager',
     'Staf'
   ],
   'pekerjaan_saya' => [
     'Vice President',
-    'Manager Unit',
+    'Manager',
     'Staf'
   ],
   'pekerjaan_tim' => [
     'Vice President',
-    'Manager Unit',
+    'Manager',
     'Staf'
   ],
   'pekerjaan_selesai' => [
     'Vice President',
-    'Manager Unit',
+    'Manager',
     'Staf'
   ],
   'delegasi_pekerjaan' => [
     'Vice President',
-    'Manager Unit',
+    'Manager',
   ],
   'pemberian_pekerjaan' => [
     'Direktur Utama',
     'Vice President',
-    'Manager Unit',
+    'Manager',
   ],
   'monitoring' => [
     'Direktur Utama',
     'Vice President',
-    'Manager Unit',
+    'Manager',
   ],
   'hse_objective' => [
     'Corporate Secretary',
     'Vice President',
-    'Manager Unit',
+    'Manager',
     'Staf',
   ],
   'development_commitment' => [
     'Corporate Secretary',
     'Vice President',
-    'Manager Unit',
+    'Manager',
     'Staf',
   ],
   'community_envelopment' => [
     'Corporate Secretary',
     'Vice President',
-    'Manager Unit',
+    'Manager',
     'Staf',
   ],
   'abs' => [
     'Direktur Utama',
     'Corporate Secretary',
     'Vice President',
-    'Manager Unit',
+    'Manager',
     'Staf'
   ],
   'reports' => [
     'Direktur Utama',
     'Corporate Secretary',
     'Vice President',
-    'Manager Unit',
+    'Manager',
     'Staf'
   ],
   'manajemen_rapat' => [
@@ -80,7 +80,7 @@ $config['page_roles'] = [
   'daftar_rapat' => [
     'Direktur Utama',
     'Vice President',
-    'Manager Unit',
+    'Manager',
     'Staf'
   ]
 ];

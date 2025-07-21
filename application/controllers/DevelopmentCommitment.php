@@ -13,6 +13,7 @@ class DevelopmentCommitment extends CI_Controller
 		$this->load->model('Development_commitment_model');
 
 		$this->load->helper('format');
+		$this->load->helper(['form', 'url']);
 
 		$menu_access = $this->session->userdata('menu_access');
 		$this->authmiddleware->check($menu_access['development_commitment']);
@@ -31,48 +32,8 @@ class DevelopmentCommitment extends CI_Controller
 		$current_user = $this->session->userdata('current_user');
 		$input = $this->input->post(NULL, TRUE);
 
-		$this->form_validation->set_rules([
-			[
-				'field'  => 'aktivitas',
-				'label'  => 'Aktivitas',
-				'rules'  => 'required',
-				'errors' => [
-					'required' => 'Kolom {field} wajib diisi.'
-				]
-			],
-			[
-				'field'  => 'tanggal_pelaksanaan',
-				'label'  => 'Tanggal Pelaksanaan',
-				'rules'  => 'required',
-				'errors' => [
-					'required' => 'Kolom {field} harus diisi.'
-				]
-			],
-			[
-				'field'  => 'lokasi',
-				'label'  => 'Lokasi',
-				'rules'  => 'required',
-				'errors' => [
-					'required' => 'Kolom {field} harus diisi.'
-				]
-			],
-			[
-				'field'  => 'lh',
-				'label'  => 'Lh',
-				'rules'  => 'required',
-				'errors' => [
-					'required' => 'Kolom {field} harus diisi.'
-				]
-			],
-			[
-				'field'  => 'keterangan',
-				'label'  => 'Keterangan',
-				'rules'  => 'required',
-				'errors' => [
-					'required' => 'Kolom {field} harus diisi.'
-				]
-			],
-		]);
+		$rules = $this->get_validation_rules();
+		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() === FALSE) {
 			$this->session->set_flashdata('validation_errors', validation_errors());
@@ -80,14 +41,20 @@ class DevelopmentCommitment extends CI_Controller
 			redirect('developmentcommitment');
 		}
 
+		$bukti = '';
+		if (!empty($_FILES['bukti']['name'])) {
+			$bukti = upload_file('bukti');
+		}
+
 		$data = [
 			'aktivitas'       		=> $input['aktivitas'],
 			'tanggal_pelaksanaan' => $input['tanggal_pelaksanaan'],
 			'lokasi' 							=> $input['lokasi'],
 			'keterangan'   				=> $input['keterangan'],
-			'lh'   						=> $input['lh'],
+			'lh'   								=> $input['lh'],
 			'id_pegawai'  				=> $current_user['id_pegawai'],
 			'periode_objective_id' => 2,
+			'bukti'   						=> $bukti
 		];
 
 		$this->Development_commitment_model->insert($data);
@@ -113,48 +80,8 @@ class DevelopmentCommitment extends CI_Controller
 		$data['pekerjaan'] = $this->Development_commitment_model->get_by_id($id);
 		if (!$data['pekerjaan']) show_404();
 
-		$this->form_validation->set_rules([
-			[
-				'field'  => 'aktivitas',
-				'label'  => 'Aktivitas',
-				'rules'  => 'required',
-				'errors' => [
-					'required' => 'Kolom {field} wajib diisi.'
-				]
-			],
-			[
-				'field'  => 'tanggal_pelaksanaan',
-				'label'  => 'Tanggal Pelaksanaan',
-				'rules'  => 'required',
-				'errors' => [
-					'required' => 'Kolom {field} harus diisi.'
-				]
-			],
-			[
-				'field'  => 'lokasi',
-				'label'  => 'Lokasi',
-				'rules'  => 'required',
-				'errors' => [
-					'required' => 'Kolom {field} harus diisi.'
-				]
-			],
-			[
-				'field'  => 'lh',
-				'label'  => 'Lh',
-				'rules'  => 'required',
-				'errors' => [
-					'required' => 'Kolom {field} harus diisi.'
-				]
-			],
-			[
-				'field'  => 'keterangan',
-				'label'  => 'Keterangan',
-				'rules'  => 'required',
-				'errors' => [
-					'required' => 'Kolom {field} harus diisi.'
-				]
-			],
-		]);
+		$rules = $this->get_validation_rules();
+		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() === FALSE) {
 			$input['id'] = $id;
@@ -163,12 +90,20 @@ class DevelopmentCommitment extends CI_Controller
 			redirect('developmentcommitment');
 		}
 
+		$bukti = '';
+		if (!empty($_FILES['bukti']['name'])) {
+			$bukti = upload_file('bukti');
+		} else if (!empty($input['bukti_lama'])) {
+			$bukti = $input['bukti_lama'];
+		}
+
 		$data = [
 			'aktivitas'       		=> $input['aktivitas'],
 			'tanggal_pelaksanaan' => $input['tanggal_pelaksanaan'],
 			'lokasi' 							=> $input['lokasi'],
 			'keterangan'   				=> $input['keterangan'],
-			'lh'   						=> $input['lh'],
+			'lh'   								=> $input['lh'],
+			'bukti'   						=> $bukti
 		];
 
 		$this->Development_commitment_model->update($id, $data);
@@ -195,5 +130,53 @@ class DevelopmentCommitment extends CI_Controller
 		]);
 		$this->Development_commitment_model->delete($id);
 		redirect('developmentcommitment');
+	}
+
+	private function get_validation_rules()
+	{
+		$rules = [
+			[
+				'field'  => 'aktivitas',
+				'label'  => 'Aktivitas',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} wajib diisi.'
+				]
+			],
+			[
+				'field'  => 'tanggal_pelaksanaan',
+				'label'  => 'Tanggal Pelaksanaan',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} harus diisi.'
+				]
+			],
+			[
+				'field'  => 'lokasi',
+				'label'  => 'Lokasi',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} harus diisi.'
+				]
+			],
+			[
+				'field'  => 'lh',
+				'label'  => 'Lh',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} harus diisi.'
+				]
+			],
+			[
+				'field'  => 'keterangan',
+				'label'  => 'Keterangan',
+				'rules'  => 'required',
+				'errors' => [
+					'required' => 'Kolom {field} harus diisi.'
+				]
+			],
+		];
+
+		return $rules;
 	}
 }
