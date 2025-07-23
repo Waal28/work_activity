@@ -43,19 +43,19 @@ $config['page_roles'] = [
     'Manager',
   ],
   'hse_objective' => [
-    'Corporate Secretary',
+    // 'Corporate Secretary',
     'Vice President',
     'Manager',
     'Officer',
   ],
   'development_commitment' => [
-    'Corporate Secretary',
+    // 'Corporate Secretary',
     'Vice President',
     'Manager',
     'Officer',
   ],
   'community_envelopment' => [
-    'Corporate Secretary',
+    // 'Corporate Secretary',
     'Vice President',
     'Manager',
     'Officer',
@@ -68,8 +68,8 @@ $config['page_roles'] = [
     'Officer'
   ],
   'reports' => [
-    'Direktur Utama',
-    'Corporate Secretary',
+    // 'Direktur Utama',
+    // 'Corporate Secretary',
     'Vice President',
     'Manager',
     'Officer'

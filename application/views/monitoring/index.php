@@ -217,11 +217,6 @@ $is_dirut = $this->session->userdata('role') == 'Direktur Utama';
 		</div>
 	</div>
 </div>
-<!-- reports -->
-<?php if ($is_dirut): ?>
-	<h3 style="margin: 50px 0 20px;">Individual Goal Setting</h3>
-	<?php $this->load->view('analytics/reports.php', ['rows' => $rows_reports]); ?>
-<?php endif; ?>
 <script>
 	const formatTanggalIndo = (tanggalString) => {
 		if (!tanggalString) return "-";

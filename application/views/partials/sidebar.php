@@ -3,6 +3,10 @@ $menu_access = $this->session->userdata('menu_access');
 $is_dirut = $this->session->userdata('role') == 'Direktur Utama';
 $is_corsec = $this->session->userdata('role') == 'Corporate Secretary';
 $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
+
+$menu_pekerjaan = ["Pekerjaan Saya", "Pekerjaan Tim", "Pekerjaan Selesai", "Delegasi Pekerjaan", "Pemberian Pekerjaan"];
+$show_menu_pekerjaan = in_array($page_title, $menu_pekerjaan) || ($is_dirut && $page_title == "Monitoring Pekerjaan");
+$show_menu_analytics = $menu_access['reports'];
 ?>
 <style>
 	.menu-text-color {
@@ -59,10 +63,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 						<span class="menu-arrow"></span>
 					</span>
 				<?php endif; ?>
-				<?php
-				$menu_pekerjaan = ["Pekerjaan Saya", "Pekerjaan Tim", "Pekerjaan Selesai", "Delegasi Pekerjaan", "Pemberian Pekerjaan"];
-				?>
-				<div class="menu-sub menu-sub-accordion <?= in_array($page_title, $menu_pekerjaan) || ($is_dirut && $page_title == "Monitoring Pekerjaan") ? "show" : "" ?>">
+				<div class="menu-sub menu-sub-accordion <?= $show_menu_pekerjaan ? "show" : "" ?>">
 					<?php if ($menu_access['pekerjaan_saya']): ?>
 						<div class="menu-item">
 							<a class="menu-link menu-hover <?= $page_title == "Pekerjaan Saya" ? "active" : "" ?>" href="<?= base_url() . 'pekerjaansaya' ?>">
@@ -248,7 +249,7 @@ $total_rapat_terjadwal = $this->session->userdata('total_rapat_terjadwal');
 			</div>
 
 			<!-- ANALYTICS -->
-			<?php if (!$is_dirut): ?>
+			<?php if ($show_menu_analytics): ?>
 				<div class="menu-item pt-5">
 					<div class="menu-content">
 						<span class="menu-heading fw-bold text-uppercase fs-7" style="color: #8fc240; padding-bottom: 3px;">Analytics</span>
