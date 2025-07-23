@@ -28,7 +28,7 @@ class DelegasiPekerjaan extends CI_Controller
     // Role-to-payload mapping
     $payload_map = [
       'Manager' => [
-        'id_unit_level' => 'A16',
+        'id_unit_level' => 'A15',
         'id_unit_kerja' => $current_user['id_unit_kerja']
       ],
       'Vice President' => [

@@ -32,7 +32,7 @@ class Excel_export extends CI_Controller
 
         $role = $this->session->userdata('role');
         $payload = [];
-        if ($role === 'Staf') {
+        if ($role === 'Officer') {
             $payload = [
                 'id_unit_level' => 'A7',
                 'id_unit_kerja' => $current_user['id_unit_kerja']

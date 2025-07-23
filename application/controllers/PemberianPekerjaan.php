@@ -28,7 +28,7 @@ class PemberianPekerjaan extends CI_Controller
 		// Role-to-payload mapping
 		$payload_map = [
 			'Manager' => [
-				'id_unit_level' => 'A16', //ambil hanya staf
+				'id_unit_level' => 'A15', //ambil hanya staf
 				'id_unit_kerja' => $current_user['id_unit_kerja'],
 			],
 			'Vice President' => [

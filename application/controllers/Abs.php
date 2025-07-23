@@ -133,7 +133,7 @@ class Abs extends CI_Controller
 	private function get_pegawai_list()
 	{
 		// $unit_level_map = [
-		// 	'Manager' => ['id_unit_level' => 'A16', 'id_unit_kerja' => $this->current_user['id_unit_kerja']],
+		// 	'Manager' => ['id_unit_level' => 'A15', 'id_unit_kerja' => $this->current_user['id_unit_kerja']],
 		// 	'Vice President' => ['id_unit_level' => 'A7'],
 		// 	'Direktur Utama' => ['id_unit_level' => 'A6'],
 		// ];
