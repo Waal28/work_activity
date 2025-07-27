@@ -1,6 +1,6 @@
 <!-- <?=
       '<pre>';
-      print_r($rows);
+      print_r($rows['objectives']);
       '</pre>';
       ?> -->
 <div class="d-flex align-items-center justify-content-end mb-5">
@@ -90,11 +90,11 @@
           <?php
           $target_total = $objective['target_semester_1'] + $objective['target_semester_2'];
           $realisasi = 0;
-          if (isset($objective['hse_point'])) {
+          if ($objective['id'] == 1) {
             $realisasi = $objective['hse_point'];
-          } elseif (isset($objective['dev_point'])) {
+          } elseif ($objective['id'] == 2) {
             $realisasi = $objective['dev_point'];
-          } elseif (isset($objective['community_point'])) {
+          } elseif ($objective['id'] == 3) {
             $realisasi = $objective['community_point'];
           }
           $performance = hitung_performance_objective($realisasi, $target_total);

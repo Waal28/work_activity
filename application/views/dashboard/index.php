@@ -1,11 +1,11 @@
 <?php
 $pekerjaan = $summary['pekerjaan'];
-$community = $summary['community_envelopment'];
+$community = $summary['community_involvement'];
 $lh_development = $summary['dev_commitment'];
 $hsse = $summary['hse_objective'];
 
 $pekerjaan_last_week = $summary_last_week['pekerjaan'];
-$community_last_week = $summary_last_week['community_envelopment'];
+$community_last_week = $summary_last_week['community_involvement'];
 $lh_development_last_week = $summary_last_week['dev_commitment'];
 $hsse_last_week = $summary_last_week['hse_objective'];
 

@@ -22,19 +22,19 @@ class Dashboard_model extends CI_Model
       'pekerjaan_selesai' => $pekerjaan_selesai,
     ];
 
-    // --- COMMUNITY ENVELOPMENT ---
+    // --- COMMUNITY involvement ---
     // 1. Total Point
-    $this->db->select_sum('community_envelopment.point');
-    $this->db->from('community_envelopment');
-    $this->db->where('community_envelopment.id_pegawai', $id_pegawai);
+    $this->db->select_sum('community_involvement.point');
+    $this->db->from('community_involvement');
+    $this->db->where('community_involvement.id_pegawai', $id_pegawai);
     $total_point_ce = $this->db->get()->row()->point ?? 0;
 
     // 2. Total Aktivitas (count)
-    $this->db->from('community_envelopment');
-    $this->db->where('community_envelopment.id_pegawai', $id_pegawai);
+    $this->db->from('community_involvement');
+    $this->db->where('community_involvement.id_pegawai', $id_pegawai);
     $aktivitas_ce = $this->db->count_all_results();
 
-    $summary['community_envelopment'] = [
+    $summary['community_involvement'] = [
       'total_point' => (int)$total_point_ce,
       'aktivitas' => $aktivitas_ce,
     ];
@@ -99,19 +99,19 @@ class Dashboard_model extends CI_Model
       'pekerjaan_selesai' => $pekerjaan_selesai,
     ];
 
-    // --- COMMUNITY ENVELOPMENT ---
-    $this->db->select_sum('community_envelopment.point');
-    $this->db->from('community_envelopment');
-    $this->db->where('community_envelopment.id_pegawai', $id_pegawai);
-    $this->db->where('community_envelopment.created_at >=', $seven_days_ago);
+    // --- COMMUNITY involvement ---
+    $this->db->select_sum('community_involvement.point');
+    $this->db->from('community_involvement');
+    $this->db->where('community_involvement.id_pegawai', $id_pegawai);
+    $this->db->where('community_involvement.created_at >=', $seven_days_ago);
     $total_point_ce = $this->db->get()->row()->point ?? 0;
 
-    $this->db->from('community_envelopment');
-    $this->db->where('community_envelopment.id_pegawai', $id_pegawai);
-    $this->db->where('community_envelopment.created_at >=', $seven_days_ago);
+    $this->db->from('community_involvement');
+    $this->db->where('community_involvement.id_pegawai', $id_pegawai);
+    $this->db->where('community_involvement.created_at >=', $seven_days_ago);
     $aktivitas_ce = $this->db->count_all_results();
 
-    $summary['community_envelopment'] = [
+    $summary['community_involvement'] = [
       'total_point' => (int)$total_point_ce,
       'aktivitas' => $aktivitas_ce,
     ];
@@ -241,7 +241,7 @@ class Dashboard_model extends CI_Model
     return [
       'labels'     => $labels,
       'pekerjaan'  => $count_by_month('pekerjaan', 'pekerjaan.created_at', 'join_pekerjaan'),
-      'community'  => $count_by_month('community_envelopment', 'community_envelopment.created_at', 'join_periode'),
+      'community'  => $count_by_month('community_involvement', 'community_involvement.created_at', 'join_periode'),
       'development' => $count_by_month('dev_commitment', 'dev_commitment.created_at', 'join_periode'),
       'hsse'       => $count_by_month('hse_objective', 'hse_objective.created_at', 'join_periode'),
     ];

@@ -31,13 +31,13 @@ $current_user = $this->session->userdata('current_user');
 			<span class="card-label fw-bold fs-3 mb-1">Community Involvement</span>
 		</h3>
 		<div class="card-toolbar">
-			<button type="button" class="btn btn-sm tombol-tambah" onclick="handleClickTambahPekerjaan()" data-bs-toggle="modal" data-bs-target="#modalCommunityEnvelopment">
+			<button type="button" class="btn btn-sm tombol-tambah" onclick="handleClickTambahPekerjaan()" data-bs-toggle="modal" data-bs-target="#modalCommunityInvolvement">
 				<i class="ki-duotone ki-plus fs-2 text-white"></i>Tambah</button>
 		</div>
 	</div>
 	<div class="card-body py-3">
 		<div class="table-responsive">
-			<?php $this->load->view('partials/tabel_community_envelopment.php', ['rows' => $rows]); ?>
+			<?php $this->load->view('partials/tabel_community_involvement.php', ['rows' => $rows]); ?>
 		</div>
 		<?php
 		$total_point = 0;
@@ -49,13 +49,13 @@ $current_user = $this->session->userdata('current_user');
 	</div>
 </div>
 <!-- Modal -->
-<?php $this->load->view('partials/form_community_envelopment.php'); ?>
+<?php $this->load->view('partials/form_community_involvement.php'); ?>
 <!-- end modal -->
 <script>
 	const root = document.querySelector(".form_pekerjaan");
 	const formErrorAlert = document.getElementById("form-error-alert");
 	const form = {
-		title: document.querySelector(".form_community_envelopment_title"),
+		title: document.querySelector(".form_community_involvement_title"),
 		element: root,
 		fields: {
 			aktivitas: root.querySelector('[form-field="aktivitas"]'),
@@ -137,7 +137,7 @@ $current_user = $this->session->userdata('current_user');
 		openForm({
 			data: {},
 			formTitle: "Community Involvement Form",
-			actionUrl: "communityEnvelopment/create",
+			actionUrl: "communityinvolvement/create",
 		});
 	};
 
@@ -148,7 +148,7 @@ $current_user = $this->session->userdata('current_user');
 		openForm({
 			data,
 			formTitle: "Edit Community Involvement",
-			actionUrl: `communityEnvelopment/edit/${data.id}`,
+			actionUrl: `communityinvolvement/edit/${data.id}`,
 		});
 	};
 
@@ -167,7 +167,7 @@ $current_user = $this->session->userdata('current_user');
 <?php if ($this->session->flashdata('validation_errors')): ?>
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
-			const modal = new bootstrap.Modal(document.getElementById('modalCommunityEnvelopment'));
+			const modal = new bootstrap.Modal(document.getElementById('modalCommunityInvolvement'));
 			const oldInput = <?= json_encode($this->session->flashdata('old_input') ?? []) ?>;
 			const validationErrors = `<?= $this->session->flashdata('validation_errors') ?>`;
 			const isEdit = !!oldInput.id;
@@ -185,7 +185,7 @@ $current_user = $this->session->userdata('current_user');
 			openForm({
 				data: oldInput,
 				formTitle: isEdit ? "Edit Community Involvement" : "Community Involvement Form",
-				actionUrl: isEdit ? `communityEnvelopment/edit/${oldInput.id}` : "communityEnvelopment/create",
+				actionUrl: isEdit ? `communityinvolvement/edit/${oldInput.id}` : "communityinvolvement/create",
 			});
 			modal.show();
 		});

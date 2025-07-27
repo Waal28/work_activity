@@ -54,7 +54,7 @@ $config['page_roles'] = [
     'Manager',
     'Officer',
   ],
-  'community_envelopment' => [
+  'community_involvement' => [
     // 'Corporate Secretary',
     'Vice President',
     'Manager',

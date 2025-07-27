@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class CommunityEnvelopment extends CI_Controller
+class CommunityInvolvement extends CI_Controller
 {
 	public function __construct()
 	{
@@ -10,21 +10,21 @@ class CommunityEnvelopment extends CI_Controller
 		$this->load->library('AuthMiddleware');
 		$this->load->library('form_validation');
 
-		$this->load->model('Community_envelopment_model');
+		$this->load->model('Community_involvement_model');
 
 		$this->load->helper('format');
 		$this->load->helper(['form', 'url']);
 
 		$menu_access = $this->session->userdata('menu_access');
-		$this->authmiddleware->check($menu_access['community_envelopment']);
+		$this->authmiddleware->check($menu_access['community_involvement']);
 	}
 	public function index()
 	{
 		$data['page_title'] = 'Community Involvement';
-		$data['content_view'] = 'objective/community_envelopment';;
+		$data['content_view'] = 'objective/community_involvement';;
 		$current_user = $this->session->userdata('current_user');
 
-		$data['rows'] = $this->Community_envelopment_model->get_community_by_pegawai($current_user['id_pegawai']);
+		$data['rows'] = $this->Community_involvement_model->get_community_by_pegawai($current_user['id_pegawai']);
 		$this->load->view('main', $data);
 	}
 	public function create()
@@ -38,7 +38,7 @@ class CommunityEnvelopment extends CI_Controller
 		if ($this->form_validation->run() === FALSE) {
 			$this->session->set_flashdata('validation_errors', validation_errors());
 			$this->session->set_flashdata('old_input', $input); // agar value form tidak hilang
-			redirect('communityenvelopment');
+			redirect('communityinvolvement');
 		}
 
 		$bukti = '';
@@ -57,12 +57,12 @@ class CommunityEnvelopment extends CI_Controller
 			'bukti'   						=> $bukti
 		];
 
-		$this->Community_envelopment_model->insert($data);
+		$this->Community_involvement_model->insert($data);
 		$this->session->set_flashdata('toast', [
 			'message' => 'Data berhasil disimpan!',
 			'type'    => 'success'
 		]);
-		redirect('communityenvelopment');
+		redirect('communityinvolvement');
 	}
 
 	public function edit($id = null)
@@ -74,10 +74,10 @@ class CommunityEnvelopment extends CI_Controller
 				'message' => 'Data gagal dihapus, ID tidak ditemukan!',
 				'type'    => 'danger'
 			]);
-			redirect('communityenvelopment');
+			redirect('communityinvolvement');
 		};
 
-		$data['pekerjaan'] = $this->Community_envelopment_model->get_by_id($id);
+		$data['pekerjaan'] = $this->Community_involvement_model->get_by_id($id);
 		if (!$data['pekerjaan']) show_404();
 
 		$rules = $this->get_validation_rules();
@@ -87,13 +87,13 @@ class CommunityEnvelopment extends CI_Controller
 			$input['id'] = $id;
 			$this->session->set_flashdata('validation_errors', validation_errors());
 			$this->session->set_flashdata('old_input', $input); // agar value form tidak hilang
-			redirect('communityenvelopment');
+			redirect('communityinvolvement');
 		}
 
 		$bukti = '';
 		if (!empty($_FILES['bukti']['name'])) {
 			$bukti = upload_file('bukti');
-		} else if (!empty($input['bukti_lama'])) {
+		} elseif (!empty($input['bukti_lama'])) {
 			$bukti = $input['bukti_lama'];
 		}
 
@@ -106,12 +106,12 @@ class CommunityEnvelopment extends CI_Controller
 			'bukti'   						=> $bukti
 		];
 
-		$this->Community_envelopment_model->update($id, $data);
+		$this->Community_involvement_model->update($id, $data);
 		$this->session->set_flashdata('toast', [
 			'message' => 'Data berhasil diupdate!',
 			'type'    => 'success' // success, danger, warning, info
 		]);
-		redirect('communityenvelopment');
+		redirect('communityinvolvement');
 	}
 
 	public function delete($id = null)
@@ -121,15 +121,15 @@ class CommunityEnvelopment extends CI_Controller
 				'message' => 'Data gagal dihapus, ID tidak ditemukan!',
 				'type'    => 'danger' // success, danger, warning, info
 			]);
-			redirect('communityenvelopment');
+			redirect('communityinvolvement');
 		};
 
 		$this->session->set_flashdata('toast', [
 			'message' => 'Data berhasil dihapus!',
 			'type'    => 'success' // success, danger, warning, info
 		]);
-		$this->Community_envelopment_model->delete($id);
-		redirect('communityenvelopment');
+		$this->Community_involvement_model->delete($id);
+		redirect('communityinvolvement');
 	}
 
 	private function get_validation_rules()

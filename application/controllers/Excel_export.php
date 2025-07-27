@@ -18,7 +18,7 @@ class Excel_export extends CI_Controller
         $this->load->helper('format');
 
         $this->load->model('Hse_objective_model');
-        $this->load->model('Community_envelopment_model');
+        $this->load->model('Community_involvement_model');
         $this->load->model('Development_commitment_model');
         $this->load->model('Pegawai_model');
         $this->load->model('Reports_model');
@@ -37,17 +37,17 @@ class Excel_export extends CI_Controller
                 'id_unit_level' => 'A7',
                 'id_unit_kerja' => $current_user['id_unit_kerja']
             ];
-        } else if ($role === 'Manager') {
+        } elseif ($role === 'Manager') {
             $payload = [
                 'id_unit_level' => 'A6',
                 'id_unit_kerja' => $current_user['id_unit_kerja']
             ];
-        } else if ($role === 'Vice President') {
+        } elseif ($role === 'Vice President') {
             $payload = [
                 'id_unit_level' => 'A6',
                 'id_unit_kerja' => $current_user['id_unit_kerja']
             ];
-        } else if ($role === 'Direktur Utama') {
+        } elseif ($role === 'Direktur Utama') {
             $payload = [
                 'id_unit_level' => 'A6',
                 'id_unit_kerja' => $current_user['id_unit_kerja']
@@ -278,11 +278,11 @@ class Excel_export extends CI_Controller
             foreach ($reports['objectives'] as $objective) {
                 $target_total = $objective['target_semester_1'] + $objective['target_semester_2'];
                 $realisasi = 0;
-                if (isset($objective['hse_point'])) {
+                if ($objective['id'] == 1) {
                     $realisasi = $objective['hse_point'];
-                } elseif (isset($objective['dev_point'])) {
+                } elseif ($objective['id'] == 2) {
                     $realisasi = $objective['dev_point'];
-                } elseif (isset($objective['community_point'])) {
+                } elseif ($objective['id'] == 3) {
                     $realisasi = $objective['community_point'];
                 }
                 $performance = hitung_performance_objective($realisasi, $target_total);
@@ -539,7 +539,7 @@ class Excel_export extends CI_Controller
         $sheet->getStyle('A7:E7')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         // Sample data
-        $rowsData = $this->Community_envelopment_model->get_community_by_pegawai($current_user['id_pegawai']);
+        $rowsData = $this->Community_involvement_model->get_community_by_pegawai($current_user['id_pegawai']);
         $data = [];
         foreach ($rowsData as $index => $row) {
             $data[] = [

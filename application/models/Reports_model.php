@@ -84,16 +84,16 @@ class Reports_model extends CI_Model
     return $query ? (float) $query->total_lh : 0;
   }
 
-  // menghitung total poin dari community envelopment
+  // menghitung total poin dari community involvement
   public function get_community_point($id_pegawai, $periode_objective_id)
   {
     $this->db
-      ->select('sum(community_envelopment.point) as total_poin')
-      ->from('community_envelopment')
-      ->join('periode_objectives', 'community_envelopment.periode_objective_id = periode_objectives.id')
-      ->join('pegawai', 'community_envelopment.id_pegawai = pegawai.id_pegawai')
-      ->where('community_envelopment.periode_objective_id', $periode_objective_id)
-      ->where('community_envelopment.id_pegawai', $id_pegawai);
+      ->select('sum(community_involvement.point) as total_poin')
+      ->from('community_involvement')
+      ->join('periode_objectives', 'community_involvement.periode_objective_id = periode_objectives.id')
+      ->join('pegawai', 'community_involvement.id_pegawai = pegawai.id_pegawai')
+      ->where('community_involvement.periode_objective_id', $periode_objective_id)
+      ->where('community_involvement.id_pegawai', $id_pegawai);
 
     $query = $this->db->get()->row();
     return $query ? (float) $query->total_poin : 0;

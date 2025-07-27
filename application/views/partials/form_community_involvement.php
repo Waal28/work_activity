@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalCommunityEnvelopment" role="dialog" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalCommunityInvolvement" role="dialog" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered mw-650px">
 		<div class="modal-content rounded">
 			<div class="modal-header pb-0 border-0 justify-content-end">
@@ -13,7 +13,7 @@
 				<!-- form pekerjaan -->
 				<form id="kt_modal_new_target_form" class="form form_pekerjaan" action="" method="POST" enctype="multipart/form-data">
 					<div class="mb-13 text-center">
-						<h1 class="mb-3 form_community_envelopment_title title-form-data">Community Involvement</h1>
+						<h1 class="mb-3 form_community_involvement_title title-form-data">Community Involvement</h1>
 					</div>
 					<div class="d-flex flex-column mb-8 fv-row">
 						<label class="d-flex align-items-center fs-6 fw-semibold mb-2">

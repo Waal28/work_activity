@@ -93,7 +93,7 @@ class DevelopmentCommitment extends CI_Controller
 		$bukti = '';
 		if (!empty($_FILES['bukti']['name'])) {
 			$bukti = upload_file('bukti');
-		} else if (!empty($input['bukti_lama'])) {
+		} elseif (!empty($input['bukti_lama'])) {
 			$bukti = $input['bukti_lama'];
 		}
 

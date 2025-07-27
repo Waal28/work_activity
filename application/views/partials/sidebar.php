@@ -207,9 +207,9 @@ $show_menu_analytics = $menu_access['reports'];
 					</div>
 				<?php endif; ?>
 
-				<?php if ($menu_access['community_envelopment']): ?>
+				<?php if ($menu_access['community_involvement']): ?>
 					<div class="menu-item">
-						<a class="menu-link menu-hover <?= $page_title == "Community Involvement" ? "active" : "" ?>" href="<?= base_url() . 'communityenvelopment' ?>">
+						<a class="menu-link menu-hover <?= $page_title == "Community Involvement" ? "active" : "" ?>" href="<?= base_url() . 'communityinvolvement' ?>">
 							<span class="menu-icon">
 								<i class="menu-icon-color ki-duotone ki-people fs-2">
 									<span class="path1"></span><span class="path2"></span>
