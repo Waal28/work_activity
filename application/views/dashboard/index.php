@@ -15,11 +15,6 @@ $deg_small_blue = ($metrik['rata_skor'] / 100) * 360;
 $deg_small_gray = ($metrik['rata_progress'] / 100) * 360;
 
 ?>
-<?=
-'<pre>';
-print_r($this->session->userdata());
-'</pre>';
-?>
 <style>
     .stats-card {
         background: white;
